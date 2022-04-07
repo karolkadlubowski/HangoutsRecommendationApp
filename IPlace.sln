@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B0F6406A-4FEE-48B3-A350-7C005B919CC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{72F492CD-436F-4C04-9555-0AD8A7B16F66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Shared", "src\Libraries\Library.Shared\Library.Shared.csproj", "{A6540724-7087-4752-A1F5-235FBAD4BBFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{72F492CD-436F-4C04-9555-0AD8A7B16F66} = {B0F6406A-4FEE-48B3-A350-7C005B919CC6}
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA} = {72F492CD-436F-4C04-9555-0AD8A7B16F66}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Debug|x64.Build.0 = Debug|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Debug|x86.Build.0 = Debug|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Release|x64.Build.0 = Release|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Release|x86.ActiveCfg = Release|Any CPU
+		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
