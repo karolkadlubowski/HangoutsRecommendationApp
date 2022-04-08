@@ -9,8 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Entities" />
-      <Folder Include="ValueObjects" />
+      <Folder Include="Exceptions" />
     </ItemGroup>
 
 </Project>
