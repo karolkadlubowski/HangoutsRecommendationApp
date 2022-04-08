@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Library.Shared.Events
+namespace Library.EventBus
 {
     public abstract record Event<TData>
     {
