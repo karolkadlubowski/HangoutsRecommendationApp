@@ -1,6 +1,6 @@
 ﻿namespace Library.Shared.AppConfigs
 {
-    public class JwtConfig
+    public record JwtConfig
     {
         public const string JwtSecretKey = "JwtConfig:Secret";
 

@@ -21,7 +21,7 @@ namespace Library.Shared.Extensions
 
             context.Response.AddApplicationError(e.Message);
 
-            await context.Response.WriteAsync(jsonResponse);
+            await context.Response.WriteAsync(jsonResponse).ConfigureAwait(false);
         }
 
         public static void AddApplicationError(this HttpResponse response, string errorMessage)
