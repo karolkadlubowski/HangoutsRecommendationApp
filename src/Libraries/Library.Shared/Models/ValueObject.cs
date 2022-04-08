@@ -1,4 +1,4 @@
-﻿namespace Template.API.Domain.ValueObjects
+﻿namespace Library.Shared.Models
 {
     public abstract record ValueObject<T>
     {
