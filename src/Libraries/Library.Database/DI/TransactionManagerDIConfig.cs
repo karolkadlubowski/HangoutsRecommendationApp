@@ -7,6 +7,6 @@ namespace Library.Database.DI
     public static class TransactionManagerDIConfig
     {
         public static IServiceCollection AddTransactionManager(this IServiceCollection services)
-            => services.AddScoped<ITransactionManager, TransactionManager>();
+            => services.AddTransient<ITransactionManager, TransactionManager>();
     }
 }
