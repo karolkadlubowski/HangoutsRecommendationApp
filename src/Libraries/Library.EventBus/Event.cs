@@ -6,6 +6,7 @@ namespace Library.EventBus
     {
         public Guid EventId { get; init; } = Guid.NewGuid();
         public DateTime CreatedOn { get; init; } = DateTime.UtcNow;
+        public Guid TransactionId { get; init; } = Guid.NewGuid();
 
         public abstract string EventName { get; }
 
