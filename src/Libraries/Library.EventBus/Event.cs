@@ -7,7 +7,7 @@ namespace Library.EventBus
         public Guid EventId { get; init; } = Guid.NewGuid();
         public DateTime CreatedOn { get; init; } = DateTime.UtcNow;
 
-        public abstract string EventType { get; }
+        public abstract string EventName { get; }
 
         public TData Data { get; init; }
     }
