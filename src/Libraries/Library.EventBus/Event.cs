@@ -10,5 +10,7 @@ namespace Library.EventBus
         public abstract string EventName { get; }
 
         public TData Data { get; init; }
+
+        public EventType EventType => Enum.Parse<EventType>(EventName);
     }
 }
