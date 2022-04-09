@@ -2,7 +2,7 @@
 {
     public static class EventTypeConverter
     {
-        public static string Convert(this EventType eventType)
+        public static string Convert(EventType eventType)
             => eventType.ToString().ToUpperInvariant();
     }
 }
