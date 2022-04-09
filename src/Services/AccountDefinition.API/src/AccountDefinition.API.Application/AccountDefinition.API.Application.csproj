@@ -5,12 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj" />
       <ProjectReference Include="..\AccountDefinition.API.Domain\AccountDefinition.API.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Abstractions" />
-      <Folder Include="Database\Repositories" />
       <Folder Include="Features" />
     </ItemGroup>
 

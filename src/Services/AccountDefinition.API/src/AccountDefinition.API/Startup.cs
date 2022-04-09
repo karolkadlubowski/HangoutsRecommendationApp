@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using AccountDefinition.API.DI;
+using AccountDefinition.API.HealthChecks;
 using IConfigurationProvider = AccountDefinition.API.Application.Providers.IConfigurationProvider;
 
 namespace AccountDefinition.API
@@ -30,13 +31,20 @@ namespace AccountDefinition.API
                 Configuration,
                 "AccountDefinition.API.Application");
 
+            services.AddAccountDefinitionDbContext(Configuration);
+            _logger.Trace("> AccountDefinition database context registered");
+
+            services.AddRepositories();
+            _logger.Trace("> Database repositories registered");
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
 
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+                .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
 
             services.AddSwagger();

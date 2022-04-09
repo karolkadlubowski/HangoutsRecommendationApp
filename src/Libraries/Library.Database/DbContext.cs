@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Library.Database.Abstractions;
@@ -14,8 +15,10 @@ namespace Library.Database
             _connectionString = connectionString;
         }
 
-        public abstract Task ExecuteAsync(string query, CancellationToken cancellationToken = default);
+        public abstract Task<IEnumerable<T>> QueryAsync<T>(string query, CancellationToken cancellationToken = default);
+        public abstract Task<IEnumerable<T>> QueryAsync<T>(string query, DynamicParameters parameters, CancellationToken cancellationToken = default);
 
-        public abstract Task ExecuteAsync(string query, DynamicParameters parameters, CancellationToken cancellationToken = default);
+        public abstract Task<int> ExecuteAsync(string query, CancellationToken cancellationToken = default);
+        public abstract Task<int> ExecuteAsync(string query, DynamicParameters parameters, CancellationToken cancellationToken = default);
     }
 }

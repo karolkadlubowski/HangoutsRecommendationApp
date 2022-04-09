@@ -10,7 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Database\Repositories" />
       <Folder Include="Events\Consumers" />
       <Folder Include="Events\Producers" />
       <Folder Include="Clients\Abstractions" />
@@ -18,6 +17,15 @@
       <Folder Include="Clients\Models\Requests" />
       <Folder Include="Clients\Models\Responses" />
       <Folder Include="Services" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Npgsql" Version="5.0.12" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Database\Queries\SelectAccountTypes.sql" />
+      <EmbeddedResource Include="Database\Queries\SelectAccountTypes.sql" />
     </ItemGroup>
 
 </Project>

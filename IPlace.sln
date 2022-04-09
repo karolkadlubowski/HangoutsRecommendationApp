@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountDefinition.API.Infra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountDefinition.API.Tests.Unit", "src\Services\AccountDefinition.API\tests\AccountDefinition.API.Tests.Unit\AccountDefinition.API.Tests.Unit.csproj", "{BF55FC77-3EDC-4123-81FA-A5D9E4C81C5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Shared.Models", "src\Libraries\Library.Shared.Models\Library.Shared.Models.csproj", "{B683D223-0BB6-4E97-93C2-BD28360DE999}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,7 @@ Global
 		{8F6010EF-B4E8-40C5-8C55-AA87F6D1F625} = {CD15B4C9-8805-4E28-A810-83C2FE8961A4}
 		{F1F2A88A-3951-40E7-A879-A5372AACF728} = {CD15B4C9-8805-4E28-A810-83C2FE8961A4}
 		{BF55FC77-3EDC-4123-81FA-A5D9E4C81C5C} = {E3B5C78E-ED1E-4A07-B436-12FFD1E8C4DB}
+		{B683D223-0BB6-4E97-93C2-BD28360DE999} = {72F492CD-436F-4C04-9555-0AD8A7B16F66}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A6540724-7087-4752-A1F5-235FBAD4BBFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -239,5 +242,17 @@ Global
 		{BF55FC77-3EDC-4123-81FA-A5D9E4C81C5C}.Release|x64.Build.0 = Release|Any CPU
 		{BF55FC77-3EDC-4123-81FA-A5D9E4C81C5C}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF55FC77-3EDC-4123-81FA-A5D9E4C81C5C}.Release|x86.Build.0 = Release|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Debug|x64.Build.0 = Debug|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Debug|x86.Build.0 = Debug|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Release|x64.ActiveCfg = Release|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Release|x64.Build.0 = Release|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Release|x86.ActiveCfg = Release|Any CPU
+		{B683D223-0BB6-4E97-93C2-BD28360DE999}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

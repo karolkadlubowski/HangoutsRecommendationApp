@@ -19,7 +19,7 @@ namespace Library.Shared.DI.Configs
             => services
                 .AddScoped(typeof(IDistributedCacheRepository<>), typeof(DistributedCacheRepository<>))
                 .AddStackExchangeRedisCache(opt =>
-                    opt.Configuration = configuration.GetValue<string>(CacheConfig.ConnectionString))
+                    opt.Configuration = configuration.GetValue<string>(CacheConfig.DistributedCacheConnectionStringKey))
                 .ConfigureCacheConfig(configuration);
 
         private static IServiceCollection ConfigureCacheConfig(this IServiceCollection services, IConfiguration configuration)

@@ -1,0 +1,15 @@
+﻿version: '3.4'
+
+services:
+  accountdefinition.database:
+    image: postgres
+    container_name: accountdefinition.database
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=IPLACE_DB
+    restart: always
+    ports:
+      - 6000:5432
+    volumes:
+      - ./src/Services/AccountDefinition.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_accountdefinition.sql:ro
