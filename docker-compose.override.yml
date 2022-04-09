@@ -1,7 +1,7 @@
 ﻿version: '3.4'
 
 services:
-  accountdefinition.database:
+  postgresql.database:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - postgres_init_scripts:/docker-entrypoint-initdb.d/
