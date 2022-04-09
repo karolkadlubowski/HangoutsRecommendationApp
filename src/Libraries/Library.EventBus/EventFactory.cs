@@ -2,7 +2,7 @@
 
 namespace Library.EventBus
 {
-    public class EventFactory<TEvent> where TEvent : Event<object>, new()
+    public abstract class EventFactory<TEvent> where TEvent : Event<object>, new()
     {
         public static TEvent CreateEventInTransaction(Guid transactionId, object data)
             => new TEvent
