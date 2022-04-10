@@ -16,6 +16,11 @@ namespace AccountDefinition.API.DI
                     .DatabaseConfig.DatabaseConnectionString));
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
-            => services.AddTransient<IAccountTypeRepository, AccountTypeRepository>();
+        {
+            services.AddTransient<IAccountTypeRepository, AccountTypeRepository>();
+            services.AddTransient<IAccountProviderRepository, AccountProviderRepository>();
+            return services;
+        }
+        
     }
 }
