@@ -24,13 +24,9 @@ namespace AccountDefinition.API.Application.Features.AddAccountProvider
         {
             var addedAccountProvider = await _accountProviderService.AddAccountProviderAsync(request);
 
-            var publishedEvent = await _eventSender.SendEventWithoutDataAsync<AccountProviderAddedEvent>(EventBusTopics.AccountDefinition, cancellationToken);
+            await _eventSender.SendEventWithoutDataAsync<AccountProviderAddedEvent>(EventBusTopics.AccountDefinition, cancellationToken);
 
-            return new AddAccountProviderResponse
-            {
-                AddedAccountProvider = addedAccountProvider,
-                Event = publishedEvent
-            };
+            return new AddAccountProviderResponse { AddedAccountProvider = addedAccountProvider, };
         }
     }
 }

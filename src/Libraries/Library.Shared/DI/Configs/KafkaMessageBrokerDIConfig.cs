@@ -16,7 +16,7 @@ namespace Library.Shared.DI.Configs
                 .Configure<KafkaConfig>(configuration.GetSection(nameof(KafkaConfig)))
                 .AddSingleton<KafkaConfig>(s => s.GetRequiredService<IOptions<KafkaConfig>>().Value)
                 .AddScoped<IEventPublisher, KafkaEventPublisher>()
-                .AddScoped<IEventConsumer, KafkaEventConsumer>()
+                .AddSingleton<IEventConsumer, KafkaEventConsumer>()
                 .AddScoped<IEventSender, EventSender>();
     }
 }

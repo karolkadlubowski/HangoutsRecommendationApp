@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Kafka.Public;
+using Kafka.Public.Loggers;
 using Library.EventBus.Abstractions;
 using Library.EventBus.AppConfigs;
 
@@ -18,7 +19,7 @@ namespace Library.EventBus
             _clusterClient = new ClusterClient(new Configuration
             {
                 Seeds = kafkaConfig.BootstrapServers
-            }, null);
+            }, new DevNullLogger());
         }
 
         public event EventHandler<Event> EventReceived;
