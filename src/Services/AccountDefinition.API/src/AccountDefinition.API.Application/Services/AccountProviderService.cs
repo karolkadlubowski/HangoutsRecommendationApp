@@ -8,7 +8,7 @@ using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using Library.Shared.Models.AccountDefinition.Dtos;
 
-namespace AccountDefinition.API.Infrastructure.Services
+namespace AccountDefinition.API.Application.Services
 {
     public class AccountProviderService : IAccountProviderService
     {

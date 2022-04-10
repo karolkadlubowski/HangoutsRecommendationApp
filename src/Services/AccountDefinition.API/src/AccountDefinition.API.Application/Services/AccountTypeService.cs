@@ -6,7 +6,7 @@ using AutoMapper;
 using Library.Shared.Logging;
 using Library.Shared.Models.AccountDefinition.Dtos;
 
-namespace AccountDefinition.API.Infrastructure.Services
+namespace AccountDefinition.API.Application.Services
 {
     public class AccountTypeService : IReadOnlyAccountTypeService
     {

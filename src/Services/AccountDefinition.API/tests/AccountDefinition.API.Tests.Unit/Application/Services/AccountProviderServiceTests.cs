@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Application.Features.AddAccountProvider;
-using AccountDefinition.API.Infrastructure.Services;
+using AccountDefinition.API.Application.Services;
 using AccountDefinition.API.Tests.Unit.Utilities.Models;
 using AutoMapper;
 using FluentAssertions;
@@ -12,7 +12,7 @@ using Library.Shared.Models.AccountDefinition.Dtos;
 using Moq;
 using NUnit.Framework;
 
-namespace AccountDefinition.API.Tests.Unit.Infrastructure.Services
+namespace AccountDefinition.API.Tests.Unit.Application.Services
 {
     [TestFixture]
     public class AccountProviderServiceTests

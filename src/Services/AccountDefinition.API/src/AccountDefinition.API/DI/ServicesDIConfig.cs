@@ -1,5 +1,5 @@
 ﻿using AccountDefinition.API.Application.Abstractions;
-using AccountDefinition.API.Infrastructure.Services;
+using AccountDefinition.API.Application.Services;
 using Library.Shared.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
