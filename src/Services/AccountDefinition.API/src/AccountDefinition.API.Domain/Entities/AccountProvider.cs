@@ -11,7 +11,7 @@ namespace AccountDefinition.API.Domain.Entities
         public static AccountProvider Create(string provider)
             => new AccountProvider
             {
-                Provider = new ProviderName(provider).Value
+                Provider = new ProviderName(provider)
             };
     }
 }

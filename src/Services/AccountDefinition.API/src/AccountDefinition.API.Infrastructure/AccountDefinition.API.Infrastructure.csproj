@@ -12,10 +12,6 @@
     <ItemGroup>
       <Folder Include="Events\Consumers" />
       <Folder Include="Events\Producers" />
-      <Folder Include="Clients\Abstractions" />
-      <Folder Include="Clients\Models\Factories" />
-      <Folder Include="Clients\Models\Requests" />
-      <Folder Include="Clients\Models\Responses" />
     </ItemGroup>
 
     <ItemGroup>
