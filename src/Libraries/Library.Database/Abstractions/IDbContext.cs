@@ -7,6 +7,8 @@ namespace Library.Database.Abstractions
 {
     public interface IDbContext
     {
+        string ConnectionString { get; }
+
         Task<IEnumerable<T>> QueryAsync<T>(string query, CancellationToken cancellationToken = default);
         Task<IEnumerable<T>> QueryAsync<T>(string query, DynamicParameters parameters, CancellationToken cancellationToken = default);
 

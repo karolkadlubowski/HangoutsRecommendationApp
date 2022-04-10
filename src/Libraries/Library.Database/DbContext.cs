@@ -8,12 +8,9 @@ namespace Library.Database
 {
     public abstract class DbContext : IDbContext
     {
-        protected readonly string _connectionString;
+        protected DbContext(string connectionString) => ConnectionString = connectionString;
 
-        protected DbContext(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public string ConnectionString { get; }
 
         public abstract Task<IEnumerable<T>> QueryAsync<T>(string query, CancellationToken cancellationToken = default);
         public abstract Task<IEnumerable<T>> QueryAsync<T>(string query, DynamicParameters parameters, CancellationToken cancellationToken = default);

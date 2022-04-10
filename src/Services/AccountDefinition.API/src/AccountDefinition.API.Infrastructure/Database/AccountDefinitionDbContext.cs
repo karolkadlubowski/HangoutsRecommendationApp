@@ -15,7 +15,7 @@ namespace AccountDefinition.API.Infrastructure.Database
 
         public override async Task<IEnumerable<T>> QueryAsync<T>(string query, CancellationToken cancellationToken = default)
         {
-            await using (var connection = new NpgsqlConnection(_connectionString))
+            await using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 return await connection.QueryAsync<T>(query);
             }
@@ -23,7 +23,7 @@ namespace AccountDefinition.API.Infrastructure.Database
 
         public override async Task<IEnumerable<T>> QueryAsync<T>(string query, DynamicParameters parameters, CancellationToken cancellationToken = default)
         {
-            await using (var connection = new NpgsqlConnection(_connectionString))
+            await using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 return await connection.QueryAsync<T>(query, parameters);
             }
@@ -31,7 +31,7 @@ namespace AccountDefinition.API.Infrastructure.Database
 
         public override async Task<int> ExecuteAsync(string query, CancellationToken cancellationToken = default)
         {
-            await using (var connection = new NpgsqlConnection(_connectionString))
+            await using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 return await connection.ExecuteAsync(query);
             }
@@ -39,7 +39,7 @@ namespace AccountDefinition.API.Infrastructure.Database
 
         public override async Task<int> ExecuteAsync(string query, DynamicParameters parameters, CancellationToken cancellationToken = default)
         {
-            await using (var connection = new NpgsqlConnection(_connectionString))
+            await using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 return await connection.ExecuteAsync(query, parameters);
             }
