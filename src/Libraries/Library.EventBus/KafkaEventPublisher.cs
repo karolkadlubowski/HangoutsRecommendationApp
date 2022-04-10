@@ -12,9 +12,9 @@ namespace Library.EventBus
     {
         private readonly IProducer<Null, string> _producer;
 
-        public KafkaEventPublisher(KafkaSettings kafkaSettings)
+        public KafkaEventPublisher(KafkaConfig kafkaConfig)
         {
-            var config = new ProducerConfig { BootstrapServers = kafkaSettings.BootstrapServers };
+            var config = new ProducerConfig { BootstrapServers = kafkaConfig.BootstrapServers };
             _producer = new ProducerBuilder<Null, string>(config)
                 .Build();
         }

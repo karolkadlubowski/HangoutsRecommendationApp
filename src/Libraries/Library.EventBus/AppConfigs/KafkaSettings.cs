@@ -1,6 +1,6 @@
 ﻿namespace Library.EventBus.AppConfigs
 {
-    public record KafkaSettings
+    public record KafkaConfig
     {
         public string BootstrapServers { get; init; }
     }

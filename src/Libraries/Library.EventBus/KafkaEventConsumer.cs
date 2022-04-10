@@ -13,11 +13,11 @@ namespace Library.EventBus
     {
         private readonly ClusterClient _clusterClient;
 
-        public KafkaEventConsumer(KafkaSettings kafkaSettings)
+        public KafkaEventConsumer(KafkaConfig kafkaConfig)
         {
             _clusterClient = new ClusterClient(new Configuration
             {
-                Seeds = kafkaSettings.BootstrapServers
+                Seeds = kafkaConfig.BootstrapServers
             }, null);
         }
 

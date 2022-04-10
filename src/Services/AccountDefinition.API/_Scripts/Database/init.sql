@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS "AccountDefinition"."AccountProviders"
 CREATE TABLE IF NOT EXISTS "AccountDefinition"."AccountTypes"
 (
     "AccountTypeId" bigserial PRIMARY KEY,
-    "Type"          int UNIQUE NOT NULL,
+    "Type"          int       UNIQUE NOT NULL,
     "CreatedOn"     timestamp without time zone DEFAULT (now() at time zone 'utc') NOT NULL,
     "ModifiedOn"    timestamp without time zone
 );
@@ -20,9 +20,9 @@ CREATE TABLE IF NOT EXISTS "AccountDefinition"."AccountTypes"
 DELETE
 FROM "AccountDefinition"."AccountProviders";
 INSERT INTO "AccountDefinition"."AccountProviders" ("AccountProviderId", "Provider")
-VALUES (1, 0),
-       (2, 1),
-       (3, 2);
+VALUES (1, 'INTERNAL'),
+       (2, 'GOOGLE'),
+       (3, 'FACEBOOK');
 SELECT setval(pg_get_serial_sequence('"AccountDefinition"."AccountProviders"', 'AccountProviderId'),
               (SELECT max("AccountProviderId") FROM "AccountDefinition"."AccountProviders"));
 
