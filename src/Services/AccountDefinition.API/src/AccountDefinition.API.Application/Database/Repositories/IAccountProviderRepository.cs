@@ -8,5 +8,7 @@ namespace AccountDefinition.API.Application.Database.Repositories
     public interface IAccountProviderRepository : IDbRepository<AccountProvider>
     {
         Task<IReadOnlyList<AccountProvider>> GetAccountProvidersAsync();
+
+        Task<AccountProvider> InsertAccountProviderAsync(string provider);
     }
 }

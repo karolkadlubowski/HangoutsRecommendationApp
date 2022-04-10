@@ -9,6 +9,7 @@ namespace AccountDefinition.API.Application.Mapper
         public MapperProfile()
         {
             CreateMap<AccountType, AccountTypeDto>();
+            CreateMap<AccountProvider, AccountProviderDto>();
         }
     }
 }

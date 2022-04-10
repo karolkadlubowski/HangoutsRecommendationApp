@@ -2,7 +2,9 @@
 {
     public static class QueriesNames
     {
-        public const string SelectAccountTypes = nameof(SelectAccountTypes);
         public const string SelectAccountProviders = nameof(SelectAccountProviders);
+        public const string InsertAccountProvider = nameof(InsertAccountProvider);
+
+        public const string SelectAccountTypes = nameof(SelectAccountTypes);
     }
 }

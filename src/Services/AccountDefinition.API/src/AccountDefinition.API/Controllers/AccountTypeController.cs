@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AccountDefinition.API.Controllers
 {
     /// <summary>
-    /// Controller which provides AccountType CRUD functionality
+    /// Controller which provides AccountType readonly functionality
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -25,6 +25,7 @@ namespace AccountDefinition.API.Controllers
         /// </summary>
         [HttpGet("list")]
         [ProducesResponseType(typeof(GetAccountTypesResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAccountTypesResponse), (int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetAccountTypes([FromQuery] GetAccountTypesQuery query)
         {
             _logger.Info($"Sending query: {nameof(GetAccountTypesQuery)}");

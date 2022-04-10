@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS "AccountDefinition"."AccountProviders"
 (
     "AccountProviderId" bigserial PRIMARY KEY,
-    "Provider"          int UNIQUE,
+    "Provider"          varchar   UNIQUE NOT NULL,
     "CreatedOn"         timestamp without time zone DEFAULT (now() at time zone 'utc') NOT NULL,
     "ModifiedOn"        timestamp without time zone
 );
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS "AccountDefinition"."AccountProviders"
 CREATE TABLE IF NOT EXISTS "AccountDefinition"."AccountTypes"
 (
     "AccountTypeId" bigserial PRIMARY KEY,
-    "Type"          int UNIQUE,
+    "Type"          int UNIQUE NOT NULL,
     "CreatedOn"     timestamp without time zone DEFAULT (now() at time zone 'utc') NOT NULL,
     "ModifiedOn"    timestamp without time zone
 );

@@ -16,7 +16,6 @@
       <Folder Include="Clients\Models\Factories" />
       <Folder Include="Clients\Models\Requests" />
       <Folder Include="Clients\Models\Responses" />
-      <Folder Include="Services" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,6 +27,8 @@
       <EmbeddedResource Include="Database\Queries\SelectAccountTypes.sql" />
       <None Remove="Database\Queries\SelectAccountProviders.sql" />
       <EmbeddedResource Include="Database\Queries\SelectAccountProviders.sql" />
+      <None Remove="Database\Queries\InsertAccountProvider.sql" />
+      <EmbeddedResource Include="Database\Queries\InsertAccountProvider.sql" />
     </ItemGroup>
 
 </Project>
