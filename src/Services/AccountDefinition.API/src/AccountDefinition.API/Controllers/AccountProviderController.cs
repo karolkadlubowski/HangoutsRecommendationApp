@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Features.AddAccountProvider;
+using AccountDefinition.API.Application.Features.DeleteAccountProviderById;
 using Library.Shared.Controllers;
 using Library.Shared.Extensions;
 using Library.Shared.Logging;
@@ -33,6 +34,22 @@ namespace AccountDefinition.API.Controllers
         public async Task<IActionResult> AddAccountProvider(AddAccountProviderCommand command)
         {
             _logger.Info($"Sending command: {nameof(AddAccountProviderCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
+        }
+
+        /// <summary>
+        /// Delete AccountProvider entity from the database with specified AccountProviderId
+        /// </summary>
+        [HttpDelete]
+        [ProducesResponseType(typeof(DeleteAccountProviderByIdResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DeleteAccountProviderByIdResponse), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(DeleteAccountProviderByIdResponse), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> DeleteAccountProviderById([FromQuery] DeleteAccountProviderByIdCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(DeleteAccountProviderByIdCommand)}");
 
             var response = await _mediator.Send(command);
 

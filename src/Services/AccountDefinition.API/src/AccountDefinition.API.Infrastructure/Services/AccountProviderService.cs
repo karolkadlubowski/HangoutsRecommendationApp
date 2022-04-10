@@ -2,6 +2,7 @@
 using AccountDefinition.API.Application.Abstractions;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Application.Features.AddAccountProvider;
+using AccountDefinition.API.Application.Features.DeleteAccountProviderById;
 using AutoMapper;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
@@ -31,9 +32,21 @@ namespace AccountDefinition.API.Infrastructure.Services
                                       $"Inserting account provider of type: '{command.Provider}' to the database failed");
 
             _logger.Info(
-                $"New account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
+                $"Account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
 
             return _mapper.Map<AccountProviderDto>(accountProvider);
+        }
+
+        public async Task<long> DeleteAccountProviderByIdAsync(DeleteAccountProviderByIdCommand byIdCommand)
+        {
+            var deletedAccountProviderId = await _accountProviderRepository.DeleteAccountProviderByIdAsync(byIdCommand.AccountProviderId);
+
+            if (deletedAccountProviderId == default)
+                throw new EntityNotFoundException($"Account provider #{byIdCommand.AccountProviderId} not found in the database");
+
+            _logger.Info($"Account provider #{deletedAccountProviderId} deleted from the database successfully");
+
+            return deletedAccountProviderId;
         }
     }
 }

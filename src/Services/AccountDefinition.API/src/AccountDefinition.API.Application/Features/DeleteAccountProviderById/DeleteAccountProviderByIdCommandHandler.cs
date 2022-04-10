@@ -8,16 +8,16 @@ using Library.Shared.Logging;
 using Library.Shared.Models.AccountDefinition.Events;
 using MediatR;
 
-namespace AccountDefinition.API.Application.Features.AddAccountProvider
+namespace AccountDefinition.API.Application.Features.DeleteAccountProviderById
 {
-    public class AddAccountProviderCommandHandler : IRequestHandler<AddAccountProviderCommand, AddAccountProviderResponse>
+    public class DeleteAccountProviderByIdCommandHandler : IRequestHandler<DeleteAccountProviderByIdCommand, DeleteAccountProviderByIdResponse>
     {
         private readonly IAccountProviderService _accountProviderService;
         private readonly IEventSender _eventSender;
         private readonly ITransactionManager _transactionManager;
         private readonly ILogger _logger;
 
-        public AddAccountProviderCommandHandler(IAccountProviderService accountProviderService,
+        public DeleteAccountProviderByIdCommandHandler(IAccountProviderService accountProviderService,
             IEventSender eventSender,
             ITransactionManager transactionManager,
             ILogger logger)
@@ -28,21 +28,24 @@ namespace AccountDefinition.API.Application.Features.AddAccountProvider
             _logger = logger;
         }
 
-        public async Task<AddAccountProviderResponse> Handle(AddAccountProviderCommand request, CancellationToken cancellationToken)
+        public async Task<DeleteAccountProviderByIdResponse> Handle(DeleteAccountProviderByIdCommand request, CancellationToken cancellationToken)
         {
             using (var transaction = _transactionManager.CreateScope())
             {
                 _logger.Trace("> Database transaction began");
 
-                var addedAccountProvider = await _accountProviderService.AddAccountProviderAsync(request);
+                var deletedAccountProviderId = await _accountProviderService.DeleteAccountProviderByIdAsync(request);
 
-                await _eventSender.SendEventWithoutDataAsync<AccountProviderAddedEvent>(EventBusTopics.AccountDefinition, cancellationToken);
+                await _eventSender.SendEventWithoutDataAsync<AccountProviderDeletedEvent>(EventBusTopics.AccountDefinition, cancellationToken);
 
                 transaction.Complete();
 
                 _logger.Trace("< Database transaction committed");
 
-                return new AddAccountProviderResponse { AddedAccountProvider = addedAccountProvider, };
+                return new DeleteAccountProviderByIdResponse
+                {
+                    DeletedAccountProviderId = deletedAccountProviderId
+                };
             }
         }
     }

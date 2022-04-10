@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AccountDefinition.API.Application.Database.Factories;
 using AccountDefinition.API.Application.Database.Queries;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Domain.Entities;
-using AccountDefinition.API.Domain.ValueObjects;
 using Dapper;
-using Library.Database;
 using Library.Database.Abstractions;
 using Library.Shared.Resources;
 using Npgsql;
@@ -42,14 +41,26 @@ namespace AccountDefinition.API.Infrastructure.Database.Repositories
                 QueryLocationFactory.QueriesAssembly
             );
 
-            var parameters = new DynamicParametersBuilder()
-                .Append("@Provider", new ProviderName(provider).Value)
-                .Build();
+            var parameters = AccountProviderParamsFactory.InsertAccountProviderParams(provider);
 
             await using (var connection = new NpgsqlConnection(_dbContext.ConnectionString))
             {
                 return await connection.QuerySingleAsync<AccountProvider>(query, parameters);
             }
+        }
+
+        public async Task<long> DeleteAccountProviderByIdAsync(long accountProviderId)
+        {
+            var query = await _resourceReader.ReadResourceAsync(
+                QueryLocationFactory.PrepareQueryLocation(QueriesNames.DeleteAccountProviderById),
+                QueryLocationFactory.QueriesAssembly
+            );
+
+            var parameters = AccountProviderParamsFactory.DeleteAccountProviderByIdParams(accountProviderId);
+
+            return await _dbContext.ExecuteAsync(query, parameters) > 0
+                ? accountProviderId
+                : default;
         }
     }
 }

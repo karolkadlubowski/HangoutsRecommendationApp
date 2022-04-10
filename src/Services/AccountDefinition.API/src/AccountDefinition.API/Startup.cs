@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using NLog;
 using AccountDefinition.API.DI;
 using AccountDefinition.API.HealthChecks;
+using Library.Database.DI;
 using Library.Shared.DI.Configs;
 using IConfigurationProvider = AccountDefinition.API.Application.Providers.IConfigurationProvider;
 
@@ -33,7 +34,9 @@ namespace AccountDefinition.API
                 Configuration,
                 "AccountDefinition.API.Application");
 
-            services.AddAccountDefinitionDbContext(Configuration);
+            services
+                .AddAccountDefinitionDbContext(Configuration)
+                .AddTransactionManager();
             _logger.Trace("> AccountDefinition database context registered");
 
             services.AddRepositories();

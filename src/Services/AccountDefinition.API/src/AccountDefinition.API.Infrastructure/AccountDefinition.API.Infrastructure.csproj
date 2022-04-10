@@ -25,6 +25,8 @@
       <EmbeddedResource Include="Database\Queries\SelectAccountProviders.sql" />
       <None Remove="Database\Queries\InsertAccountProvider.sql" />
       <EmbeddedResource Include="Database\Queries\InsertAccountProvider.sql" />
+      <None Remove="Database\Queries\DeleteAccountProvider.sql" />
+      <EmbeddedResource Include="Database\Queries\DeleteAccountProviderById.sql" />
     </ItemGroup>
 
 </Project>
