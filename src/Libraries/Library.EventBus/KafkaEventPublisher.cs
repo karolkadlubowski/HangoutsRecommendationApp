@@ -10,17 +10,17 @@ namespace Library.EventBus
 {
     public class KafkaEventPublisher : IEventPublisher
     {
-        private readonly IProducer<EventType, string> _producer;
+        private readonly IProducer<Null, string> _producer;
 
         public KafkaEventPublisher(KafkaSettings kafkaSettings)
         {
             var config = new ProducerConfig { BootstrapServers = kafkaSettings.BootstrapServers };
-            _producer = new ProducerBuilder<EventType, string>(config)
+            _producer = new ProducerBuilder<Null, string>(config)
                 .Build();
         }
 
         public async Task PublishAsync<TEvent>(string topic, TEvent @event, CancellationToken cancellationToken = default)
-            where TEvent : Event<object>
+            where TEvent : Event
         {
             if (@event is null)
                 throw new ArgumentNullException(nameof(@event));
@@ -30,9 +30,8 @@ namespace Library.EventBus
 
             var serializedEvent = JsonSerializer.Serialize(@event);
 
-            await _producer.ProduceAsync(topic, new Message<EventType, string>
+            await _producer.ProduceAsync(topic, new Message<Null, string>
             {
-                Key = @event.EventType,
                 Value = serializedEvent
             }, cancellationToken);
         }

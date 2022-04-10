@@ -2,8 +2,8 @@
 
 namespace Library.Shared.Models.AccountDefinition.Events
 {
-    public record AccountProviderAddedEvent : EventWithoutData
+    public record AccountProviderAddedEvent : Event
     {
-        public override string EventName => EventTypeConverter.Convert(EventType.ACCOUNT_PROVIDER_ADDED);
+        public AccountProviderAddedEvent() => EventType = EventType.ACCOUNT_PROVIDER_ADDED;
     }
 }

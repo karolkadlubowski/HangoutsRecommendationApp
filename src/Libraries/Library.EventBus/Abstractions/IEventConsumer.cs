@@ -6,7 +6,7 @@ namespace Library.EventBus.Abstractions
 {
     public interface IEventConsumer
     {
-        event EventHandler<EventType> EventReceived;
+        event EventHandler<Event> EventReceived;
 
         Task ConsumeFromLatestAsync(string topic, CancellationToken cancellationToken = default);
     }

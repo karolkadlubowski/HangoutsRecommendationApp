@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Kafka.Public;
@@ -20,7 +21,7 @@ namespace Library.EventBus
             }, null);
         }
 
-        public event EventHandler<EventType> EventReceived;
+        public event EventHandler<Event> EventReceived;
 
         public async Task ConsumeFromLatestAsync(string topic, CancellationToken cancellationToken = default)
             => await Task.Factory.StartNew(() =>
@@ -29,11 +30,11 @@ namespace Library.EventBus
 
                 _clusterClient.MessageReceived += record =>
                 {
-                    var eventType = Enum.Parse<EventType>(record.Key.ToString() ?? string.Empty);
                     var serializedEvent = Encoding.UTF8.GetString(record.Value as byte[] ?? Array.Empty<byte>());
+                    var @event = JsonSerializer.Deserialize<Event>(serializedEvent);
 
                     if (serializedEvent != null)
-                        EventReceived?.Invoke(this, eventType);
+                        EventReceived?.Invoke(this, @event);
                 };
             });
     }

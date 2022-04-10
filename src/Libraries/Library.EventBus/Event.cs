@@ -2,16 +2,18 @@
 
 namespace Library.EventBus
 {
-    public abstract record Event<TData>
+    public record Event
     {
         public Guid EventId { get; init; } = Guid.NewGuid();
         public DateTime CreatedOn { get; init; } = DateTime.UtcNow;
         public Guid TransactionId { get; init; } = Guid.NewGuid();
+        public EventType EventType { get; init; }
 
-        public abstract string EventName { get; }
+        public object Data { get; init; }
 
-        public TData Data { get; init; }
+        public string EventName => EventTypeConverter.Convert(EventType);
 
-        public EventType EventType => Enum.Parse<EventType>(EventName);
+        public virtual TData GetData<TData>() where TData : class
+            => Data as TData;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Library.Shared.Models.AccountDefinition.Events
 {
-    public record AccountProviderDeletedEvent : EventWithoutData
+    public record AccountProviderDeletedEvent : Event
     {
-        public override string EventName => EventTypeConverter.Convert(EventType.ACCOUNT_PROVIDER_DELETED);
+        public AccountProviderDeletedEvent() => EventType = EventType.ACCOUNT_PROVIDER_DELETED;
     }
 }
