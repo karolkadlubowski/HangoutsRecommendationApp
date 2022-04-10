@@ -1,3 +1,4 @@
+using AccountDefinition.API.Application.Mapper;
 using Library.Shared.DI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using NLog;
 using AccountDefinition.API.DI;
 using AccountDefinition.API.HealthChecks;
+using Library.Shared.DI.Configs;
 using IConfigurationProvider = AccountDefinition.API.Application.Providers.IConfigurationProvider;
 
 namespace AccountDefinition.API
@@ -50,6 +52,9 @@ namespace AccountDefinition.API
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");
 
+            services.AddAutoMapper(typeof(MapperProfile));
+            _logger.Trace("> AutoMapper profile registered");
+
             _logger.Info("Application registered successfully");
         }
 
@@ -66,6 +71,8 @@ namespace AccountDefinition.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseLoggingRequestScope();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }

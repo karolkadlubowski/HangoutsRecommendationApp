@@ -26,6 +26,8 @@
     <ItemGroup>
       <None Remove="Database\Queries\SelectAccountTypes.sql" />
       <EmbeddedResource Include="Database\Queries\SelectAccountTypes.sql" />
+      <None Remove="Database\Queries\SelectAccountProviders.sql" />
+      <EmbeddedResource Include="Database\Queries\SelectAccountProviders.sql" />
     </ItemGroup>
 
 </Project>
