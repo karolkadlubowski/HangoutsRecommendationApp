@@ -1,4 +1,4 @@
-﻿using AccountDefinition.API.Domain.ValueObjects;
+﻿using System;
 using Dapper;
 using Library.Database;
 
@@ -6,9 +6,10 @@ namespace AccountDefinition.API.Application.Database.Factories
 {
     public static class AccountProviderParamsFactory
     {
-        public static DynamicParameters InsertAccountProviderParams(string provider)
+        public static DynamicParameters InsertAccountProviderParams(string provider, DateTime createdOn)
             => new DynamicParametersBuilder()
-                .Append("@Provider", new ProviderName(provider).Value)
+                .Append("@Provider", provider)
+                .Append("@CreatedOn", createdOn)
                 .Build();
 
         public static DynamicParameters DeleteAccountProviderByIdParams(long accountProviderId)

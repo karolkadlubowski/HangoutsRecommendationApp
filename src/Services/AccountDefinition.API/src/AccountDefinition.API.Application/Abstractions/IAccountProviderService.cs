@@ -8,6 +8,6 @@ namespace AccountDefinition.API.Application.Abstractions
     public interface IAccountProviderService : IReadOnlyAccountProviderService
     {
         Task<AccountProviderDto> AddAccountProviderAsync(AddAccountProviderCommand command);
-        Task<long> DeleteAccountProviderByIdAsync(DeleteAccountProviderByIdCommand byIdCommand);
+        Task<long> DeleteAccountProviderByIdAsync(DeleteAccountProviderByIdCommand command);
     }
 }

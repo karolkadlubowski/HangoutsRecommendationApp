@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Application.Features.AddAccountProvider;
 using AccountDefinition.API.Application.Services;
+using AccountDefinition.API.Domain.Entities;
 using AccountDefinition.API.Tests.Unit.Utilities.Models;
 using AutoMapper;
 using FluentAssertions;
@@ -54,7 +55,7 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
             //Arrange
             var expectedResult = new AccountProviderDto { Provider = ExpectedProvider, CreatedOn = _createdOn };
 
-            _accountProviderRepository.Setup(x => x.InsertAccountProviderAsync(It.IsAny<string>()))
+            _accountProviderRepository.Setup(x => x.InsertAccountProviderAsync(It.IsAny<AccountProvider>()))
                 .ReturnsAsync(_accountProvider);
             _mapper.Setup(x => x.Map<AccountProviderDto>(_accountProvider))
                 .Returns(new AccountProviderDto { Provider = _accountProvider.Provider, CreatedOn = _accountProvider.CreatedOn });
@@ -70,7 +71,7 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
         public async Task AddAccountProviderAsync_WhenAccountProviderInsertingToDatabaseFailed_ThrowDatabaseOperationException()
         {
             //Arrange
-            _accountProviderRepository.Setup(x => x.InsertAccountProviderAsync(It.IsAny<string>()))
+            _accountProviderRepository.Setup(x => x.InsertAccountProviderAsync(It.IsAny<AccountProvider>()))
                 .ReturnsAsync(() => null);
 
             //Act

@@ -3,6 +3,7 @@ using AccountDefinition.API.Application.Abstractions;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Application.Features.AddAccountProvider;
 using AccountDefinition.API.Application.Features.DeleteAccountProviderById;
+using AccountDefinition.API.Domain.Entities;
 using AutoMapper;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
@@ -27,9 +28,11 @@ namespace AccountDefinition.API.Application.Services
 
         public async Task<AccountProviderDto> AddAccountProviderAsync(AddAccountProviderCommand command)
         {
-            var accountProvider = await _accountProviderRepository.InsertAccountProviderAsync(command.Provider)
-                                  ?? throw new DatabaseOperationException(
-                                      $"Inserting account provider of type: '{command.Provider}' to the database failed");
+            var accountProvider = AccountProvider.Create(command.Provider);
+
+            accountProvider = await _accountProviderRepository.InsertAccountProviderAsync(accountProvider)
+                              ?? throw new DatabaseOperationException(
+                                  $"Inserting account provider of type: '{accountProvider.Provider}' to the database failed");
 
             _logger.Info(
                 $"Account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
@@ -37,12 +40,12 @@ namespace AccountDefinition.API.Application.Services
             return _mapper.Map<AccountProviderDto>(accountProvider);
         }
 
-        public async Task<long> DeleteAccountProviderByIdAsync(DeleteAccountProviderByIdCommand byIdCommand)
+        public async Task<long> DeleteAccountProviderByIdAsync(DeleteAccountProviderByIdCommand command)
         {
-            var deletedAccountProviderId = await _accountProviderRepository.DeleteAccountProviderByIdAsync(byIdCommand.AccountProviderId);
+            var deletedAccountProviderId = await _accountProviderRepository.DeleteAccountProviderByIdAsync(command.AccountProviderId);
 
             if (deletedAccountProviderId == default)
-                throw new EntityNotFoundException($"Account provider #{byIdCommand.AccountProviderId} not found in the database");
+                throw new EntityNotFoundException($"Account provider #{command.AccountProviderId} not found in the database");
 
             _logger.Info($"Account provider #{deletedAccountProviderId} deleted from the database successfully");
 

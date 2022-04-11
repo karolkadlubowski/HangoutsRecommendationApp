@@ -9,7 +9,7 @@ namespace AccountDefinition.API.Application.Database.Repositories
     {
         Task<IReadOnlyList<AccountProvider>> GetAccountProvidersAsync();
 
-        Task<AccountProvider> InsertAccountProviderAsync(string provider);
+        Task<AccountProvider> InsertAccountProviderAsync(AccountProvider accountProvider);
         Task<long> DeleteAccountProviderByIdAsync(long accountProviderId);
     }
 }

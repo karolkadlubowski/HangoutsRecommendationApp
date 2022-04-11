@@ -10,11 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Events\Consumers" />
-      <Folder Include="Events\Producers" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Npgsql" Version="5.0.12" />
     </ItemGroup>
 

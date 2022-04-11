@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Database.Factories;
 using AccountDefinition.API.Application.Database.Queries;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Domain.Entities;
+using AccountDefinition.API.Infrastructure.Database.Extensions;
 using Dapper;
 using Library.Database.Abstractions;
+using Library.Shared.Exceptions;
 using Library.Shared.Resources;
 using Npgsql;
 
@@ -34,18 +37,29 @@ namespace AccountDefinition.API.Infrastructure.Database.Repositories
                 .ToList();
         }
 
-        public async Task<AccountProvider> InsertAccountProviderAsync(string provider)
+        public async Task<AccountProvider> InsertAccountProviderAsync(AccountProvider accountProvider)
         {
             var query = await _resourceReader.ReadResourceAsync(
                 QueryLocationFactory.PrepareQueryLocation(QueriesNames.InsertAccountProvider),
                 QueryLocationFactory.QueriesAssembly
             );
 
-            var parameters = AccountProviderParamsFactory.InsertAccountProviderParams(provider);
+            var parameters = AccountProviderParamsFactory.InsertAccountProviderParams(accountProvider.Provider,
+                accountProvider.CreatedOn);
 
-            await using (var connection = new NpgsqlConnection(_dbContext.ConnectionString))
+            try
             {
-                return await connection.QuerySingleAsync<AccountProvider>(query, parameters);
+                await using (var connection = new NpgsqlConnection(_dbContext.ConnectionString))
+                {
+                    return await connection.QuerySingleAsync<AccountProvider>(query, parameters);
+                }
+            }
+            catch (Exception e)
+            {
+                if ((e.InnerException as PostgresException)?.IsUniqueConstraintViolationException() ?? false)
+                    throw new DuplicateExistsException($"Account provider with provider name: '{accountProvider.Provider}' already exists in the database");
+
+                throw;
             }
         }
 
