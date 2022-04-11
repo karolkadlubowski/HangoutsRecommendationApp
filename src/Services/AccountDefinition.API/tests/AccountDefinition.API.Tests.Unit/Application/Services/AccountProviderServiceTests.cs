@@ -11,6 +11,7 @@ using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using Library.Shared.Models.AccountDefinition.Dtos;
 using Moq;
+using Npgsql;
 using NUnit.Framework;
 
 namespace AccountDefinition.API.Tests.Unit.Application.Services
@@ -79,6 +80,22 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
 
             //Assert
             await act.Should().ThrowAsync<DatabaseOperationException>();
+        }
+
+        [Test]
+        public async Task AddAccountProviderAsync_WhenAccountProviderAlreadyExistsInDatabase_ThrowDuplicateAlreadyExistsException()
+        {
+            //Arrange
+            const string UniqueConstraintViolationExceptionCode = "23505";
+
+            _accountProviderRepository.Setup(x => x.InsertAccountProviderAsync(It.IsAny<AccountProvider>()))
+                .Throws(() => new PostgresException("", "", "", UniqueConstraintViolationExceptionCode));
+
+            //Act
+            Func<Task> act = () => _accountProviderService.AddAccountProviderAsync(_command);
+
+            //Assert
+            await act.Should().ThrowAsync<DuplicateExistsException>();
         }
     }
 }

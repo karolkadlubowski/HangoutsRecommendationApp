@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Database.Factories;
 using AccountDefinition.API.Application.Database.Queries;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Domain.Entities;
-using AccountDefinition.API.Infrastructure.Database.Extensions;
 using Dapper;
 using Library.Database.Abstractions;
-using Library.Shared.Exceptions;
 using Library.Shared.Resources;
 using Npgsql;
 
@@ -47,19 +44,9 @@ namespace AccountDefinition.API.Infrastructure.Database.Repositories
             var parameters = AccountProviderParamsFactory.InsertAccountProviderParams(accountProvider.Provider,
                 accountProvider.CreatedOn);
 
-            try
+            await using (var connection = new NpgsqlConnection(_dbContext.ConnectionString))
             {
-                await using (var connection = new NpgsqlConnection(_dbContext.ConnectionString))
-                {
-                    return await connection.QuerySingleAsync<AccountProvider>(query, parameters);
-                }
-            }
-            catch (Exception e)
-            {
-                if ((e.InnerException as PostgresException)?.IsUniqueConstraintViolationException() ?? false)
-                    throw new DuplicateExistsException($"Account provider with provider name: '{accountProvider.Provider}' already exists in the database");
-
-                throw;
+                return await connection.QuerySingleAsync<AccountProvider>(query, parameters);
             }
         }
 
