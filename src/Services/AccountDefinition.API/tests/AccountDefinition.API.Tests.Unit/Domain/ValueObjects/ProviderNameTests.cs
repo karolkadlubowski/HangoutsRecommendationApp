@@ -27,6 +27,7 @@ namespace AccountDefinition.API.Tests.Unit.Domain.ValueObjects
         [TestCase("Provider ")]
         [TestCase(" Provider")]
         [TestCase(" Provider ")]
+        [TestCase("Provider")]
         public void Create_WhenProviderIsNotEmpty_ReturnProviderWithTrimmedWhiteCharactersAndInUpperCase(string provider)
         {
             //Arrange
