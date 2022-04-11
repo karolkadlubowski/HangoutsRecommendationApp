@@ -1,22 +1,9 @@
 ﻿version: '3.4'
 
 services:
-  postgresql.database:
-    image: postgres
-    container_name: postgresql.database
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin1234
-      - POSTGRES_DB=IPLACE_DB
-    restart: always
-    ports:
-      - 6000:5432
-    volumes:
-      - ./src/Services/AccountDefinition.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_accountdefinition.sql:ro
-  
   kafka:
-    image: confluentinc/cp-kafka
     container_name: kafka
+    image: confluentinc/cp-kafka
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -31,10 +18,37 @@ services:
       - zookeeper
 
   zookeeper:
-    image: confluentinc/cp-zookeeper
     container_name: zookeeper
+    image: confluentinc/cp-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    restart: always
     ports:
       - 2181:2181
+  
+  postgresql.database:
+    container_name: postgresql.database
+    image: postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=IPLACE_DB
+    restart: always
+    ports:
+      - 6000:5432
+    volumes:
+      - ./src/Services/AccountDefinition.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_accountdefinition.sql:ro
+  
+  filestorage.database:
+    container_name: filestorage.database
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin1234
+      - MONGO_INITDB_DATABASE=FILESTORAGE_DB
+    restart: always
+    ports:
+      - 6001:27017
+    volumes:
+      - ./src/Services/FileStorage.API/_Scripts/Database:/docker-entrypoint-initdb.d:ro
