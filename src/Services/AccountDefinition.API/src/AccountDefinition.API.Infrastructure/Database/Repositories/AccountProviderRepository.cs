@@ -46,7 +46,8 @@ namespace AccountDefinition.API.Infrastructure.Database.Repositories
 
             await using (var connection = new NpgsqlConnection(_dbContext.ConnectionString))
             {
-                return await connection.QuerySingleAsync<AccountProvider>(query, parameters);
+                accountProvider = await connection.QuerySingleAsync<AccountProvider>(query, parameters);
+                return accountProvider;
             }
         }
 
