@@ -1,6 +1,9 @@
-﻿namespace AccountDefinition.API.Domain.Configuration
+﻿using Library.Shared.AppConfigs;
+
+namespace AccountDefinition.API.Domain.Configuration
 {
-    public class ServiceConfiguration
+    public record ServiceConfiguration
     {
+        public DatabaseConfig DatabaseConfig { get; init; }
     }
 }

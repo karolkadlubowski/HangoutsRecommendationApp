@@ -1,4 +1,5 @@
 using Library.Shared.DI;
+using Library.Shared.DI.Configs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -58,6 +59,8 @@ namespace Template.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseLoggingRequestScope();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }

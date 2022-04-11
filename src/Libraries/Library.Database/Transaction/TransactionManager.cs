@@ -9,6 +9,6 @@ namespace Library.Database.Transaction
             => new DefaultTransaction(System.Transactions.Transaction.Current);
 
         public ITransactionScope CreateScope(TransactionScopeOption options = TransactionScopeOption.Required)
-            => new DefaultTransactionScope(new TransactionScope(options));
+            => new DefaultTransactionScope(new TransactionScope(options, TransactionScopeAsyncFlowOption.Enabled));
     }
 }

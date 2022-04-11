@@ -2,7 +2,7 @@
 {
     public record CacheConfig
     {
-        public const string ConnectionString = "CacheConfig:DistributedCacheConnectionString";
+        public const string DistributedCacheConnectionStringKey = "CacheConfig:DistributedCacheConnectionString";
 
         public int? SlidingExpirationMinutes { get; init; }
         public int? AbsoluteExpirationMinutes { get; init; }

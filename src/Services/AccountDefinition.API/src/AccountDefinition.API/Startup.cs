@@ -1,3 +1,4 @@
+using AccountDefinition.API.Application.Mapper;
 using Library.Shared.DI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using AccountDefinition.API.DI;
+using AccountDefinition.API.HealthChecks;
+using Library.Database.DI;
+using Library.Shared.DI.Configs;
 using IConfigurationProvider = AccountDefinition.API.Application.Providers.IConfigurationProvider;
 
 namespace AccountDefinition.API
@@ -30,17 +34,32 @@ namespace AccountDefinition.API
                 Configuration,
                 "AccountDefinition.API.Application");
 
+            services
+                .AddAccountDefinitionDbContext(Configuration)
+                .AddTransactionManager();
+            _logger.Trace("> AccountDefinition database context registered");
+
+            services.AddRepositories();
+            _logger.Trace("> Database repositories registered");
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
 
-            services.AddHealthChecks();
+            services.AddKafkaMessageBroker(Configuration);
+            _logger.Trace("> Kafka message broker registered");
+
+            services.AddHealthChecks()
+                .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
 
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");
+
+            services.AddAutoMapper(typeof(MapperProfile));
+            _logger.Trace("> AutoMapper profile registered");
 
             _logger.Info("Application registered successfully");
         }
@@ -58,6 +77,8 @@ namespace AccountDefinition.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseLoggingRequestScope();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }

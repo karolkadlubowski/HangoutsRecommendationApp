@@ -1,0 +1,11 @@
+﻿version: '3.4'
+
+services:
+  postgresql.database:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - postgres_init_scripts:/docker-entrypoint-initdb.d/
+
+volumes:
+  postgres_data:
+  postgres_init_scripts:
