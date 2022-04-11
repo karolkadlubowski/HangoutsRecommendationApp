@@ -13,11 +13,10 @@
       <Folder Include="Database\Repositories" />
       <Folder Include="Events\Consumers" />
       <Folder Include="Events\Producers" />
-      <Folder Include="Clients\Abstractions" />
-      <Folder Include="Clients\Models\Factories" />
-      <Folder Include="Clients\Models\Requests" />
-      <Folder Include="Clients\Models\Responses" />
-      <Folder Include="Services" />
+      <Folder Include="HttpClients\Abstractions" />
+      <Folder Include="HttpClients\Models\Factories" />
+      <Folder Include="HttpClients\Models\Requests" />
+      <Folder Include="HttpClients\Models\Responses" />
     </ItemGroup>
 
 </Project>
