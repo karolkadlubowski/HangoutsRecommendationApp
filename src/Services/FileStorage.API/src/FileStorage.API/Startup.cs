@@ -1,3 +1,4 @@
+using FileStorage.API.Application.Mapper;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using FileStorage.API.DI;
+using FileStorage.API.HealthChecks;
 using IConfigurationProvider = FileStorage.API.Application.Providers.IConfigurationProvider;
 
 namespace FileStorage.API
@@ -31,14 +33,26 @@ namespace FileStorage.API
                 Configuration,
                 "FileStorage.API.Application");
 
+            services
+                .AddFileStorageDbContext(Configuration);
+            _logger.Trace("> FileStorage database context registered");
+
+            services.AddRepositories();
+            _logger.Trace("> Database repositories registered");
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
 
-            services.AddHealthChecks();
+            services
+                .AddHealthChecks()
+                .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
+
+            services.AddAutoMapper(typeof(MapperProfile));
+            _logger.Trace("> AutoMapper profile registered");
 
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");

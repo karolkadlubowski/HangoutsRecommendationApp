@@ -17,9 +17,4 @@
       <ProjectReference Include="..\FileStorage.API.Infrastructure\FileStorage.API.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Controllers" />
-      <Folder Include="HealthChecks" />
-    </ItemGroup>
-
 </Project>

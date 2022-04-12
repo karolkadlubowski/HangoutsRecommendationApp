@@ -51,15 +51,16 @@ namespace AccountDefinition.API
             services.AddKafkaMessageBroker(Configuration);
             _logger.Trace("> Kafka message broker registered");
 
-            services.AddHealthChecks()
+            services
+                .AddHealthChecks()
                 .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
 
-            services.AddSwagger();
-            _logger.Trace("> Swagger UI registered");
-
             services.AddAutoMapper(typeof(MapperProfile));
             _logger.Trace("> AutoMapper profile registered");
+
+            services.AddSwagger();
+            _logger.Trace("> Swagger UI registered");
 
             _logger.Info("Application registered successfully");
         }
