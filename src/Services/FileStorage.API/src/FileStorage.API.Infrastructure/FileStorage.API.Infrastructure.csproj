@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FileStorage.API.Application\FileStorage.API.Application.csproj" />
+      <ProjectReference Include="..\FileStorage.API.Domain\FileStorage.API.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Database\Repositories" />
+    </ItemGroup>
+
+</Project>

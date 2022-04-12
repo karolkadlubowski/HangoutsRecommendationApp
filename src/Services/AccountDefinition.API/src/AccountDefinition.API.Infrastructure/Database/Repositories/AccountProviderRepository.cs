@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Database.Factories;
+using AccountDefinition.API.Application.Database.PersistenceModels;
 using AccountDefinition.API.Application.Database.Queries;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Domain.Entities;
@@ -23,18 +24,18 @@ namespace AccountDefinition.API.Infrastructure.Database.Repositories
             _resourceReader = resourceReader;
         }
 
-        public async Task<IReadOnlyList<AccountProvider>> GetAccountProvidersAsync()
+        public async Task<IReadOnlyList<AccountProviderPersistenceModel>> GetAccountProvidersAsync()
         {
             var query = await _resourceReader.ReadResourceAsync(
                 QueryLocationFactory.PrepareQueryLocation(QueriesNames.SelectAccountProviders),
                 QueryLocationFactory.QueriesAssembly
             );
 
-            return (await _dbContext.QueryAsync<AccountProvider>(query))
+            return (await _dbContext.QueryAsync<AccountProviderPersistenceModel>(query))
                 .ToList();
         }
 
-        public async Task<AccountProvider> InsertAccountProviderAsync(AccountProvider accountProvider)
+        public async Task<AccountProviderPersistenceModel> InsertAccountProviderAsync(AccountProvider accountProvider)
         {
             var query = await _resourceReader.ReadResourceAsync(
                 QueryLocationFactory.PrepareQueryLocation(QueriesNames.InsertAccountProvider),
@@ -46,7 +47,7 @@ namespace AccountDefinition.API.Infrastructure.Database.Repositories
 
             await using (var connection = new NpgsqlConnection(_dbContext.ConnectionString))
             {
-                return await connection.QuerySingleAsync<AccountProvider>(query, parameters);
+                return await connection.QuerySingleOrDefaultAsync<AccountProviderPersistenceModel>(query, parameters);
             }
         }
 

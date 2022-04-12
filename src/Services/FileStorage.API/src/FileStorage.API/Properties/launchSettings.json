@@ -1,11 +1,11 @@
 ﻿{
   "profiles": {
-    "AccountDefinition.API": {
+    "FileStorage.API": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:8030",
+      "applicationUrl": "http://localhost:8050",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

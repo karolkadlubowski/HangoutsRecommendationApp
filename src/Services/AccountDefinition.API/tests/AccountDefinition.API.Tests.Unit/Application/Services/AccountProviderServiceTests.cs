@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AccountDefinition.API.Application.Database.PersistenceModels;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Application.Features.AddAccountProvider;
 using AccountDefinition.API.Application.Services;
@@ -29,6 +30,7 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
         private Mock<ILogger> _logger;
 
         private TestAccountProvider _accountProvider;
+        private AccountProviderPersistenceModel _accountProviderPersistenceModel;
 
         private AddAccountProviderCommand _command;
 
@@ -38,6 +40,7 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
         public void SetUp()
         {
             _accountProvider = new TestAccountProvider(ExpectedProvider, _createdOn);
+            _accountProviderPersistenceModel = new AccountProviderPersistenceModel { Provider = ExpectedProvider, CreatedOn = _createdOn };
 
             _accountProviderRepository = new Mock<IAccountProviderRepository>();
             _mapper = new Mock<IMapper>();
@@ -57,7 +60,10 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
             var expectedResult = new AccountProviderDto { Provider = ExpectedProvider, CreatedOn = _createdOn };
 
             _accountProviderRepository.Setup(x => x.InsertAccountProviderAsync(It.IsAny<AccountProvider>()))
-                .ReturnsAsync(_accountProvider);
+                .ReturnsAsync(_accountProviderPersistenceModel);
+
+            _mapper.Setup(x => x.Map<AccountProviderPersistenceModel, AccountProvider>(_accountProviderPersistenceModel))
+                .Returns(_accountProvider);
             _mapper.Setup(x => x.Map<AccountProviderDto>(_accountProvider))
                 .Returns(new AccountProviderDto { Provider = _accountProvider.Provider, CreatedOn = _accountProvider.CreatedOn });
 

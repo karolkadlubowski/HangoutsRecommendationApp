@@ -1,6 +1,6 @@
 ﻿namespace Template.API.Domain.Configuration
 {
-    public class ServiceConfiguration
+    public record ServiceConfiguration
     {
     }
 }

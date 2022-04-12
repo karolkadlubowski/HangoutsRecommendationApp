@@ -5,7 +5,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - postgres_init_scripts:/docker-entrypoint-initdb.d/
+  
+  filestorage.database:
+    volumes:
+      - filestorage_data:/data/db
+      - filestorage_configdb:/data/configdb
 
 volumes:
   postgres_data:
   postgres_init_scripts:
+  filestorage_data:
+  filestorage_configdb:
