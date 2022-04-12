@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Abstractions;
+using AccountDefinition.API.Application.Database.PersistenceModels;
 using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Application.Features.AddAccountProvider;
 using AccountDefinition.API.Application.Features.DeleteAccountProviderById;
@@ -34,9 +35,11 @@ namespace AccountDefinition.API.Application.Services
 
             try
             {
-                accountProvider = await _accountProviderRepository.InsertAccountProviderAsync(accountProvider)
-                                  ?? throw new DatabaseOperationException(
-                                      $"Inserting account provider of type: '{accountProvider.Provider}' to the database failed");
+                var accountProviderPersistenceModel = await _accountProviderRepository.InsertAccountProviderAsync(accountProvider)
+                                                      ?? throw new DatabaseOperationException(
+                                                          $"Inserting account provider of type: '{accountProvider.Provider}' to the database failed");
+
+                accountProvider = _mapper.Map<AccountProviderPersistenceModel, AccountProvider>(accountProviderPersistenceModel);
 
                 _logger.Info(
                     $"Account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
