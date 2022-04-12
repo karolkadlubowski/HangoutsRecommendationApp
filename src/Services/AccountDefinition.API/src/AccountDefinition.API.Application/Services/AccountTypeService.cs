@@ -32,7 +32,7 @@ namespace AccountDefinition.API.Application.Services
 
             _logger.Info($"{accountTypes.Count} account types fetched from the database");
 
-            return _mapper.Map<IReadOnlyList<AccountTypeDto>>(accountTypePersistenceModels);
+            return _mapper.Map<IReadOnlyList<AccountTypeDto>>(accountTypes);
         }
     }
 }
