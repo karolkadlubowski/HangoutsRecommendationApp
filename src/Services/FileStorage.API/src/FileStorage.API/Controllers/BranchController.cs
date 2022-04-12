@@ -21,7 +21,7 @@ namespace FileStorage.API.Controllers
         }
 
         /// <summary>
-        /// Add new Branch entity to the database
+        /// Returns Branch entity from the database, find by the branch name
         /// </summary>
         /// <param name="query">
         /// Name - cannot be null or empty, cannot exceed 60 characters
