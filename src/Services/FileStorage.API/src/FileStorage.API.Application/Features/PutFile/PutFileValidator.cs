@@ -7,7 +7,7 @@ namespace FileStorage.API.Application.Features.PutFile
     {
         public PutFileValidator()
         {
-            RuleFor(x => x.Key)
+            RuleFor(x => x.FolderKey)
                 .NotNull()
                 .NotEmpty();
 

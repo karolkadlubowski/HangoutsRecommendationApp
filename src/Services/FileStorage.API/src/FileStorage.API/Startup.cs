@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using NLog;
 using FileStorage.API.DI;
 using FileStorage.API.HealthChecks;
+using SimpleFileSystem;
+using SimpleFileSystem.DependencyInjection;
 using IConfigurationProvider = FileStorage.API.Application.Providers.IConfigurationProvider;
 
 namespace FileStorage.API
@@ -51,6 +53,12 @@ namespace FileStorage.API
                 .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
 
+            services.AddSimpleFileSystem(() => new FileSystemConfigurationBuilder()
+                .SetBasePath(Configuration.GetValue<string>("FileServerConfig:FileServerBasePath"))
+                .SetBaseUrl(Configuration.GetValue<string>("FileServerConfig:FileServerUrl"))
+                .Build());
+            _logger.Trace("> Simple File System registered.");
+
             services.AddAutoMapper(typeof(MapperProfile));
             _logger.Trace("> AutoMapper profile registered");
 
@@ -71,6 +79,9 @@ namespace FileStorage.API
             app.UseHealthChecks("/health");
 
             app.UseRouting();
+            
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 

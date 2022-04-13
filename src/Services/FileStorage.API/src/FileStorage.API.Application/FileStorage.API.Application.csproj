@@ -7,6 +7,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj" />
       <ProjectReference Include="..\..\..\..\Libraries\Library.Shared.Models\Library.Shared.Models.csproj" />
+      <ProjectReference Include="..\..\..\..\Libraries\SimpleFileSystem.DependencyInjection\SimpleFileSystem.DependencyInjection.csproj" />
       <ProjectReference Include="..\FileStorage.API.Domain\FileStorage.API.Domain.csproj" />
     </ItemGroup>
 

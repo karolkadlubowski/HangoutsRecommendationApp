@@ -45,7 +45,7 @@ namespace FileStorage.API.Application.Services
 
         private async Task<Folder> GetOrCreateFolderFromDatabaseAsync(PutFileCommand command)
         {
-            var folder = Folder.CreateDefault(command.Key);
+            var folder = Folder.CreateDefault(command.FolderKey);
 
             var folderPersistenceModel = await _folderRepository.GetFolderByKeyAsync(folder.Key);
 
