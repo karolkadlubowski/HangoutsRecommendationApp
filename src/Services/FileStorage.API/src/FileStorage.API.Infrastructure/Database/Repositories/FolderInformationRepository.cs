@@ -16,16 +16,10 @@ namespace FileStorage.API.Infrastructure.Database.Repositories
                 .Find(folder => folder.Key == key)
                 .FirstOrDefaultAsync();
 
-        public async Task<FolderInformationPersistenceModel> UpsertFolderInformationAsync(FolderInformationPersistenceModel persistenceModel)
-        {
-            var result = await _collection
+        public async Task UpsertFolderInformationAsync(FolderInformationPersistenceModel persistenceModel)
+            => await _collection
                 .ReplaceOneAsync(folder => folder.Key == persistenceModel.Key,
                     persistenceModel,
                     new ReplaceOptions { IsUpsert = true });
-
-            return await _collection
-                .Find(folder => folder.FolderInformationId == result.UpsertedId)
-                .FirstOrDefaultAsync();
-        }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Models;
 
@@ -15,8 +15,18 @@ namespace FileStorage.API.Domain.Entities
         public static FolderInformation CreateDefault(string folderKey)
             => new FolderInformation
             {
-                FolderInformationId = Guid.NewGuid().ToString(),
+                FolderInformationId = new GuidId(),
                 Key = new FolderInformationKey(folderKey)
             };
+
+        public void AddOrReplaceFileInformation(FileInformation fileInformation)
+        {
+            var file = FileInformations.FirstOrDefault(file => file.Key == fileInformation.Key);
+
+            if (file is not null)
+                FileInformations.Remove(file);
+            
+            FileInformations.Add(fileInformation);
+        }
     }
 }

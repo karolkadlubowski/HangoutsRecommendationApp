@@ -14,7 +14,9 @@ namespace FileStorage.API.Domain.ValueObjects
             => new StringBuilder()
                 .Append(folderInformation?.Key
                         ?? throw new ValidationException($"{nameof(folderInformation)} cannot be null"))
+                .Append("/")
                 .Append(name)
-                .ToString();
+                .ToString()
+                .Replace("//", "/");
     }
 }

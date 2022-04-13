@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FileStorage.API.Application.Database.Attributes;
 using Library.Database;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace FileStorage.API.Application.Database.PersistenceModels
@@ -10,7 +9,6 @@ namespace FileStorage.API.Application.Database.PersistenceModels
     public record FolderInformationPersistenceModel : BasePersistenceModel
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string FolderInformationId { get; init; }
 
         public string Key { get; init; }

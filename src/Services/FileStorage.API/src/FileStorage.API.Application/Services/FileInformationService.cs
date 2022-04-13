@@ -27,29 +27,38 @@ namespace FileStorage.API.Application.Services
 
         public async Task<FileInformationDto> PutFileInformationAsync(PutFileCommand command)
         {
+            var folderInformation = await GetOrCreateFolderInformationFromDatabaseAsync(command);
+
+            var fileInformation = FileInformation.CreateDefault(command.Name, folderInformation);
+
+            folderInformation.AddOrReplaceFileInformation(fileInformation);
+            _logger.Info(
+                $"New file #{fileInformation.FileInformationId} with key '{fileInformation.Key}' added to the folder #{folderInformation.FolderInformationId} with key '{folderInformation.Key}'");
+
+            await _folderInformationRepository.UpsertFolderInformationAsync(
+                _mapper.Map<FolderInformationPersistenceModel>(folderInformation));
+            _logger.Info(
+                $"Folder #{folderInformation.FolderInformationId} with key '{folderInformation.Key}' upserted in the database. Current files count: {folderInformation.FileInformations.Count}");
+
+            return _mapper.Map<FileInformationDto>(_mapper.Map<FileInformation>(fileInformation));
+        }
+
+        private async Task<FolderInformation> GetOrCreateFolderInformationFromDatabaseAsync(PutFileCommand command)
+        {
             var folderInformation = FolderInformation.CreateDefault(command.Key);
 
             var folderInformationPersistenceModel = await _folderInformationRepository.GetFolderInformationByKeyAsync(folderInformation.Key);
 
             if (folderInformationPersistenceModel is not null)
             {
-                _logger.Trace($"Folder #{folderInformation.FolderInformationId} with key '{folderInformation.Key}' found in the database. Updating entry");
+                _logger.Trace($"Folder #{folderInformationPersistenceModel.FolderInformationId} with key '{folderInformation.Key}' found in the database. Updating entry");
                 folderInformation = _mapper.Map<FolderInformation>(folderInformationPersistenceModel);
+                folderInformation.UpdateNow();
             }
 
-            _logger.Trace($"Folder #{folderInformation.FolderInformationId} with key '{folderInformation.Key}' not found in the database. Inserting entry");
+            _logger.Trace($"Folder with key '{folderInformation.Key}' not found in the database. Inserting entry");
 
-            var fileInformation = FileInformation.CreateDefault(command.Name, folderInformation);
-
-            folderInformation.FileInformations.Add(fileInformation);
-            _logger.Info(
-                $"New file #{fileInformation.FileInformationId} with key '{fileInformation.Key}' added to the folder #{folderInformation.FolderInformationId} with key '{folderInformation.Key}'");
-
-            folderInformationPersistenceModel = await _folderInformationRepository.UpsertFolderInformationAsync(
-                _mapper.Map<FolderInformationPersistenceModel>(folderInformation));
-            _logger.Info($"Folder #{folderInformation.FolderInformationId} with key '{folderInformation.Key}' upserted in the database. Current files count: {folderInformation.FileInformations.Count}");
-
-            return _mapper.Map<FileInformationDto>(_mapper.Map<FileInformation>(fileInformation));
+            return folderInformation;
         }
     }
 }

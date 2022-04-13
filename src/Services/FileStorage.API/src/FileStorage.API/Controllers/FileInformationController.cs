@@ -28,7 +28,7 @@ namespace FileStorage.API.Controllers
         /// Name - cannot be null or empty, cannot exceed 60 characters
         /// File - cannot be null
         /// </param>
-        [HttpGet]
+        [HttpPut]
         [ProducesResponseType(typeof(PutFileResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(PutFileResponse), (int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(PutFileResponse), (int)HttpStatusCode.UnprocessableEntity)]

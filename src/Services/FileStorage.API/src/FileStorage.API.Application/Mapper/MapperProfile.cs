@@ -10,10 +10,12 @@ namespace FileStorage.API.Application.Mapper
         public MapperProfile()
         {
             CreateMap<FolderInformation, FolderInformationDto>();
-            CreateMap<FolderInformationPersistenceModel, FolderInformation>();
+            CreateMap<FolderInformationPersistenceModel, FolderInformation>()
+                .ReverseMap();
 
             CreateMap<FileInformation, FileInformationDto>();
-            CreateMap<FileInformationPersistenceModel, FileInformation>();
+            CreateMap<FileInformationPersistenceModel, FileInformation>()
+                .ReverseMap();
         }
     }
 }

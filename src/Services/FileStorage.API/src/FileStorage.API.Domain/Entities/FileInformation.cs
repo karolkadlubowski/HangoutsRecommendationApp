@@ -1,5 +1,4 @@
-﻿using System;
-using FileStorage.API.Domain.ValueObjects;
+﻿using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Models;
 
 namespace FileStorage.API.Domain.Entities
@@ -14,7 +13,7 @@ namespace FileStorage.API.Domain.Entities
         {
             var fileInformation = new FileInformation
             {
-                FileInformationId = Guid.NewGuid().ToString(), 
+                FileInformationId = new GuidId(), 
                 Name = new FileInformationName(name)
             };
 

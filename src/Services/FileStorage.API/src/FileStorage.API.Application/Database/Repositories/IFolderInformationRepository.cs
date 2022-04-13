@@ -8,6 +8,6 @@ namespace FileStorage.API.Application.Database.Repositories
     {
         Task<FolderInformationPersistenceModel> GetFolderInformationByKeyAsync(string key);
 
-        Task<FolderInformationPersistenceModel> UpsertFolderInformationAsync(FolderInformationPersistenceModel persistenceModel);
+        Task UpsertFolderInformationAsync(FolderInformationPersistenceModel persistenceModel);
     }
 }
