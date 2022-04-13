@@ -8,6 +8,7 @@ namespace FileStorage.API.Domain.Entities
         public string FileId { get; protected set; }
         public string Key { get; protected set; }
         public string Name { get; protected set; }
+        public string FolderKey { get; protected set; }
 
         public static File CreateDefault(string name, Folder folder)
         {
@@ -18,6 +19,7 @@ namespace FileStorage.API.Domain.Entities
             };
 
             file.Key = new FileKey(file.Name, folder);
+            file.FolderKey = folder.Key;
 
             return file;
         }

@@ -12,4 +12,7 @@
 );
 
 db = new Mongo().getDB("FILESTORAGE_DB");
-db.createCollection("Branches");
+
+db.createCollection("Folders");
+
+db.Folders.createIndex({ "Key": 1 });

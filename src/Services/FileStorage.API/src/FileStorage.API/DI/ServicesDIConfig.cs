@@ -1,6 +1,6 @@
 ﻿using FileStorage.API.Application.Abstractions;
 using FileStorage.API.Application.Services;
-using FileStorage.API.Infrastructure.Adapters;
+using FileStorage.API.Infrastructure.Facades;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +16,7 @@ namespace FileStorage.API.DI
                 .AddScoped<IFileService, FileService>();
 
             services
-                .AddSingleton<IFileSystemAdapter, FileSystemAdapter>();
+                .AddSingleton<IFileSystemFacade, FileSystemFacade>();
 
             return services;
         }

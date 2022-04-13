@@ -10,7 +10,7 @@ namespace Library.Shared.Resources
         {
             var stream = assembly.GetManifestResourceStream(resourcePath)
                          ?? throw new FileNotFoundException(
-                             $"Embedded resource not found under the given path: '{resourcePath}'.");
+                             $"Embedded resource not found under the given path: '{resourcePath}'");
 
             using (var streamReader = new StreamReader(stream))
             {

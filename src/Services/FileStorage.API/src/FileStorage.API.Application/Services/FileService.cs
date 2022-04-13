@@ -38,7 +38,7 @@ namespace FileStorage.API.Application.Services
             await _folderRepository.UpsertFolderAsync(
                 _mapper.Map<FolderPersistenceModel>(folder));
             _logger.Info(
-                $"Folder #{folder.FolderId} with key '{folder.Key}' upserted in the database. Current files count: {folder.Files.Count}");
+                $"Folder #{folder.FolderId} with key '{folder.Key}' upserted into the database. Current files count: {folder.Files.Count}");
 
             return _mapper.Map<FileDto>(_mapper.Map<File>(file));
         }

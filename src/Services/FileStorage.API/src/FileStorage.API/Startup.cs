@@ -1,3 +1,4 @@
+using System.IO;
 using FileStorage.API.Application.Mapper;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using NLog;
 using FileStorage.API.DI;
 using FileStorage.API.HealthChecks;
+using Microsoft.Extensions.FileProviders;
 using SimpleFileSystem;
 using SimpleFileSystem.DependencyInjection;
 using IConfigurationProvider = FileStorage.API.Application.Providers.IConfigurationProvider;
@@ -18,6 +20,9 @@ namespace FileStorage.API
     public class Startup
     {
         private readonly ILogger _logger;
+
+        private const string FileServerBasePathKey = "FileServerConfig:FileServerBasePath";
+        private const string FileServerUrlKey = "FileServerConfig:FileServerUrl";
 
         public Startup(IConfiguration configuration)
         {
@@ -54,10 +59,10 @@ namespace FileStorage.API
             _logger.Trace("> Health checks registered");
 
             services.AddSimpleFileSystem(() => new FileSystemConfigurationBuilder()
-                .SetBasePath(Configuration.GetValue<string>("FileServerConfig:FileServerBasePath"))
-                .SetBaseUrl(Configuration.GetValue<string>("FileServerConfig:FileServerUrl"))
+                .SetBasePath(Configuration.GetValue<string>(FileServerBasePathKey))
+                .SetBaseUrl(Configuration.GetValue<string>(FileServerBasePathKey))
                 .Build());
-            _logger.Trace("> Simple File System registered.");
+            _logger.Trace("> Simple File System registered");
 
             services.AddAutoMapper(typeof(MapperProfile));
             _logger.Trace("> AutoMapper profile registered");
@@ -79,9 +84,14 @@ namespace FileStorage.API
             app.UseHealthChecks("/health");
 
             app.UseRouting();
-            
+
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, Configuration.GetValue<string>(FileServerBasePathKey))),
+                RequestPath = "/storage"
+            });
 
             app.UseAuthorization();
 

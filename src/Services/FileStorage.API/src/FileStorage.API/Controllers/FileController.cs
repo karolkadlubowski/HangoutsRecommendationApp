@@ -21,7 +21,7 @@ namespace FileStorage.API.Controllers
         }
 
         /// <summary>
-        /// Upsert File entity in the database
+        /// Upsert File entity into the database and upload file to the server storage
         /// </summary>
         /// <param name="command">
         /// Key - cannot be null or empty
