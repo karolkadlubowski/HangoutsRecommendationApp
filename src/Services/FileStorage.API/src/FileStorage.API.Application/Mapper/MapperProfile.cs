@@ -9,8 +9,8 @@ namespace FileStorage.API.Application.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<Branch, BranchDto>();
-            CreateMap<BranchPersistenceModel, Branch>();
+            CreateMap<FolderInformation, FolderInformationDto>();
+            CreateMap<FolderInformationPersistenceModel, FolderInformation>();
 
             CreateMap<FileInformation, FileInformationDto>();
             CreateMap<FileInformationPersistenceModel, FileInformation>();

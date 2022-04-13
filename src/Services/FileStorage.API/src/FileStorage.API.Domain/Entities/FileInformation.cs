@@ -9,21 +9,16 @@ namespace FileStorage.API.Domain.Entities
         public string FileInformationId { get; protected set; }
         public string Key { get; protected set; }
         public string Name { get; protected set; }
-        public string BranchId { get; protected set; }
 
-        public Branch Branch { get; protected set; }
-
-        public static FileInformation CreateDefault(string name, Branch branch)
+        public static FileInformation CreateDefault(string name, FolderInformation folderInformation)
         {
             var fileInformation = new FileInformation
             {
-                FileInformationId = Guid.NewGuid().ToString(),
-                Name = new FileInformationName(name),
-                Branch = branch
+                FileInformationId = Guid.NewGuid().ToString(), 
+                Name = new FileInformationName(name)
             };
 
-            fileInformation.Key = new FileInformationKey(fileInformation.Name, branch);
-            fileInformation.BranchId = new FileInformationBranchId(fileInformation.Branch);
+            fileInformation.Key = new FileInformationKey(fileInformation.Name, folderInformation);
 
             return fileInformation;
         }

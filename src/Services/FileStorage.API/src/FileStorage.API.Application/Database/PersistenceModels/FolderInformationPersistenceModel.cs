@@ -6,17 +6,14 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace FileStorage.API.Application.Database.PersistenceModels
 {
-    [BsonCollection("Branches")]
-    public record BranchPersistenceModel : BasePersistenceModel
+    [BsonCollection("Folders")]
+    public record FolderInformationPersistenceModel : BasePersistenceModel
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string BranchId { get; init; }
+        public string FolderInformationId { get; init; }
 
-        public string Name { get; init; }
-        public string ParentBranchId { get; init; }
-
-        public BranchPersistenceModel ParentBranch { get; init; }
+        public string Key { get; init; }
 
         public ICollection<FileInformationPersistenceModel> FileInformations { get; init; } = new HashSet<FileInformationPersistenceModel>();
     }

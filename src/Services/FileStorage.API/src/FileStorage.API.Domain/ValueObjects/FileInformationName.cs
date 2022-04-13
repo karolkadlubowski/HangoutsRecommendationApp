@@ -7,7 +7,7 @@ namespace FileStorage.API.Domain.ValueObjects
     {
         public FileInformationName(string fileName)
             => Value = string.IsNullOrWhiteSpace(fileName)
-                ? throw new ValidationException($"{nameof(fileName)} cannot be empty or null")
+                ? throw new ValidationException($"{nameof(fileName)} cannot be null or empty")
                 : fileName.Trim();
     }
 }
