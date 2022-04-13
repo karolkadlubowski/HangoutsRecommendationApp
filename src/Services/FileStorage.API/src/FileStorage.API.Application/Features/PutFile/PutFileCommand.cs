@@ -1,7 +1,5 @@
-﻿using System.IO;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using SimpleFileSystem.Extensions;
 
 namespace FileStorage.API.Application.Features.PutFile
 {
@@ -10,6 +8,6 @@ namespace FileStorage.API.Application.Features.PutFile
         public string FolderKey { get; init; }
         public IFormFile File { get; init; }
 
-        public string Name => File?.GetFileNameWithExtension();
+        public string Name => File?.FileName;
     }
 }

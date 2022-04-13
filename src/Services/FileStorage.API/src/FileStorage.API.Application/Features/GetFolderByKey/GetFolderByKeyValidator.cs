@@ -1,5 +1,4 @@
-﻿using FileStorage.API.Domain.Validation;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace FileStorage.API.Application.Features.GetFolderByKey
 {
@@ -7,9 +6,9 @@ namespace FileStorage.API.Application.Features.GetFolderByKey
     {
         public GetFolderByKeyValidator()
         {
-            RuleFor(x => x.Key)
+            RuleFor(x => x.FolderKey)
                 .NotNull()
-                .MaximumLength(ValidationRules.MaximumNameLength);
+                .NotEmpty();
         }
     }
 }

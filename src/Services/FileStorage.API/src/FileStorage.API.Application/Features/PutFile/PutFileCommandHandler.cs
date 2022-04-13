@@ -4,6 +4,7 @@ using FileStorage.API.Application.Abstractions;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using MediatR;
+using SimpleFileSystem.Extensions;
 
 namespace FileStorage.API.Application.Features.PutFile
 {
@@ -30,7 +31,7 @@ namespace FileStorage.API.Application.Features.PutFile
             {
                 _logger.Info($"File entry #{file.FileId} with the key '{file.Key}' written to the database successfully");
 
-                var uploadedFileModel = await _fileSystemFacade.UploadAsync(request.File, file.FolderKey);
+                var uploadedFileModel = await _fileSystemFacade.UploadAsync(request.File, file.FolderKey.CleanPath());
 
                 if (uploadedFileModel is not null)
                 {

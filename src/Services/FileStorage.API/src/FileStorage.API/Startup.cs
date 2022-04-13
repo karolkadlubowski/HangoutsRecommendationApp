@@ -60,7 +60,7 @@ namespace FileStorage.API
 
             services.AddSimpleFileSystem(() => new FileSystemConfigurationBuilder()
                 .SetBasePath(Configuration.GetValue<string>(FileServerBasePathKey))
-                .SetBaseUrl(Configuration.GetValue<string>(FileServerBasePathKey))
+                .SetBaseUrl(Configuration.GetValue<string>(FileServerUrlKey))
                 .Build());
             _logger.Trace("> Simple File System registered");
 
@@ -90,7 +90,7 @@ namespace FileStorage.API
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, Configuration.GetValue<string>(FileServerBasePathKey))),
-                RequestPath = "/storage"
+                RequestPath = $"/{Configuration.GetValue<string>(FileServerBasePathKey)}"
             });
 
             app.UseAuthorization();

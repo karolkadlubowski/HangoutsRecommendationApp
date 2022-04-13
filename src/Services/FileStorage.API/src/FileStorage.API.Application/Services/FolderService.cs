@@ -28,7 +28,7 @@ namespace FileStorage.API.Application.Services
 
         public async Task<FolderDto> GetFolderByKeyAsync(GetFolderByKeyQuery query)
         {
-            var folderKey = new FolderKey(query.Key);
+            var folderKey = new FolderKey(query.FolderKey);
 
             var folderPersistenceModel = await _folderRepository.GetFolderByKeyAsync(folderKey)
                                          ?? throw new EntityNotFoundException($"Folder with key: '{folderKey.Value}' not found in the database");

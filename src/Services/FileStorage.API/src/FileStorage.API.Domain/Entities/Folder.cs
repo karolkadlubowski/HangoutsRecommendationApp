@@ -24,7 +24,7 @@ namespace FileStorage.API.Domain.Entities
             var existingFile = Files.FirstOrDefault(f => f.Key == file.Key);
 
             if (existingFile is not null)
-                Files.Remove(file);
+                Files.Remove(existingFile);
 
             Files.Add(file);
         }
