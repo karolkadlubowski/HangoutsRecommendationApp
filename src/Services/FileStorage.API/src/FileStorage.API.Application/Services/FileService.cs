@@ -10,20 +10,24 @@ using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using Library.Shared.Models.FileStorage.Dtos;
+using SimpleFileSystem.Abstractions;
 
 namespace FileStorage.API.Application.Services
 {
     public class FileService : IFileService
     {
         private readonly IFolderRepository _folderRepository;
+        private readonly IFileSystemConfiguration _fileSystemConfiguration;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public FileService(IFolderRepository folderRepository,
+            IFileSystemConfiguration fileSystemConfiguration,
             IMapper mapper,
             ILogger logger)
         {
             _folderRepository = folderRepository;
+            _fileSystemConfiguration = fileSystemConfiguration;
             _mapper = mapper;
             _logger = logger;
         }
@@ -42,6 +46,8 @@ namespace FileStorage.API.Application.Services
             var fileName = new FileName(query.FileName);
             var file = folder.FindFileByName(fileName)
                        ?? throw new EntityNotFoundException($"File with the name '{fileName.Value}' not found in the folder with the key '{folder.Key}'");
+
+            file.SetUrl(_fileSystemConfiguration.BaseUrl);
 
             _logger.Info($"File #{file.FileId} with the key '{file.Key}' found in the folder with the key '{folder.Key}'");
 

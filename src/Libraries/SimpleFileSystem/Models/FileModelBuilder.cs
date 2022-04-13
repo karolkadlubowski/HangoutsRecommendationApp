@@ -34,7 +34,7 @@ namespace SimpleFileSystem.Models
 
         public FileModel Build()
         {
-            var (relativePath, fullPath) = ($"{_directoryPath}", $"{_basePath}{_directoryPath}/");
+            var (relativePath, fullPath) = ($"{_directoryPath}/", $"{_basePath}{_directoryPath}/");
             var fileUrl = $"{_baseUrl}{_directoryPath}/";
 
             Directory.CreateDirectory(fullPath);

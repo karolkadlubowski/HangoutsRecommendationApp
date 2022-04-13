@@ -17,10 +17,10 @@ namespace FileStorage.API.Infrastructure.Facades
         public async Task<FileModel> UploadAsync(IFormFile file, string folderKey)
             => await _fileSystemManager.UploadAsync(file, folderKey, new FileName(file?.FileName));
 
-        public async Task DeleteFileAsync(string fileKey)
-            => await Task.Factory.StartNew(() => _fileSystemManager.Delete(fileKey));
+        public async Task<bool> DeleteFileAsync(string fileKey)
+            => await Task.Run(() => _fileSystemManager.Delete(fileKey));
 
-        public async Task DeleteFolderAsync(string folderKey)
-            => await Task.Factory.StartNew(() => _fileSystemManager.DeleteDirectory(folderKey));
+        public async Task<bool> DeleteFolderAsync(string folderKey)
+            => await Task.Run(() => _fileSystemManager.DeleteDirectory(folderKey));
     }
 }

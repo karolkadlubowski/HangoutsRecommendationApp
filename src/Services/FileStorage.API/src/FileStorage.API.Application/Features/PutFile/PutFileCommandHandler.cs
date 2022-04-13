@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using FileStorage.API.Application.Abstractions;
+using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using MediatR;
-using SimpleFileSystem.Extensions;
 
 namespace FileStorage.API.Application.Features.PutFile
 {
@@ -25,25 +25,36 @@ namespace FileStorage.API.Application.Features.PutFile
 
         public async Task<PutFileResponse> Handle(PutFileCommand request, CancellationToken cancellationToken)
         {
-            var file = await _fileService.PutFileAsync(request);
+            var folderKey = new FolderKey(request.FolderKey).Value;
+            var uploadedFileModel = await _fileSystemFacade.UploadAsync(request.File, folderKey);
 
-            if (file is not null)
+            try
             {
-                _logger.Info($"File entry #{file.FileId} with the key '{file.Key}' written to the database successfully");
-
-                var uploadedFileModel = await _fileSystemFacade.UploadAsync(request.File, file.FolderKey.CleanPath());
-
                 if (uploadedFileModel is not null)
                 {
-                    _logger.Info($"File with the key '{file.Key}' uploaded to the server storage successfully");
+                    _logger.Info($"File under the path '{uploadedFileModel.Path}' uploaded to the server storage successfully");
 
-                    return new PutFileResponse { File = file with { FileUrl = uploadedFileModel.Url } };
+                    var file = await _fileService.PutFileAsync(request);
+
+                    if (file is not null)
+                    {
+                        _logger.Info($"File entry #{file.FileId} with the key '{file.Key}' written to the database successfully");
+
+                        return new PutFileResponse { File = file with { FileUrl = uploadedFileModel.Url } };
+                    }
+
+                    throw new DatabaseOperationException($"Writing file entry with the folder key '{folderKey}' to the database failed");
                 }
 
-                throw new ServerException($"Uploading file with the key '{file.Key}' to the server storage failed but entry is stored in the database");
+                throw new ServerException($"Uploading file under the path '{uploadedFileModel.Path}' to the server storage failed");
             }
+            catch (DatabaseOperationException)
+            {
+                if (await _fileSystemFacade.DeleteFileAsync(uploadedFileModel.Path))
+                    _logger.Warning($"File under the path '{uploadedFileModel.Path}' deleted from the storage successfully");
 
-            throw new DatabaseOperationException($"Writing file entry with the key '{file.Key}' to the database failed");
+                throw;
+            }
         }
     }
 }

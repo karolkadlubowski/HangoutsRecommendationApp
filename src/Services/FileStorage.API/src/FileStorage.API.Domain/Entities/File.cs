@@ -1,4 +1,5 @@
-﻿using FileStorage.API.Domain.ValueObjects;
+﻿using FileStorage.API.Domain.Factories;
+using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Models;
 
 namespace FileStorage.API.Domain.Entities
@@ -9,6 +10,8 @@ namespace FileStorage.API.Domain.Entities
         public string Key { get; protected set; }
         public string Name { get; protected set; }
         public string FolderKey { get; protected set; }
+
+        public string FileUrl { get; protected set; }
 
         public static File CreateDefault(string name, Folder folder)
         {
@@ -23,5 +26,8 @@ namespace FileStorage.API.Domain.Entities
 
             return file;
         }
+
+        public void SetUrl(string baseUrl)
+            => FileUrl = FileUrlFactory.CombineUrl(baseUrl, Key);
     }
 }

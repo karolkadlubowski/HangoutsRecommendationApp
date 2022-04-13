@@ -8,7 +8,7 @@ namespace FileStorage.API.Application.Abstractions
     {
         Task<FileModel> UploadAsync(IFormFile file, string folderKey);
 
-        Task DeleteFileAsync(string fileKey);
-        Task DeleteFolderAsync(string folderKey);
+        Task<bool> DeleteFileAsync(string fileKey);
+        Task<bool> DeleteFolderAsync(string folderKey);
     }
 }

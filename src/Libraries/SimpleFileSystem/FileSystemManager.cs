@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using SimpleFileSystem.Abstractions;
+using SimpleFileSystem.Extensions;
 using SimpleFileSystem.Models;
 
 namespace SimpleFileSystem
@@ -164,7 +165,8 @@ namespace SimpleFileSystem
 
         public bool Delete(string filePath)
         {
-            var fullPath = $"{_configuration.BasePath}{filePath}";
+            var fullPath = $"{_configuration.BasePath}/{filePath}"
+                .CleanPath();
 
             if (!File.Exists(fullPath))
                 return false;

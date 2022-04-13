@@ -32,5 +32,11 @@ namespace FileStorage.API.Domain.Entities
 
         public File FindFileByName(string fileName)
             => Files.FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase));
+
+        public void SetUrlForAllFiles(string baseUrl)
+        {
+            foreach (var file in Files)
+                file.SetUrl(baseUrl);
+        }
     }
 }
