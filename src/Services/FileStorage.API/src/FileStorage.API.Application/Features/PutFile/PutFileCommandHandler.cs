@@ -46,7 +46,7 @@ namespace FileStorage.API.Application.Features.PutFile
                     throw new DatabaseOperationException($"Writing file entry with the folder key '{folderKey}' to the database failed");
                 }
 
-                throw new ServerException($"Uploading file under the path '{uploadedFileModel.Path}' to the server storage failed");
+                throw new ServerException($"Uploading file with the folder key '{folderKey}' to the server storage failed");
             }
             catch (DatabaseOperationException)
             {
