@@ -7,17 +7,17 @@ namespace FileStorage.API.Application.Features.GetFolderByKey
 {
     public class GetFolderByKeyQueryHandler : IRequestHandler<GetFolderByKeyQuery, GetFolderByKeyResponse>
     {
-        private readonly IReadOnlyFolderInformationService _folderInformationService;
+        private readonly IReadOnlyFolderService _folderService;
 
-        public GetFolderByKeyQueryHandler(IReadOnlyFolderInformationService folderInformationService)
+        public GetFolderByKeyQueryHandler(IReadOnlyFolderService folderService)
         {
-            _folderInformationService = folderInformationService;
+            _folderService = folderService;
         }
 
         public async Task<GetFolderByKeyResponse> Handle(GetFolderByKeyQuery request, CancellationToken cancellationToken)
             => new GetFolderByKeyResponse
             {
-                FolderInformation = await _folderInformationService.GetFolderByKeyAsync(request)
+                Folder = await _folderService.GetFolderByKeyAsync(request)
             };
     }
 }

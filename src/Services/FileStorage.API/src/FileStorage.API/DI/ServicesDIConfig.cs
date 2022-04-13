@@ -10,9 +10,9 @@ namespace FileStorage.API.DI
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddScoped<IReadOnlyFolderInformationService, FolderInformationService>()
-                .AddScoped<IFolderInformationService, FolderInformationService>()
-                .AddScoped<IFileInformationService, FileInformationService>();
+                .AddScoped<IReadOnlyFolderService, FolderService>()
+                .AddScoped<IFolderService, FolderService>()
+                .AddScoped<IFileService, FileService>();
 
             return services;
         }

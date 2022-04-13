@@ -18,6 +18,6 @@ namespace FileStorage.API.DI
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
             => services
-                .AddTransient<IFolderInformationRepository, FolderInformationRepository>();
+                .AddTransient<IFolderRepository, FolderRepository>();
     }
 }

@@ -4,8 +4,8 @@ using Library.Shared.Models.FileStorage.Dtos;
 
 namespace FileStorage.API.Application.Abstractions
 {
-    public interface IReadOnlyFolderInformationService
+    public interface IReadOnlyFolderService
     {
-        Task<FolderInformationDto> GetFolderByKeyAsync(GetFolderByKeyQuery query);
+        Task<FolderDto> GetFolderByKeyAsync(GetFolderByKeyQuery query);
     }
 }

@@ -5,18 +5,18 @@ using MongoDB.Driver;
 
 namespace FileStorage.API.Infrastructure.Database.Repositories
 {
-    public class FolderInformationRepository : BaseDbRepository<FolderInformationPersistenceModel>, IFolderInformationRepository
+    public class FolderRepository : BaseDbRepository<FolderPersistenceModel>, IFolderRepository
     {
-        public FolderInformationRepository(FileStorageDbContext dbContext) : base(dbContext)
+        public FolderRepository(FileStorageDbContext dbContext) : base(dbContext)
         {
         }
 
-        public async Task<FolderInformationPersistenceModel> GetFolderInformationByKeyAsync(string key)
+        public async Task<FolderPersistenceModel> GetFolderByKeyAsync(string key)
             => await _collection
                 .Find(folder => folder.Key == key)
                 .FirstOrDefaultAsync();
 
-        public async Task UpsertFolderInformationAsync(FolderInformationPersistenceModel persistenceModel)
+        public async Task UpsertFolderAsync(FolderPersistenceModel persistenceModel)
             => await _collection
                 .ReplaceOneAsync(folder => folder.Key == persistenceModel.Key,
                     persistenceModel,

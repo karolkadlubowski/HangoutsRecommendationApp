@@ -10,18 +10,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace FileStorage.API.Controllers
 {
     /// <summary>
-    /// Controller which provides FolderInformation CRUD functionality
+    /// Controller which provides Folder CRUD functionality
     /// </summary>
     [ApiController]
     [Route("api/v1/folder")]
-    public class FolderInformationController : BaseApiController
+    public class FolderController : BaseApiController
     {
-        public FolderInformationController(IMediator mediator, ILogger logger) : base(mediator, logger)
+        public FolderController(IMediator mediator, ILogger logger) : base(mediator, logger)
         {
         }
 
         /// <summary>
-        /// Return FolderInformation entity from the database, find by the folder key
+        /// Return Folder entity from the database, find by the folder key
         /// </summary>
         /// <param name="query">
         /// Key - cannot be null or empty

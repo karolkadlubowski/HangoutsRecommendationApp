@@ -5,7 +5,7 @@ namespace FileStorage.API.Application.Features.GetFolderByKey
 {
     public record GetFolderByKeyResponse : BaseApiResponse
     {
-        public FolderInformationDto FolderInformation { get; init; }
+        public FolderDto Folder { get; init; }
 
         public GetFolderByKeyResponse(Error error = null) : base(error)
         {

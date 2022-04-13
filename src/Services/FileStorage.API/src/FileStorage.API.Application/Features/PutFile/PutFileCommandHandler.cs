@@ -7,18 +7,18 @@ namespace FileStorage.API.Application.Features.PutFile
 {
     public class PutFileCommandHandler : IRequestHandler<PutFileCommand, PutFileResponse>
     {
-        private readonly IFileInformationService _fileInformationService;
+        private readonly IFileService _fileService;
 
-        public PutFileCommandHandler(IFileInformationService fileInformationService)
+        public PutFileCommandHandler(IFileService fileService)
         {
-            _fileInformationService = fileInformationService;
+            _fileService = fileService;
         }
 
         public async Task<PutFileResponse> Handle(PutFileCommand request, CancellationToken cancellationToken)
         {
-            var fileInformation = await _fileInformationService.PutFileInformationAsync(request);
+            var file = await _fileService.PutFileAsync(request);
 
-            return new PutFileResponse { FileInformation = fileInformation };
+            return new PutFileResponse { File = file };
         }
     }
 }

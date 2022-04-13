@@ -1,8 +1,8 @@
 ﻿namespace Library.Shared.Models.FileStorage.Dtos
 {
-    public record FileInformationDto
+    public record FileDto
     {
-        public string FileInformationId { get; init; }
+        public string FileId { get; init; }
         public string Key { get; init; }
         public string Name { get; init; }
     }

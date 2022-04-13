@@ -5,7 +5,7 @@ namespace FileStorage.API.Application.Features.PutFile
 {
     public record PutFileResponse : BaseApiResponse
     {
-        public FileInformationDto FileInformation { get; init; }
+        public FileDto File { get; init; }
 
         public PutFileResponse(Error error = null) : base(error)
         {

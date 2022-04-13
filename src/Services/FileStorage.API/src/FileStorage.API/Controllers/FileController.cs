@@ -10,18 +10,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace FileStorage.API.Controllers
 {
     /// <summary>
-    /// Controller which provides FileInformation CRUD functionality
+    /// Controller which provides File CRUD functionality
     /// </summary>
     [ApiController]
     [Route("api/v1/file")]
-    public class FileInformationController : BaseApiController
+    public class FileController : BaseApiController
     {
-        public FileInformationController(IMediator mediator, ILogger logger) : base(mediator, logger)
+        public FileController(IMediator mediator, ILogger logger) : base(mediator, logger)
         {
         }
 
         /// <summary>
-        /// Upsert FileInformation entity in the database
+        /// Upsert File entity in the database
         /// </summary>
         /// <param name="command">
         /// Key - cannot be null or empty

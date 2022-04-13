@@ -4,8 +4,8 @@ using Library.Shared.Models.FileStorage.Dtos;
 
 namespace FileStorage.API.Application.Abstractions
 {
-    public interface IFileInformationService
+    public interface IFileService
     {
-        Task<FileInformationDto> PutFileInformationAsync(PutFileCommand command);
+        Task<FileDto> PutFileAsync(PutFileCommand command);
     }
 }
