@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Models;
@@ -28,5 +29,8 @@ namespace FileStorage.API.Domain.Entities
 
             Files.Add(file);
         }
+
+        public File FindFileByName(string fileName)
+            => Files.FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase));
     }
 }

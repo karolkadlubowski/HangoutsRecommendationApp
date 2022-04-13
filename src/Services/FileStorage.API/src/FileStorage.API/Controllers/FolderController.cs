@@ -13,7 +13,7 @@ namespace FileStorage.API.Controllers
     /// Controller which provides Folder CRUD functionality
     /// </summary>
     [ApiController]
-    [Route("api/v1/folder")]
+    [Route("api/v1/[controller]")]
     public class FolderController : BaseApiController
     {
         public FolderController(IMediator mediator, ILogger logger) : base(mediator, logger)

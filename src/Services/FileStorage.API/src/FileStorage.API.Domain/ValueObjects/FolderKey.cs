@@ -10,6 +10,8 @@ namespace FileStorage.API.Domain.ValueObjects
                 ? throw new ValidationException($"{nameof(folderKey)} cannot be null or empty")
                 : folderKey
                     .Trim()
+                    .Replace("//", "/")
+                    .TrimEnd('/')
                     .ToUpperInvariant();
     }
 }
