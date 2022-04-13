@@ -13,7 +13,7 @@ namespace FileStorage.API.Controllers
     /// Controller which provides FolderInformation CRUD functionality
     /// </summary>
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/folder")]
     public class FolderInformationController : BaseApiController
     {
         public FolderInformationController(IMediator mediator, ILogger logger) : base(mediator, logger)
@@ -21,10 +21,10 @@ namespace FileStorage.API.Controllers
         }
 
         /// <summary>
-        /// Returns FolderInformation entity from the database, find by the folder key
+        /// Return FolderInformation entity from the database, find by the folder key
         /// </summary>
         /// <param name="query">
-        /// Key - cannot be null or empty, cannot exceed 60 characters
+        /// Key - cannot be null or empty
         /// </param>
         [HttpGet]
         [ProducesResponseType(typeof(GetFolderByKeyResponse), (int)HttpStatusCode.OK)]
