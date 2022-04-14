@@ -36,16 +36,15 @@ namespace AccountDefinition.API.Application.Features.DeleteAccountProviderById
 
                 var deletedAccountProviderId = await _accountProviderService.DeleteAccountProviderByIdAsync(request);
 
-                await _eventSender.SendEventWithoutDataAsync<AccountProviderDeletedEvent>(EventBusTopics.AccountDefinition, cancellationToken);
+                await _eventSender.SendEventAsync(EventBusTopics.AccountDefinition,
+                    EventFactory<AccountProviderDeletedEvent>.CreateEventWithoutData(),
+                    cancellationToken);
 
                 transaction.Complete();
 
                 _logger.Trace("< Database transaction committed");
 
-                return new DeleteAccountProviderByIdResponse
-                {
-                    DeletedAccountProviderId = deletedAccountProviderId
-                };
+                return new DeleteAccountProviderByIdResponse { DeletedAccountProviderId = deletedAccountProviderId };
             }
         }
     }

@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FileStorage.API.Application.Abstractions;
 using FileStorage.API.Domain.ValueObjects;
+using Library.EventBus;
+using Library.Shared.Events.Abstractions;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using Library.Shared.Models.FileStorage.Dtos;
@@ -14,16 +16,19 @@ namespace FileStorage.API.Application.Features.PutFile
     {
         private readonly IFileService _fileService;
         private readonly IFileSystemFacade _fileSystemFacade;
+        private readonly IEventSender _eventSender;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public PutFileCommandHandler(IFileService fileService,
             IFileSystemFacade fileSystemFacade,
+            IEventSender eventSender,
             IMapper mapper,
             ILogger logger)
         {
             _fileService = fileService;
             _fileSystemFacade = fileSystemFacade;
+            _eventSender = eventSender;
             _mapper = mapper;
             _logger = logger;
         }
@@ -46,6 +51,8 @@ namespace FileStorage.API.Application.Features.PutFile
                         _logger.Info($"File entry #{file.FileId} with the key '{file.Key}' written to the database successfully");
 
                         var fileToReturn = _mapper.Map<FileDto>(file);
+
+                        await _eventSender.SendEventAsync(EventBusTopics.FileStorage, file.FirstStoredEvent, cancellationToken);
 
                         return new PutFileResponse { File = fileToReturn with { FileUrl = uploadedFileModel.Url } };
                     }

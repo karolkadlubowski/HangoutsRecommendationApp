@@ -52,6 +52,9 @@ namespace FileStorage.API
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
+            
+            services.AddKafkaMessageBroker(Configuration);
+            _logger.Trace("> Kafka message broker registered");
 
             services
                 .AddHealthChecks()

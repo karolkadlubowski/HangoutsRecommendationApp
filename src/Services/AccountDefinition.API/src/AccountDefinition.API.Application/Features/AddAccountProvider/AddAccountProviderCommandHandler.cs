@@ -7,7 +7,6 @@ using Library.EventBus;
 using Library.Shared.Events.Abstractions;
 using Library.Shared.Logging;
 using Library.Shared.Models.AccountDefinition.Dtos;
-using Library.Shared.Models.AccountDefinition.Events;
 using MediatR;
 
 namespace AccountDefinition.API.Application.Features.AddAccountProvider
@@ -41,7 +40,9 @@ namespace AccountDefinition.API.Application.Features.AddAccountProvider
 
                 var addedAccountProvider = await _accountProviderService.AddAccountProviderAsync(request);
 
-                await _eventSender.SendEventWithoutDataAsync<AccountProviderAddedEvent>(EventBusTopics.AccountDefinition, cancellationToken);
+                await _eventSender.SendEventAsync(EventBusTopics.AccountDefinition,
+                    addedAccountProvider.FirstStoredEvent,
+                    cancellationToken);
 
                 transaction.Complete();
 

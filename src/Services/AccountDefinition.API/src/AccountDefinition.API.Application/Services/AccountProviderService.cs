@@ -8,8 +8,10 @@ using AccountDefinition.API.Application.Features.DeleteAccountProviderById;
 using AccountDefinition.API.Domain.Entities;
 using AutoMapper;
 using Library.Database.Extensions;
+using Library.EventBus;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
+using Library.Shared.Models.AccountDefinition.Events;
 
 namespace AccountDefinition.API.Application.Services
 {
@@ -42,6 +44,8 @@ namespace AccountDefinition.API.Application.Services
 
                 _logger.Info(
                     $"Account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
+                
+                accountProvider.AddDomainEvent(EventFactory<AccountProviderAddedEvent>.CreateEventWithoutData());
 
                 return accountProvider;
             }
