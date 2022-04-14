@@ -10,7 +10,6 @@ using AutoMapper;
 using Library.Database.Extensions;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
-using Library.Shared.Models.AccountDefinition.Dtos;
 
 namespace AccountDefinition.API.Application.Services
 {
@@ -29,7 +28,7 @@ namespace AccountDefinition.API.Application.Services
             _logger = logger;
         }
 
-        public async Task<AccountProviderDto> AddAccountProviderAsync(AddAccountProviderCommand command)
+        public async Task<AccountProvider> AddAccountProviderAsync(AddAccountProviderCommand command)
         {
             var accountProvider = AccountProvider.Create(command.Provider);
 
@@ -44,7 +43,7 @@ namespace AccountDefinition.API.Application.Services
                 _logger.Info(
                     $"Account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
 
-                return _mapper.Map<AccountProviderDto>(accountProvider);
+                return accountProvider;
             }
             catch (DbException e)
             {

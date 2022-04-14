@@ -10,7 +10,6 @@ using AutoMapper;
 using FluentAssertions;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
-using Library.Shared.Models.AccountDefinition.Dtos;
 using Moq;
 using Npgsql;
 using NUnit.Framework;
@@ -54,24 +53,20 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
         }
 
         [Test]
-        public async Task AddAccountProviderAsync_WhenAccountProviderInsertedToDatabase_ReturnAccountProviderDto()
+        public async Task AddAccountProviderAsync_WhenAccountProviderInsertedToDatabase_ReturnAccountProvider()
         {
             //Arrange
-            var expectedResult = new AccountProviderDto { Provider = ExpectedProvider, CreatedOn = _createdOn };
-
             _accountProviderRepository.Setup(x => x.InsertAccountProviderAsync(It.IsAny<AccountProvider>()))
                 .ReturnsAsync(_accountProviderPersistenceModel);
 
             _mapper.Setup(x => x.Map<AccountProviderPersistenceModel, AccountProvider>(_accountProviderPersistenceModel))
                 .Returns(_accountProvider);
-            _mapper.Setup(x => x.Map<AccountProviderDto>(_accountProvider))
-                .Returns(new AccountProviderDto { Provider = _accountProvider.Provider, CreatedOn = _accountProvider.CreatedOn });
 
             //Act
             var result = await _accountProviderService.AddAccountProviderAsync(_command);
 
             //Assert
-            result.Should().BeEquivalentTo(expectedResult);
+            result.Should().BeEquivalentTo(_accountProvider);
         }
 
         [Test]

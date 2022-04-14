@@ -1,9 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using FileStorage.API.Application.Abstractions;
 using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
+using Library.Shared.Models.FileStorage.Dtos;
 using MediatR;
 
 namespace FileStorage.API.Application.Features.PutFile
@@ -12,14 +14,17 @@ namespace FileStorage.API.Application.Features.PutFile
     {
         private readonly IFileService _fileService;
         private readonly IFileSystemFacade _fileSystemFacade;
+        private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public PutFileCommandHandler(IFileService fileService,
             IFileSystemFacade fileSystemFacade,
+            IMapper mapper,
             ILogger logger)
         {
             _fileService = fileService;
             _fileSystemFacade = fileSystemFacade;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -40,7 +45,9 @@ namespace FileStorage.API.Application.Features.PutFile
                     {
                         _logger.Info($"File entry #{file.FileId} with the key '{file.Key}' written to the database successfully");
 
-                        return new PutFileResponse { File = file with { FileUrl = uploadedFileModel.Url } };
+                        var fileToReturn = _mapper.Map<FileDto>(file);
+
+                        return new PutFileResponse { File = fileToReturn with { FileUrl = uploadedFileModel.Url } };
                     }
 
                     throw new DatabaseOperationException($"Writing file entry with the folder key '{folderKey}' to the database failed");

@@ -7,7 +7,6 @@ using FileStorage.API.Domain.Entities;
 using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
-using Library.Shared.Models.FileStorage.Dtos;
 using SimpleFileSystem.Abstractions;
 
 namespace FileStorage.API.Application.Services
@@ -30,7 +29,7 @@ namespace FileStorage.API.Application.Services
             _logger = logger;
         }
 
-        public async Task<FolderDto> GetFolderByKeyAsync(GetFolderByKeyQuery query)
+        public async Task<Folder> GetFolderByKeyAsync(GetFolderByKeyQuery query)
         {
             var folderKey = new FolderKey(query.FolderKey);
 
@@ -43,7 +42,7 @@ namespace FileStorage.API.Application.Services
 
             _logger.Info($"Folder #{folder.FolderId} with key: '{folder.Key}' found in the database. It contains {folder.Files.Count} files");
 
-            return _mapper.Map<FolderDto>(folder);
+            return folder;
         }
     }
 }
