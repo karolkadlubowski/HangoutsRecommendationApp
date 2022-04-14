@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using FileStorage.API.Application.Abstractions;
 using FileStorage.API.Application.Database.Repositories;
@@ -43,7 +44,7 @@ namespace FileStorage.API.Application.Services
             return folder;
         }
 
-        public async Task<Folder> DeleteFolderAsync(DeleteFolderCommand command)
+        public async Task<Folder> DeleteFolderWithSubfoldersAsync(DeleteFolderCommand command)
         {
             var folderPersistenceModel = await _folderRepository.GetFolderByKeyAsync(command.FolderKey)
                                          ?? throw new EntityNotFoundException($"Folder with key: '{command.FolderKey}' not found in the database");
@@ -55,7 +56,21 @@ namespace FileStorage.API.Application.Services
 
             _logger.Info($"Folder #{folder.FolderId} with the key '{folder.Key}' deleted from the database successfully");
 
+            await DeleteSubfoldersFromDatabaseAsync(folder);
+
             return folder;
+        }
+
+        private async Task DeleteSubfoldersFromDatabaseAsync(Folder folder)
+        {
+            var subfoldersPersistenceModels = await _folderRepository.GetSubfoldersAsync(folder.Key);
+
+            foreach (var subfolder in subfoldersPersistenceModels
+                         .Where(subfolder => subfolder.FolderId != folder.FolderId))
+            {
+                _logger.Info($"Subfolder #{subfolder.FolderId} with the key '{subfolder.Key}' deleted from the database successfully");
+                await _folderRepository.DeleteFolderAsync(subfolder.Key);
+            }
         }
     }
 }

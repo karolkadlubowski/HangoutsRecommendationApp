@@ -23,7 +23,7 @@ namespace FileStorage.API.Application.Features.DeleteFolder
 
         public async Task<DeleteFolderResponse> Handle(DeleteFolderCommand request, CancellationToken cancellationToken)
         {
-            var deletedFolder = await _folderService.DeleteFolderAsync(request);
+            var deletedFolder = await _folderService.DeleteFolderWithSubfoldersAsync(request);
 
             if (await _fileSystemAdapter.DeleteFolderAsync(deletedFolder.Key))
             {

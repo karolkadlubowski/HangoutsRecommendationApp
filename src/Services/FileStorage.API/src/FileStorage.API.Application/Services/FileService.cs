@@ -82,7 +82,7 @@ namespace FileStorage.API.Application.Services
             var folder = _mapper.Map<Folder>(folderPersistenceModel);
             _logger.Trace($"Folder with the key '{folder.Key}' found in the database");
 
-            var deletedFile = folder.DeleteFileIfExists(command.FileId);
+            var deletedFile = folder.DeleteFileIfExists(command.FileName);
 
             if (!await _folderRepository.UpdateFolderAsync(
                     _mapper.Map<FolderPersistenceModel>(folder)))

@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using FileStorage.API.Application.Database.PersistenceModels;
 using FileStorage.API.Application.Database.Repositories;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace FileStorage.API.Infrastructure.Database.Repositories
 {
@@ -15,6 +17,12 @@ namespace FileStorage.API.Infrastructure.Database.Repositories
             => await _collection
                 .Find(folder => folder.Key == key)
                 .FirstOrDefaultAsync();
+
+        public async Task<IReadOnlyList<FolderPersistenceModel>> GetSubfoldersAsync(string parentKey)
+            => await _collection
+                .AsQueryable()
+                .Where(folder => folder.Key.StartsWith(parentKey))
+                .ToListAsync();
 
         public async Task<bool> UpdateFolderAsync(FolderPersistenceModel persistenceModel)
             => (await _collection

@@ -6,6 +6,6 @@ namespace FileStorage.API.Application.Abstractions
 {
     public interface IFolderService : IReadOnlyFolderService
     {
-        Task<Folder> DeleteFolderAsync(DeleteFolderCommand command);
+        Task<Folder> DeleteFolderWithSubfoldersAsync(DeleteFolderCommand command);
     }
 }

@@ -68,7 +68,7 @@ namespace FileStorage.API.Controllers
         /// </summary>
         /// <param name="command">
         /// FolderKey - cannot be null or empty
-        /// FileId - cannot be null or empty
+        /// FileName - cannot be null or empty
         /// </param>
         [HttpDelete]
         [ProducesResponseType(typeof(DeleteFileResponse), (int)HttpStatusCode.OK)]

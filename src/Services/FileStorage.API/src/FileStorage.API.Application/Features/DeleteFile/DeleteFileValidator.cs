@@ -6,7 +6,7 @@ namespace FileStorage.API.Application.Features.DeleteFile
     {
         public DeleteFileValidator()
         {
-            RuleFor(x => x.FileId)
+            RuleFor(x => x.FileName)
                 .NotNull()
                 .NotEmpty();
 

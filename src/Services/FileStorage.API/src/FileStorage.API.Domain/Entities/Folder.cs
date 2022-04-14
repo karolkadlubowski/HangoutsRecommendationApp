@@ -34,10 +34,10 @@ namespace FileStorage.API.Domain.Entities
         public File FindFileByName(string fileName)
             => Files.FirstOrDefault(f => f.Name.Equals(fileName, StringComparison.InvariantCultureIgnoreCase));
 
-        public File DeleteFileIfExists(string fileId)
+        public File DeleteFileIfExists(string fileName)
         {
-            var fileToRemove = Files.FirstOrDefault(f => f.FileId == fileId)
-                               ?? throw new EntityNotFoundException($"File #{fileId} not found in the folder with the key '{Key}'");
+            var fileToRemove = FindFileByName(fileName)
+                               ?? throw new EntityNotFoundException($"File with name '{fileName}' not found in the folder with the key '{Key}'");
 
             Files.Remove(fileToRemove);
 
