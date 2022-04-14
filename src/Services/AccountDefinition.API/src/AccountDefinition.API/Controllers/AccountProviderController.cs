@@ -37,7 +37,6 @@ namespace AccountDefinition.API.Controllers
             return this.CreateResponse(response);
         }
         
-
         /// <summary>
         /// Add new AccountProvider entity to the database
         /// </summary>

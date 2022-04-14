@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Library.Shared.Models.AccountDefinition.Dtos;
+using AccountDefinition.API.Domain.Entities;
 
 namespace AccountDefinition.API.Application.Abstractions
 {
     public interface IReadOnlyAccountProviderService
     {
-        Task<IReadOnlyList<AccountProviderDto>> GetAccountProvidersAsync();
+        Task<IReadOnlyList<AccountProvider>> GetAccountProvidersAsync();
     }
 }

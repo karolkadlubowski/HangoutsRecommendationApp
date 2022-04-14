@@ -30,15 +30,15 @@ namespace AccountDefinition.API.Application.Services
             _logger = logger;
         }
 
-        public async Task<IReadOnlyList<AccountProviderDto>> GetAccountProvidersAsync()
+        public async Task<IReadOnlyList<AccountProvider>> GetAccountProvidersAsync()
         {
             var accountProviderPersistenceModels = await _accountProviderRepository.GetAccountProvidersAsync();
 
             var accountProviders = _mapper.Map<IReadOnlyList<AccountProvider>>(accountProviderPersistenceModels);
             
-            _logger.Info($"{accountProviders.Count} account types fetched from the database");
+            _logger.Info($"{accountProviders.Count} account providers fetched from the database");
 
-            return _mapper.Map<IReadOnlyList<AccountProviderDto>>(accountProviders);
+            return accountProviders;
         }
 
         public async Task<AccountProviderDto> AddAccountProviderAsync(AddAccountProviderCommand command)

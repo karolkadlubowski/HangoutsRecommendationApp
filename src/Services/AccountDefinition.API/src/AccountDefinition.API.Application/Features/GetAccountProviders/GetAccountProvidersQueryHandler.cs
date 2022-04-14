@@ -1,7 +1,9 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Abstractions;
-using AccountDefinition.API.Application.Features.GetAccountTypes;
+using AutoMapper;
+using Library.Shared.Models.AccountDefinition.Dtos;
 using MediatR;
 
 namespace AccountDefinition.API.Application.Features.GetAccountProviders
@@ -9,16 +11,18 @@ namespace AccountDefinition.API.Application.Features.GetAccountProviders
     public class GetAccountProvidersQueryHandler : IRequestHandler<GetAccountProvidersQuery, GetAccountProvidersResponse>
     {
         private readonly IReadOnlyAccountProviderService _accountProviderService;
-        
-        public GetAccountProvidersQueryHandler(IReadOnlyAccountProviderService accountProviderService)
+        private readonly IMapper _mapper;
+
+        public GetAccountProvidersQueryHandler(IReadOnlyAccountProviderService accountProviderService, IMapper mapper)
         {
             _accountProviderService = accountProviderService;
+            _mapper = mapper;
         }
 
         public async Task<GetAccountProvidersResponse> Handle(GetAccountProvidersQuery request, CancellationToken cancellationToken)
             => new GetAccountProvidersResponse()
             {
-                AccountProviders = await _accountProviderService.GetAccountProvidersAsync()
+                AccountProviders = _mapper.Map<IReadOnlyList<AccountProviderDto>>(await _accountProviderService.GetAccountProvidersAsync())
             };
     }
 }

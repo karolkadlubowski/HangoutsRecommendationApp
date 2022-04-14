@@ -133,7 +133,7 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
         {
             //Arrange
             _accountProviderRepository.Setup(x => x.DeleteAccountProviderByIdAsync(ProviderId))
-                .ReturnsAsync(0);
+                .ReturnsAsync(default(long));
 
             //Act
             Func<Task> act = () => _accountProviderService.DeleteAccountProviderByIdAsync(_deleteAccountProviderByIdCommand);
