@@ -7,25 +7,28 @@ namespace Library.Shared.Models
 {
     public abstract class RootEntity
     {
+        private readonly Queue<Event> _domainEvents = new Queue<Event>();
+
         public DateTime CreatedOn { get; protected set; } = DateTime.UtcNow;
         public DateTime? ModifiedOn { get; protected set; }
 
-        public Queue<Event> DomainEvents { get; protected set; } = new Queue<Event>();
-
         public void UpdateNow() => ModifiedOn = DateTime.UtcNow;
 
-        public Event FirstStoredEvent => DomainEvents.Peek();
+        public Event FirstStoredEvent
+            => _domainEvents.Any()
+                ? _domainEvents.Peek()
+                : null;
 
         public IReadOnlyList<Event> GetOrderedEvents()
         {
             var orderedEvents = new List<Event>();
 
-            while (DomainEvents.Any())
-                orderedEvents.Add(DomainEvents.Dequeue());
+            while (_domainEvents.Any())
+                orderedEvents.Add(_domainEvents.Dequeue());
 
             return orderedEvents;
         }
 
-        public void AddDomainEvent(Event @event) => DomainEvents.Enqueue(@event);
+        public void AddDomainEvent(Event @event) => _domainEvents.Enqueue(@event);
     }
 }

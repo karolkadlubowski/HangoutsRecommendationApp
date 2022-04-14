@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using FileStorage.API.Application.Features.DeleteFile;
 using FileStorage.API.Application.Features.GetFileByName;
 using FileStorage.API.Application.Features.PutFile;
 using Library.Shared.Controllers;
@@ -41,7 +42,7 @@ namespace FileStorage.API.Controllers
 
             return this.CreateResponse(response);
         }
-        
+
         /// <summary>
         /// Upsert File entity into the database and upload file to the server storage
         /// </summary>
@@ -56,6 +57,27 @@ namespace FileStorage.API.Controllers
         public async Task<IActionResult> PutFile([FromForm] PutFileCommand command)
         {
             _logger.Info($"Sending command: {nameof(PutFileCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
+        }
+
+        /// <summary>
+        /// Delete File entity from the database, update Folder record and delete file from the server storage
+        /// </summary>
+        /// <param name="command">
+        /// FolderKey - cannot be null or empty
+        /// FileId - cannot be null or empty
+        /// </param>
+        [HttpDelete]
+        [ProducesResponseType(typeof(DeleteFileResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DeleteFileResponse), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(DeleteFileResponse), (int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(DeleteFileResponse), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> DeleteFile([FromQuery] DeleteFileCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(DeleteFileCommand)}");
 
             var response = await _mediator.Send(command);
 

@@ -6,6 +6,7 @@ using Library.EventBus;
 using Library.Shared.Events.Abstractions;
 using Library.Shared.Logging;
 using Library.Shared.Models.AccountDefinition.Events;
+using Library.Shared.Models.AccountDefinition.Events.DataModels;
 using MediatR;
 
 namespace AccountDefinition.API.Application.Features.DeleteAccountProviderById
@@ -37,7 +38,8 @@ namespace AccountDefinition.API.Application.Features.DeleteAccountProviderById
                 var deletedAccountProviderId = await _accountProviderService.DeleteAccountProviderByIdAsync(request);
 
                 await _eventSender.SendEventAsync(EventBusTopics.AccountDefinition,
-                    EventFactory<AccountProviderDeletedEvent>.CreateEventWithoutData(),
+                    EventFactory<AccountProviderDeletedEvent>.CreateEvent(
+                        new AccountProviderDeletedEventDataModel { AccountProviderId = deletedAccountProviderId }),
                     cancellationToken);
 
                 transaction.Complete();

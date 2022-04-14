@@ -12,6 +12,7 @@ using Library.EventBus;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using Library.Shared.Models.AccountDefinition.Events;
+using Library.Shared.Models.AccountDefinition.Events.DataModels;
 
 namespace AccountDefinition.API.Application.Services
 {
@@ -44,8 +45,9 @@ namespace AccountDefinition.API.Application.Services
 
                 _logger.Info(
                     $"Account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
-                
-                accountProvider.AddDomainEvent(EventFactory<AccountProviderAddedEvent>.CreateEventWithoutData());
+
+                accountProvider.AddDomainEvent(EventFactory<AccountProviderAddedEvent>.CreateEvent(
+                    new AccountProviderAddedEventDataModel { AccountProviderId = accountProvider.AccountProviderId, Provider = accountProvider.Provider }));
 
                 return accountProvider;
             }

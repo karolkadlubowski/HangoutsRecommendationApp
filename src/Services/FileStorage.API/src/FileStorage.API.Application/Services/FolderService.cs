@@ -2,9 +2,9 @@
 using AutoMapper;
 using FileStorage.API.Application.Abstractions;
 using FileStorage.API.Application.Database.Repositories;
+using FileStorage.API.Application.Features.DeleteFolder;
 using FileStorage.API.Application.Features.GetFolderByKey;
 using FileStorage.API.Domain.Entities;
-using FileStorage.API.Domain.ValueObjects;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using SimpleFileSystem.Abstractions;
@@ -31,16 +31,29 @@ namespace FileStorage.API.Application.Services
 
         public async Task<Folder> GetFolderByKeyAsync(GetFolderByKeyQuery query)
         {
-            var folderKey = new FolderKey(query.FolderKey);
-
-            var folderPersistenceModel = await _folderRepository.GetFolderByKeyAsync(folderKey)
-                                         ?? throw new EntityNotFoundException($"Folder with key: '{folderKey.Value}' not found in the database");
+            var folderPersistenceModel = await _folderRepository.GetFolderByKeyAsync(query.FolderKey)
+                                         ?? throw new EntityNotFoundException($"Folder with key: '{query.FolderKey}' not found in the database");
 
             var folder = _mapper.Map<Folder>(folderPersistenceModel);
 
             folder.SetUrlForAllFiles(_fileSystemConfiguration.BaseUrl);
 
             _logger.Info($"Folder #{folder.FolderId} with key: '{folder.Key}' found in the database. It contains {folder.Files.Count} files");
+
+            return folder;
+        }
+
+        public async Task<Folder> DeleteFolderAsync(DeleteFolderCommand command)
+        {
+            var folderPersistenceModel = await _folderRepository.GetFolderByKeyAsync(command.FolderKey)
+                                         ?? throw new EntityNotFoundException($"Folder with key: '{command.FolderKey}' not found in the database");
+
+            var folder = _mapper.Map<Folder>(folderPersistenceModel);
+
+            if (!await _folderRepository.DeleteFolderAsync(folder.Key))
+                throw new DatabaseOperationException($"Deleting folder with the key '{folder.FolderId}' from the database failed");
+
+            _logger.Info($"Folder #{folder.FolderId} with the key '{folder.Key}' deleted from the database successfully");
 
             return folder;
         }

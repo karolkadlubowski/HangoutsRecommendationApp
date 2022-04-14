@@ -8,6 +8,8 @@ namespace FileStorage.API.Application.Database.Repositories
     {
         Task<FolderPersistenceModel> GetFolderByKeyAsync(string key);
 
-        Task UpsertFolderAsync(FolderPersistenceModel persistenceModel);
+        Task<bool> UpdateFolderAsync(FolderPersistenceModel persistenceModel);
+        Task<bool> UpsertFolderAsync(FolderPersistenceModel persistenceModel);
+        Task<bool> DeleteFolderAsync(string key);
     }
 }
