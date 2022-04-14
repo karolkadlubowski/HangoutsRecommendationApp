@@ -4,7 +4,7 @@ using SimpleFileSystem.Models;
 
 namespace FileStorage.API.Application.Abstractions
 {
-    public interface IFileSystemFacade
+    public interface IFileSystemAdapter
     {
         Task<FileModel> UploadAsync(IFormFile file, string folderKey);
 

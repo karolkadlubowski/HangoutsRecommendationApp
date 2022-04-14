@@ -7,11 +7,8 @@ using FileStorage.API.Application.Features.GetFileByName;
 using FileStorage.API.Application.Features.PutFile;
 using FileStorage.API.Domain.Entities;
 using FileStorage.API.Domain.ValueObjects;
-using Library.EventBus;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
-using Library.Shared.Models.FileStorage.Events;
-using Library.Shared.Models.FileStorage.Events.DataModels;
 using SimpleFileSystem.Abstractions;
 
 namespace FileStorage.API.Application.Services
@@ -72,8 +69,6 @@ namespace FileStorage.API.Application.Services
                 _mapper.Map<FolderPersistenceModel>(folder));
             _logger.Info(
                 $"Folder #{folder.FolderId} with key '{folder.Key}' upserted into the database. Current files count: {folder.Files.Count}");
-
-            file.AddDomainEvent(EventFactory<FileAddedEvent>.CreateEvent(new FileAddedEventDataModel { FileKey = file.Key, FileUrl = file.FileUrl }));
 
             return file;
         }

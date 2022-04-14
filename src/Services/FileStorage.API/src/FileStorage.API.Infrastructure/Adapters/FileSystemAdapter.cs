@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Http;
 using SimpleFileSystem.Abstractions;
 using SimpleFileSystem.Models;
 
-namespace FileStorage.API.Infrastructure.Facades
+namespace FileStorage.API.Infrastructure.Adapters
 {
-    public class FileSystemFacade : IFileSystemFacade
+    public class FileSystemAdapter : IFileSystemAdapter
     {
         private readonly IFileSystemManager _fileSystemManager;
 
-        public FileSystemFacade(IFileSystemManager fileSystemManager)
+        public FileSystemAdapter(IFileSystemManager fileSystemManager)
             => _fileSystemManager = fileSystemManager;
 
         public async Task<FileModel> UploadAsync(IFormFile file, string folderKey)

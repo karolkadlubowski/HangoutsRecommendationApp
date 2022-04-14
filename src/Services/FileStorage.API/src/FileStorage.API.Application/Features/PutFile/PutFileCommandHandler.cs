@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FileStorage.API.Application.Abstractions;
 using FileStorage.API.Domain.ValueObjects;
-using Library.EventBus;
-using Library.Shared.Events.Abstractions;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using Library.Shared.Models.FileStorage.Dtos;
@@ -15,20 +13,17 @@ namespace FileStorage.API.Application.Features.PutFile
     public class PutFileCommandHandler : IRequestHandler<PutFileCommand, PutFileResponse>
     {
         private readonly IFileService _fileService;
-        private readonly IFileSystemFacade _fileSystemFacade;
-        private readonly IEventSender _eventSender;
+        private readonly IFileSystemAdapter _fileSystemAdapter;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public PutFileCommandHandler(IFileService fileService,
-            IFileSystemFacade fileSystemFacade,
-            IEventSender eventSender,
+            IFileSystemAdapter fileSystemAdapter,
             IMapper mapper,
             ILogger logger)
         {
             _fileService = fileService;
-            _fileSystemFacade = fileSystemFacade;
-            _eventSender = eventSender;
+            _fileSystemAdapter = fileSystemAdapter;
             _mapper = mapper;
             _logger = logger;
         }
@@ -36,7 +31,7 @@ namespace FileStorage.API.Application.Features.PutFile
         public async Task<PutFileResponse> Handle(PutFileCommand request, CancellationToken cancellationToken)
         {
             var folderKey = new FolderKey(request.FolderKey).Value;
-            var uploadedFileModel = await _fileSystemFacade.UploadAsync(request.File, folderKey);
+            var uploadedFileModel = await _fileSystemAdapter.UploadAsync(request.File, folderKey);
 
             try
             {
@@ -52,8 +47,6 @@ namespace FileStorage.API.Application.Features.PutFile
 
                         var fileToReturn = _mapper.Map<FileDto>(file);
 
-                        await _eventSender.SendEventAsync(EventBusTopics.FileStorage, file.FirstStoredEvent, cancellationToken);
-
                         return new PutFileResponse { File = fileToReturn with { FileUrl = uploadedFileModel.Url } };
                     }
 
@@ -64,7 +57,7 @@ namespace FileStorage.API.Application.Features.PutFile
             }
             catch (DatabaseOperationException)
             {
-                if (await _fileSystemFacade.DeleteFileAsync(uploadedFileModel.Path))
+                if (await _fileSystemAdapter.DeleteFileAsync(uploadedFileModel.Path))
                     _logger.Warning($"File under the path '{uploadedFileModel.Path}' deleted from the storage successfully");
 
                 throw;
