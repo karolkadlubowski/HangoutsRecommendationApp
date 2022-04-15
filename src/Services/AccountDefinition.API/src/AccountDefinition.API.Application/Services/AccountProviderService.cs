@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Abstractions;
 using AccountDefinition.API.Application.Database.PersistenceModels;
@@ -29,6 +30,17 @@ namespace AccountDefinition.API.Application.Services
             _accountProviderRepository = accountProviderRepository;
             _mapper = mapper;
             _logger = logger;
+        }
+
+        public async Task<IReadOnlyList<AccountProvider>> GetAccountProvidersAsync()
+        {
+            var accountProviderPersistenceModels = await _accountProviderRepository.GetAccountProvidersAsync();
+
+            var accountProviders = _mapper.Map<IReadOnlyList<AccountProvider>>(accountProviderPersistenceModels);
+
+            _logger.Info($"{accountProviders.Count} account providers fetched from the database");
+
+            return accountProviders;
         }
 
         public async Task<AccountProvider> AddAccountProviderAsync(AddAccountProviderCommand command)
