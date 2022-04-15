@@ -18,8 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
-      <Folder Include="HealthChecks" />
+      <Folder Include="storage" />
     </ItemGroup>
 
 </Project>

@@ -5,14 +5,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj" />
+      <ProjectReference Include="..\..\..\..\Libraries\Library.Shared.Models\Library.Shared.Models.csproj" />
+      <ProjectReference Include="..\..\..\..\Libraries\SimpleFileSystem.DependencyInjection\SimpleFileSystem.DependencyInjection.csproj" />
       <ProjectReference Include="..\FileStorage.API.Domain\FileStorage.API.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Abstractions" />
-      <Folder Include="Database\Repositories" />
-      <Folder Include="Features" />
-      <Folder Include="Services" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     </ItemGroup>
 
 </Project>

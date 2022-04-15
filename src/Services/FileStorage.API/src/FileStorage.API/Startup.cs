@@ -1,3 +1,5 @@
+using System.IO;
+using FileStorage.API.Application.Mapper;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using FileStorage.API.DI;
+using FileStorage.API.HealthChecks;
+using Microsoft.Extensions.FileProviders;
+using SimpleFileSystem;
+using SimpleFileSystem.DependencyInjection;
 using IConfigurationProvider = FileStorage.API.Application.Providers.IConfigurationProvider;
 
 namespace FileStorage.API
@@ -14,6 +20,9 @@ namespace FileStorage.API
     public class Startup
     {
         private readonly ILogger _logger;
+
+        private const string FileServerBasePathKey = "FileServerConfig:FileServerBasePath";
+        private const string FileServerUrlKey = "FileServerConfig:FileServerUrl";
 
         public Startup(IConfiguration configuration)
         {
@@ -31,14 +40,32 @@ namespace FileStorage.API
                 Configuration,
                 "FileStorage.API.Application");
 
+            services
+                .AddFileStorageDbContext(Configuration);
+            _logger.Trace("> FileStorage database context registered");
+
+            services.AddRepositories();
+            _logger.Trace("> Database repositories registered");
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
-
-            services.AddHealthChecks();
+            
+            services
+                .AddHealthChecks()
+                .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
+
+            services.AddSimpleFileSystem(() => new FileSystemConfigurationBuilder()
+                .SetBasePath(Configuration.GetValue<string>(FileServerBasePathKey))
+                .SetBaseUrl(Configuration.GetValue<string>(FileServerUrlKey))
+                .Build());
+            _logger.Trace("> Simple File System registered");
+
+            services.AddAutoMapper(typeof(MapperProfile));
+            _logger.Trace("> AutoMapper profile registered");
 
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");
@@ -57,6 +84,14 @@ namespace FileStorage.API
             app.UseHealthChecks("/health");
 
             app.UseRouting();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, Configuration.GetValue<string>(FileServerBasePathKey))),
+                RequestPath = $"/{Configuration.GetValue<string>(FileServerBasePathKey)}"
+            });
 
             app.UseAuthorization();
 

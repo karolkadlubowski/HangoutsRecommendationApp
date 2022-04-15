@@ -5,7 +5,6 @@ using AccountDefinition.API.Application.Database.Repositories;
 using AccountDefinition.API.Domain.Entities;
 using AutoMapper;
 using Library.Shared.Logging;
-using Library.Shared.Models.AccountDefinition.Dtos;
 
 namespace AccountDefinition.API.Application.Services
 {
@@ -24,7 +23,7 @@ namespace AccountDefinition.API.Application.Services
             _logger = logger;
         }
 
-        public async Task<IReadOnlyList<AccountTypeDto>> GetAccountTypesAsync()
+        public async Task<IReadOnlyList<AccountType>> GetAccountTypesAsync()
         {
             var accountTypePersistenceModels = await _accountTypeRepository.GetAccountTypesAsync();
 
@@ -32,7 +31,7 @@ namespace AccountDefinition.API.Application.Services
 
             _logger.Info($"{accountTypes.Count} account types fetched from the database");
 
-            return _mapper.Map<IReadOnlyList<AccountTypeDto>>(accountTypes);
+            return accountTypes;
         }
     }
 }

@@ -9,9 +9,11 @@ using AccountDefinition.API.Application.Features.DeleteAccountProviderById;
 using AccountDefinition.API.Domain.Entities;
 using AutoMapper;
 using Library.Database.Extensions;
+using Library.EventBus;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
-using Library.Shared.Models.AccountDefinition.Dtos;
+using Library.Shared.Models.AccountDefinition.Events;
+using Library.Shared.Models.AccountDefinition.Events.DataModels;
 
 namespace AccountDefinition.API.Application.Services
 {
@@ -35,13 +37,13 @@ namespace AccountDefinition.API.Application.Services
             var accountProviderPersistenceModels = await _accountProviderRepository.GetAccountProvidersAsync();
 
             var accountProviders = _mapper.Map<IReadOnlyList<AccountProvider>>(accountProviderPersistenceModels);
-            
+
             _logger.Info($"{accountProviders.Count} account providers fetched from the database");
 
             return accountProviders;
         }
 
-        public async Task<AccountProviderDto> AddAccountProviderAsync(AddAccountProviderCommand command)
+        public async Task<AccountProvider> AddAccountProviderAsync(AddAccountProviderCommand command)
         {
             var accountProvider = AccountProvider.Create(command.Provider);
 
@@ -56,7 +58,10 @@ namespace AccountDefinition.API.Application.Services
                 _logger.Info(
                     $"Account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
 
-                return _mapper.Map<AccountProviderDto>(accountProvider);
+                accountProvider.AddDomainEvent(EventFactory<AccountProviderAddedEvent>.CreateEvent(
+                    new AccountProviderAddedEventDataModel { AccountProviderId = accountProvider.AccountProviderId, Provider = accountProvider.Provider }));
+
+                return accountProvider;
             }
             catch (DbException e)
             {
