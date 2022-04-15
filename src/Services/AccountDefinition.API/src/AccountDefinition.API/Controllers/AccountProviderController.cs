@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AccountDefinition.API.Application.Features.AddAccountProvider;
 using AccountDefinition.API.Application.Features.DeleteAccountProviderById;
+using AccountDefinition.API.Application.Features.GetAccountProviders;
 using Library.Shared.Controllers;
 using Library.Shared.Extensions;
 using Library.Shared.Logging;
@@ -21,6 +22,21 @@ namespace AccountDefinition.API.Controllers
         {
         }
 
+        /// <summary>
+        /// Returns all AccountProvider entities from the database
+        /// </summary>
+        [HttpGet("list")]
+        [ProducesResponseType(typeof(GetAccountProvidersResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAccountProvidersResponse), (int) HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetAccountProviders([FromQuery] GetAccountProvidersQuery query)
+        {
+            _logger.Info($"Sending query: {nameof(GetAccountProvidersQuery)}");
+
+            var response = await _mediator.Send(query);
+
+            return this.CreateResponse(response);
+        }
+        
         /// <summary>
         /// Add new AccountProvider entity to the database
         /// </summary>
