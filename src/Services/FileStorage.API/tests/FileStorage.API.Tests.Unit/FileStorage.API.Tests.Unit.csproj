@@ -21,8 +21,4 @@
       <ProjectReference Include="..\..\src\FileStorage.API.Infrastructure\FileStorage.API.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Application" />
-    </ItemGroup>
-
 </Project>
