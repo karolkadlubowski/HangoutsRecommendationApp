@@ -163,7 +163,7 @@ namespace FileStorage.API.Tests.Unit.Application.Services
             _folderRepository.Setup(x => x.DeleteFolderAsync(Key))
                 .ReturnsAsync(true);
             _folderRepository.Setup(x => x.GetSubfoldersAsync(Key))
-                .ReturnsAsync(FoldersFactory.PrepareSubfolders(Key, SubfoldersCount).ToList());
+                .ReturnsAsync(FolderPersistenceModelsFactory.PrepareFolders(Key, SubfoldersCount).ToList());
             _mapper.Setup(x => x.Map<Folder>(folderPersistenceModel))
                 .Returns(folder);
 

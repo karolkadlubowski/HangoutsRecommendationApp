@@ -4,9 +4,9 @@ using FileStorage.API.Domain.ValueObjects;
 
 namespace FileStorage.API.Tests.Unit.Utilities.Factories
 {
-    public static class FoldersFactory
+    public static class FolderPersistenceModelsFactory
     {
-        public static IEnumerable<FolderPersistenceModel> PrepareSubfolders(string key, int count)
+        public static IEnumerable<FolderPersistenceModel> PrepareFolders(string key, int count)
         {
             for (var i = 0; i < count; i++)
                 yield return new FolderPersistenceModel
