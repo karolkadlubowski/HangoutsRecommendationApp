@@ -6,8 +6,10 @@ namespace Category.API.Application.Database.Repositories
 {
     public interface ICategoryRepository
     {
-        Task<IReadOnlyList<CategoryPersistenceModel>> GetAllCategoriesAsync();
+        Task<IReadOnlyList<CategoryPersistenceModel>> GetCategoriesOrderedByNameAsync();
 
         Task<CategoryPersistenceModel> InsertCategoryAsync(string name);
+
+        Task<bool> DoesCategoryExist(string name);
     }
 }

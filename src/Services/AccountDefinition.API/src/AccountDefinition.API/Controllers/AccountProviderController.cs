@@ -26,8 +26,8 @@ namespace AccountDefinition.API.Controllers
         /// Returns all AccountProvider entities from the database
         /// </summary>
         [HttpGet("list")]
-        [ProducesResponseType(typeof(GetAccountProvidersResponse), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(GetAccountProvidersResponse), (int) HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(GetAccountProvidersResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetAccountProvidersResponse), (int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetAccountProviders([FromQuery] GetAccountProvidersQuery query)
         {
             _logger.Info($"Sending query: {nameof(GetAccountProvidersQuery)}");
@@ -36,17 +36,18 @@ namespace AccountDefinition.API.Controllers
 
             return this.CreateResponse(response);
         }
-        
+
         /// <summary>
         /// Add new AccountProvider entity to the database
         /// </summary>
-        /// <param name="query">
+        /// <param name="command">
         /// Provider - cannot be null or empty
         /// </param>
         [HttpPost]
         [ProducesResponseType(typeof(AddAccountProviderResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(AddAccountProviderResponse), (int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(AddAccountProviderResponse), (int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(AddAccountProviderResponse), (int)HttpStatusCode.Conflict)]
         public async Task<IActionResult> AddAccountProvider(AddAccountProviderCommand command)
         {
             _logger.Info($"Sending command: {nameof(AddAccountProviderCommand)}");

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Category.API.Application.Database.PersistenceModels;
 using Category.API.Application.Database.Repositories;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace Category.API.Infrastructure.Database.Repositories
 {
@@ -13,19 +14,30 @@ namespace Category.API.Infrastructure.Database.Repositories
         {
         }
 
-        public async Task<IReadOnlyList<CategoryPersistenceModel>> GetAllCategoriesAsync()
-            => await _collection
-                .AsQueryable()
+        public async Task<IReadOnlyList<CategoryPersistenceModel>> GetCategoriesOrderedByNameAsync()
+            => await _collection.AsQueryable()
+                .OrderBy(c => c.Name)
                 .ToListAsync();
 
         public async Task<CategoryPersistenceModel> InsertCategoryAsync(string name)
         {
-            var category = new CategoryPersistenceModel { Name = name, CreatedOn = DateTime.UtcNow };
+            try
+            {
+                var category = new CategoryPersistenceModel { Name = name, CreatedOn = DateTime.UtcNow };
 
-            await _collection
-                .InsertOneAsync(category);
+                await _collection
+                    .InsertOneAsync(category);
 
-            return category;
+                return category;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
+
+        public async Task<bool> DoesCategoryExist(string name)
+            => await _collection.AsQueryable()
+                .AnyAsync(c => c.Name == name);
     }
 }

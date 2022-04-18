@@ -41,7 +41,7 @@ services:
       - ./src/Services/AccountDefinition.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_accountdefinition.sql:ro
   
   category.database:
-    container_name: filestorage.database
+    container_name: category.database
     image: mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
