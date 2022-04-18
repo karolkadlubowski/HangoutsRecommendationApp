@@ -5,11 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Library.EventBus\Library.EventBus.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Category\Events" />
+      <ProjectReference Include="..\..\..\..\Libraries\Library.Shared\Library.Shared.csproj" />
     </ItemGroup>
 
 </Project>

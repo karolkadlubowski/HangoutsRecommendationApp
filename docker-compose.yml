@@ -40,6 +40,19 @@ services:
     volumes:
       - ./src/Services/AccountDefinition.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_accountdefinition.sql:ro
   
+  category.database:
+    container_name: filestorage.database
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin1234
+      - MONGO_INITDB_DATABASE=CATEGORY_DB
+    restart: always
+    ports:
+      - 6020:27017
+    volumes:
+      - ./src/Services/Category.API/_Scripts/Database:/docker-entrypoint-initdb.d:ro
+  
   filestorage.database:
     container_name: filestorage.database
     image: mongo
@@ -49,6 +62,6 @@ services:
       - MONGO_INITDB_DATABASE=FILESTORAGE_DB
     restart: always
     ports:
-      - 6001:27017
+      - 6050:27017
     volumes:
       - ./src/Services/FileStorage.API/_Scripts/Database:/docker-entrypoint-initdb.d:ro
