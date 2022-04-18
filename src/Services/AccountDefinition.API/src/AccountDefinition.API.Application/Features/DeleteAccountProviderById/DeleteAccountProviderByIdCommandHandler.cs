@@ -38,7 +38,7 @@ namespace AccountDefinition.API.Application.Features.DeleteAccountProviderById
                 var deletedAccountProviderId = await _accountProviderService.DeleteAccountProviderByIdAsync(request);
 
                 await _eventSender.SendEventAsync(EventBusTopics.AccountDefinition,
-                    EventFactory<AccountProviderDeletedEvent>.CreateEvent(
+                    EventFactory<AccountProviderDeletedEvent>.CreateEvent(deletedAccountProviderId,
                         new AccountProviderDeletedEventDataModel { AccountProviderId = deletedAccountProviderId }),
                     cancellationToken);
 

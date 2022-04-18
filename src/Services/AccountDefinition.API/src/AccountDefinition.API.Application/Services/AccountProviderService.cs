@@ -58,7 +58,7 @@ namespace AccountDefinition.API.Application.Services
                 _logger.Info(
                     $"Account provider #{accountProvider.AccountProviderId} of type: '{accountProvider.Provider}' inserted to the database successfully");
 
-                accountProvider.AddDomainEvent(EventFactory<AccountProviderAddedEvent>.CreateEvent(
+                accountProvider.AddDomainEvent(EventFactory<AccountProviderAddedEvent>.CreateEvent(accountProvider.AccountProviderId,
                     new AccountProviderAddedEventDataModel { AccountProviderId = accountProvider.AccountProviderId, Provider = accountProvider.Provider }));
 
                 return accountProvider;
