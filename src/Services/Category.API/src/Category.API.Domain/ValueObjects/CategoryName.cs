@@ -14,7 +14,9 @@ namespace Category.API.Domain.ValueObjects
             if (name.Length > ValidationRules.MaxNameLength)
                 throw new ValidationException($"{nameof(name)} cannot exceed {ValidationRules.MaxNameLength} characters");
 
-            Value = name;
+            Value = name
+                .Trim()
+                .ToUpperInvariant();
         }
     }
 }
