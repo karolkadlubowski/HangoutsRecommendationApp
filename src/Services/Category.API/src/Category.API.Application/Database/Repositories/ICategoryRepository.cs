@@ -11,6 +11,6 @@ namespace Category.API.Application.Database.Repositories
         Task<CategoryPersistenceModel> InsertCategoryAsync(string name);
         Task<bool> DeleteCategoryAsync(string categoryId);
 
-        Task<bool> DoesCategoryExist(string name);
+        Task<bool> AnyCategoryExistAsync(string name);
     }
 }

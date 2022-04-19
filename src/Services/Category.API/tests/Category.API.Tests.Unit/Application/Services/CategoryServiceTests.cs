@@ -51,7 +51,7 @@ namespace Category.API.Tests.Unit.Application.Services
         public async Task AddCategoryAsync_WhenCategoryAlreadyExistsInDatabase_ThrowDuplicateExistsException()
         {
             //Arrange
-            _categoryRepository.Setup(x => x.DoesCategoryExist(CategoryName))
+            _categoryRepository.Setup(x => x.AnyCategoryExistAsync(CategoryName))
                 .ReturnsAsync(true);
 
             //Act
@@ -65,7 +65,7 @@ namespace Category.API.Tests.Unit.Application.Services
         public async Task AddCategoryAsync_WhenInsertingCategoryToDatabaseFailed_ThrowDatabaseOperationException()
         {
             //Arrange
-            _categoryRepository.Setup(x => x.DoesCategoryExist(CategoryName))
+            _categoryRepository.Setup(x => x.AnyCategoryExistAsync(CategoryName))
                 .ReturnsAsync(false);
             _categoryRepository.Setup(x => x.InsertCategoryAsync(CategoryName))
                 .ReturnsAsync(() => null);
@@ -94,7 +94,7 @@ namespace Category.API.Tests.Unit.Application.Services
                 categoryPersistenceModel.Name,
                 categoryPersistenceModel.CreatedOn);
 
-            _categoryRepository.Setup(x => x.DoesCategoryExist(CategoryName))
+            _categoryRepository.Setup(x => x.AnyCategoryExistAsync(CategoryName))
                 .ReturnsAsync(false);
             _categoryRepository.Setup(x => x.InsertCategoryAsync(CategoryName))
                 .ReturnsAsync(categoryPersistenceModel);

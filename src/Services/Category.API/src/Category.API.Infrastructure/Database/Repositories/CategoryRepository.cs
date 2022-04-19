@@ -25,8 +25,7 @@ namespace Category.API.Infrastructure.Database.Repositories
             {
                 var category = new CategoryPersistenceModel { Name = name, CreatedOn = DateTime.UtcNow };
 
-                await _collection
-                    .InsertOneAsync(category);
+                await _collection.InsertOneAsync(category);
 
                 return category;
             }
@@ -41,7 +40,7 @@ namespace Category.API.Infrastructure.Database.Repositories
                     .DeleteOneAsync(c => c.CategoryId == categoryId))
                 .DeletedCount > 0;
 
-        public async Task<bool> DoesCategoryExist(string name)
+        public async Task<bool> AnyCategoryExistAsync(string name)
             => await _collection.AsQueryable()
                 .AnyAsync(c => c.Name == name);
     }

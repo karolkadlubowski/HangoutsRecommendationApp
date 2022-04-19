@@ -45,7 +45,7 @@ namespace Category.API.Application.Services
         {
             var category = Domain.Entities.Category.Create(command.Name);
 
-            if (await _categoryRepository.DoesCategoryExist(category.Name))
+            if (await _categoryRepository.AnyCategoryExistAsync(category.Name))
                 throw new DuplicateExistsException($"Category with name '{category.Name}' already exists in the database");
 
             var categoryPersistenceModel = await _categoryRepository.InsertCategoryAsync(category.Name)
