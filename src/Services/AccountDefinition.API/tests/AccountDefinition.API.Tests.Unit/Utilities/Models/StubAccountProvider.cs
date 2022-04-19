@@ -3,9 +3,9 @@ using AccountDefinition.API.Domain.Entities;
 
 namespace AccountDefinition.API.Tests.Unit.Utilities.Models
 {
-    public class TestAccountProvider : AccountProvider
+    public class StubAccountProvider : AccountProvider
     {
-        public TestAccountProvider(string provider, DateTime createdOn)
+        public StubAccountProvider(string provider, DateTime createdOn)
         {
             Provider = provider;
             CreatedOn = createdOn;

@@ -21,8 +21,4 @@
       <ProjectReference Include="..\..\src\Category.API.Infrastructure\Category.API.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Application" />
-    </ItemGroup>
-
 </Project>
