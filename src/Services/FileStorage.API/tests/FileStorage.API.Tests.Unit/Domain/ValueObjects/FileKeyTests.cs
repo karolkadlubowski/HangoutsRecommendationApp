@@ -31,7 +31,7 @@ namespace FileStorage.API.Tests.Unit.Domain.ValueObjects
             const string Key = "Key//Test";
             const string Name = "name.json";
 
-            var folder = new TestFolder(Key);
+            var folder = new StubFolder(Key);
 
             var expectedResult = $"Key/Test/{Name}";
 

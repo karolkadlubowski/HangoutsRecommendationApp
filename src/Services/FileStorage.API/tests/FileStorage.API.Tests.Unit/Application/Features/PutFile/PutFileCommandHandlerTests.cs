@@ -29,7 +29,7 @@ namespace FileStorage.API.Tests.Unit.Application.Features.PutFile
         private const string Name = nameof(Name);
         private const string Url = "localhost";
 
-        private TestFile _file;
+        private StubFile _file;
         private FileDto _fileToReturn;
         private PutFileCommand _command;
         private PutFileResponse _expectedResponse;
@@ -44,7 +44,7 @@ namespace FileStorage.API.Tests.Unit.Application.Features.PutFile
             _mapper = new Mock<IMapper>();
             _logger = new Mock<ILogger>();
 
-            _file = new TestFile(Key);
+            _file = new StubFile(Key);
             _fileToReturn = new FileDto
             {
                 FileId = _file.FileId,

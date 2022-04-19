@@ -3,9 +3,9 @@ using FileStorage.API.Domain.ValueObjects;
 
 namespace FileStorage.API.Tests.Unit.Utilities.Models
 {
-    public class TestFolder : Folder
+    public class StubFolder : Folder
     {
-        public TestFolder(string key)
+        public StubFolder(string key)
         {
             FolderId = new GuidIdentifier();
             Key = key;

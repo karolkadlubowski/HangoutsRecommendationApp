@@ -36,7 +36,7 @@ namespace FileStorage.API.Tests.Unit.Domain.Entities
             const int ExpectedFilesCount = 1;
 
             var folder = new Folder();
-            var file = new TestFile(Key);
+            var file = new StubFile(Key);
             folder.Files.Add(file);
 
             //Act
@@ -57,7 +57,7 @@ namespace FileStorage.API.Tests.Unit.Domain.Entities
             const int ExpectedFilesCount = 1;
 
             var folder = new Folder();
-            var file = new TestFile(Key);
+            var file = new StubFile(Key);
 
             //Act
             folder.AddOrReplaceFile(file);
@@ -80,7 +80,7 @@ namespace FileStorage.API.Tests.Unit.Domain.Entities
             //Arrange
             const string FileName = nameof(FileName);
 
-            var expectedFile = new TestFile(Key);
+            var expectedFile = new StubFile(Key);
             expectedFile.SetName(FileName);
 
             var folder = new Folder();
@@ -99,7 +99,7 @@ namespace FileStorage.API.Tests.Unit.Domain.Entities
             //Arrange
             const string FileName = nameof(FileName);
 
-            var file = new TestFile(Key);
+            var file = new StubFile(Key);
             file.SetName(FileName);
 
             var folder = new Folder();
@@ -124,7 +124,7 @@ namespace FileStorage.API.Tests.Unit.Domain.Entities
 
             const string FileName = nameof(FileName);
 
-            var expectedFile = new TestFile(Key);
+            var expectedFile = new StubFile(Key);
             expectedFile.SetName(FileName);
 
             var folder = new Folder();
@@ -147,7 +147,7 @@ namespace FileStorage.API.Tests.Unit.Domain.Entities
             //Arrange
             const string FileName = nameof(FileName);
 
-            var expectedFile = new TestFile(Key);
+            var expectedFile = new StubFile(Key);
             expectedFile.SetName(FileName);
 
             var folder = new Folder();

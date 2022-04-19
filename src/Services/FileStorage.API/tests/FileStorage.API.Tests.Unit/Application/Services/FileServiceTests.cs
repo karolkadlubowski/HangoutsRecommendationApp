@@ -84,8 +84,8 @@ namespace FileStorage.API.Tests.Unit.Application.Services
             //Arrange
             const string BaseUrl = "localhost";
 
-            var folder = new TestFolder(Key);
-            var file = new TestFile(Key);
+            var folder = new StubFolder(Key);
+            var file = new StubFile(Key);
             file.SetName(Key);
             folder.Files.Add(file);
 
@@ -119,7 +119,7 @@ namespace FileStorage.API.Tests.Unit.Application.Services
             _folderRepository.Setup(x => x.UpsertFolderAsync(It.IsAny<FolderPersistenceModel>()))
                 .ReturnsAsync(false);
             _mapper.Setup(x => x.Map<Folder>(It.IsAny<FolderPersistenceModel>()))
-                .Returns(new TestFolder(Key));
+                .Returns(new StubFolder(Key));
             _fileSystemConfiguration.Setup(x => x.BaseUrl)
                 .Returns(BaseUrl);
 
@@ -183,7 +183,7 @@ namespace FileStorage.API.Tests.Unit.Application.Services
         public async Task DeleteFileAndUpdateFolderAsync_WhenFileNotFoundInFolder_ThrowEntityNotFoundException()
         {
             //Arrange
-            var folder = new TestFolder(Key);
+            var folder = new StubFolder(Key);
 
             var folderPersistenceModel = new FolderPersistenceModel { Key = Key };
 
@@ -203,8 +203,8 @@ namespace FileStorage.API.Tests.Unit.Application.Services
         public async Task DeleteFileAndUpdateFolderAsync_WhenFileFoundInFolderAndUpdatingFolderInDatabaseFailed_ThrowDatabaseOperationException()
         {
             //Arrange
-            var folder = new TestFolder(Key);
-            var file = new TestFile(Key);
+            var folder = new StubFolder(Key);
+            var file = new StubFile(Key);
             file.SetName(Key);
             folder.Files.Add(file);
 
@@ -230,8 +230,8 @@ namespace FileStorage.API.Tests.Unit.Application.Services
         public async Task DeleteFileAndUpdateFolderAsync_WhenFileFoundInFolderAndUpdatedInDatabase_ReturnDeletedFile()
         {
             //Arrange
-            var folder = new TestFolder(Key);
-            var file = new TestFile(Key);
+            var folder = new StubFolder(Key);
+            var file = new StubFile(Key);
             file.SetName(Key);
             folder.Files.Add(file);
 

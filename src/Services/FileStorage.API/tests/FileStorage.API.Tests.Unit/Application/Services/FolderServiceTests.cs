@@ -69,7 +69,7 @@ namespace FileStorage.API.Tests.Unit.Application.Services
             //Arrange
             const string BaseUrl = "localhost";
 
-            var folder = new TestFolder(Key);
+            var folder = new StubFolder(Key);
             var folderPersistenceModel = new FolderPersistenceModel { Key = Key };
 
             _folderRepository.Setup(x => x.GetFolderByKeyAsync(Key))
@@ -108,7 +108,7 @@ namespace FileStorage.API.Tests.Unit.Application.Services
         public async Task DeleteFolderWithSubfoldersAsync_WhenFolderFoundInDatabaseAndDeletingFromDatabaseFailed_ThrowDatabaseOperationException()
         {
             //Arrange
-            var folder = new TestFolder(Key);
+            var folder = new StubFolder(Key);
             var folderPersistenceModel = new FolderPersistenceModel { Key = Key };
 
             _folderRepository.Setup(x => x.GetFolderByKeyAsync(Key))
@@ -129,7 +129,7 @@ namespace FileStorage.API.Tests.Unit.Application.Services
         public async Task DeleteFolderWithSubfoldersAsync_WhenFolderFoundInDatabaseAndDeleteFromDatabaseSucceeded_ReturnDeletedFolder()
         {
             //Arrange
-            var folder = new TestFolder(Key);
+            var folder = new StubFolder(Key);
             var folderPersistenceModel = new FolderPersistenceModel { Key = Key };
 
             _folderRepository.Setup(x => x.GetFolderByKeyAsync(Key))
@@ -155,7 +155,7 @@ namespace FileStorage.API.Tests.Unit.Application.Services
             const int SubfoldersCount = 3;
             const int TotalFoldersCount = 4;
 
-            var folder = new TestFolder(Key);
+            var folder = new StubFolder(Key);
             var folderPersistenceModel = new FolderPersistenceModel { Key = Key };
 
             _folderRepository.Setup(x => x.GetFolderByKeyAsync(Key))

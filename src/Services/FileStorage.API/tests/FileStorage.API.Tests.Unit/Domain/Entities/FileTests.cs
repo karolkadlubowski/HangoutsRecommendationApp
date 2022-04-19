@@ -14,7 +14,7 @@ namespace FileStorage.API.Tests.Unit.Domain.Entities
             const string Key = nameof(Key);
             const string ExpectedUrl = "http://localhost/Key";
 
-            var file = new TestFile(Key);
+            var file = new StubFile(Key);
 
             //Act
             file.SetUrl("http://localhost");

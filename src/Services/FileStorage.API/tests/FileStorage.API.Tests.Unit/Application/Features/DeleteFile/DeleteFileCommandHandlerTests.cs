@@ -18,7 +18,7 @@ namespace FileStorage.API.Tests.Unit.Application.Features.DeleteFile
 
         private const string Key = nameof(Key);
 
-        private TestFile _deletedFile;
+        private StubFile _deletedFile;
         private DeleteFileCommand _command;
         private DeleteFileResponse _expectedResponse;
 
@@ -31,7 +31,7 @@ namespace FileStorage.API.Tests.Unit.Application.Features.DeleteFile
             _fileSystemAdapter = new Mock<IFileSystemAdapter>();
             _logger = new Mock<ILogger>();
 
-            _deletedFile = new TestFile(Key);
+            _deletedFile = new StubFile(Key);
             _command = new DeleteFileCommand { FolderKey = Key, FileName = Key };
             _expectedResponse = new DeleteFileResponse { DeletedFileId = _deletedFile.FileId };
 
