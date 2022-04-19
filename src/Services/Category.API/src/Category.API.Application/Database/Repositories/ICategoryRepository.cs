@@ -9,6 +9,7 @@ namespace Category.API.Application.Database.Repositories
         Task<IReadOnlyList<CategoryPersistenceModel>> GetCategoriesOrderedByNameAsync();
 
         Task<CategoryPersistenceModel> InsertCategoryAsync(string name);
+        Task<bool> DeleteCategoryAsync(string categoryId);
 
         Task<bool> DoesCategoryExist(string name);
     }

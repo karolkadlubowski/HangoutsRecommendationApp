@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Category.API.Application.Features.AddCategory;
+using Category.API.Application.Features.DeleteCategory;
 using Category.API.Application.Features.GetCategories;
 using Library.Shared.Controllers;
 using Library.Shared.Extensions;
@@ -50,6 +51,26 @@ namespace Category.API.Controllers
         public async Task<IActionResult> AddCategory(AddCategoryCommand command)
         {
             _logger.Info($"Sending command: {nameof(AddCategoryCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
+        }
+
+        /// <summary>
+        /// Delete Category from the database
+        /// </summary>
+        /// <param name="command">
+        /// CategoryId - cannot be null or empty
+        /// </param>
+        [HttpDelete]
+        [ProducesResponseType(typeof(AddCategoryResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AddCategoryResponse), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(AddCategoryResponse), (int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(AddCategoryResponse), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> DeleteCategory([FromQuery] DeleteCategoryCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(DeleteCategoryCommand)}");
 
             var response = await _mediator.Send(command);
 

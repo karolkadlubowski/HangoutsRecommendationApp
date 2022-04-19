@@ -36,6 +36,11 @@ namespace Category.API.Infrastructure.Database.Repositories
             }
         }
 
+        public async Task<bool> DeleteCategoryAsync(string categoryId)
+            => (await _collection
+                    .DeleteOneAsync(c => c.CategoryId == categoryId))
+                .DeletedCount > 0;
+
         public async Task<bool> DoesCategoryExist(string name)
             => await _collection.AsQueryable()
                 .AnyAsync(c => c.Name == name);

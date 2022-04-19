@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Category.API.Application.Abstractions;
 using Category.API.Application.Database.PersistenceModels;
 using Category.API.Application.Database.Repositories;
 using Category.API.Application.Features.AddCategory;
+using Category.API.Application.Features.DeleteCategory;
 using Library.EventBus;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
@@ -57,6 +59,23 @@ namespace Category.API.Application.Services
                 new CategoryAddedEventDataModel { CategoryId = category.CategoryId, Name = category.Name }));
 
             return category;
+        }
+
+        public async Task<string> DeleteCategoryAsync(DeleteCategoryCommand command)
+        {
+            try
+            {
+                if (!await _categoryRepository.DeleteCategoryAsync(command.CategoryId))
+                    throw new EntityNotFoundException($"Category #{command.CategoryId} was not deleted from the database because it was not found");
+
+                _logger.Info($"Category #{command.CategoryId} deleted from the database successfully");
+
+                return command.CategoryId;
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseOperationException($"Deleting category #{command.CategoryId} from the database failed. Exception: {e.Message}");
+            }
         }
     }
 }
