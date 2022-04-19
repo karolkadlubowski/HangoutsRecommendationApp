@@ -72,7 +72,7 @@ namespace Category.API.Application.Services
 
                 return command.CategoryId;
             }
-            catch (Exception e)
+            catch (Exception e) when (e is not EntityNotFoundException)
             {
                 throw new DatabaseOperationException($"Deleting category #{command.CategoryId} from the database failed. Exception: {e.Message}");
             }
