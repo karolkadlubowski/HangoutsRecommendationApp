@@ -11,6 +11,7 @@ namespace Venue.API.Application.Database.PersistenceModels
         public long LocationId { get; set; }
         public string CategoryId { get; set; }
         public long? CreatorId { get; set; }
-        public VenuePersistState PersistState { get; set; } = VenuePersistState.NOT_PERSISTED;
+        public VenueStatus Status { get; set; } = VenueStatus.Created;
+        public VenuePersistState PersistState { get; set; } = VenuePersistState.NotPersisted;
     }
 }
