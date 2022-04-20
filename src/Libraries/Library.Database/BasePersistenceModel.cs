@@ -2,9 +2,11 @@
 
 namespace Library.Database
 {
-    public abstract record BasePersistenceModel
+    public abstract class BasePersistenceModel
     {
-        public DateTime CreatedOn { get; init; }
-        public DateTime? ModifiedOn { get; init; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+
+        public void UpdateNow() => ModifiedOn = DateTime.UtcNow;
     }
 }

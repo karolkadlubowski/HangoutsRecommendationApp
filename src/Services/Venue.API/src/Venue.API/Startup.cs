@@ -6,7 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using Venue.API.Application.Mapper;
 using Venue.API.DI;
+using Venue.API.HealthChecks;
 using IConfigurationProvider = Venue.API.Application.Providers.IConfigurationProvider;
 
 namespace Venue.API
@@ -31,14 +33,28 @@ namespace Venue.API
                 Configuration,
                 "Venue.API.Application");
 
+            services.AddVenueDbContext(Configuration);
+            _logger.Trace("> Venue database context registered");
+
+            services.AddRepositories();
+            _logger.Trace("> Database repositories registered");
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
 
-            services.AddHealthChecks();
+            services.AddKafkaMessageBroker(Configuration);
+            _logger.Trace("> Kafka message broker registered");
+
+            services
+                .AddHealthChecks()
+                .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
+
+            services.AddAutoMapper(typeof(MapperProfile));
+            _logger.Trace("> AutoMapper profile registered");
 
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");

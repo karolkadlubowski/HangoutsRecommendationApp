@@ -2,9 +2,9 @@
 
 namespace AccountDefinition.API.Application.Database.PersistenceModels
 {
-    public record AccountProviderPersistenceModel : BasePersistenceModel
+    public class AccountProviderPersistenceModel : BasePersistenceModel
     {
-        public long AccountProviderId { get; init; }
-        public string Provider { get; init; }
+        public long AccountProviderId { get; set; }
+        public string Provider { get; set; }
     }
 }
