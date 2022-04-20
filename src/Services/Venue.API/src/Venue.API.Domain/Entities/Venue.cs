@@ -12,6 +12,7 @@ namespace Venue.API.Domain.Entities
         public long LocationId { get; protected set; }
         public string CategoryId { get; protected set; }
         public long? CreatorId { get; protected set; }
+        public VenueStatus Status { get; protected set; } = VenueStatus.Created;
         public VenuePersistState PersistState { get; protected set; } = VenuePersistState.NOT_PERSISTED;
 
         public static Venue CreateDefault(string name, long locationId, string categoryId)
@@ -36,5 +37,8 @@ namespace Venue.API.Domain.Entities
 
         public void UpdatePersistState(VenuePersistState persistState)
             => PersistState = persistState;
+
+        public void Accept()
+            => Status = VenueStatus.Accepted;
     }
 }
