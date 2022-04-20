@@ -1,4 +1,5 @@
 ﻿using Library.Database;
+using Library.Shared.Models.Venue.Enums;
 
 namespace Venue.API.Application.Database.PersistenceModels
 {
@@ -10,5 +11,6 @@ namespace Venue.API.Application.Database.PersistenceModels
         public long LocationId { get; set; }
         public string CategoryId { get; set; }
         public long? CreatorId { get; set; }
+        public VenuePersistState PersistState { get; set; } = VenuePersistState.NOT_PERSISTED;
     }
 }

@@ -4,8 +4,14 @@
     {
         private readonly Venue _venue;
 
-        public VenueBuilder(string name, long locationId, string categoryId)
-            => _venue = Venue.CreateDefault(name, locationId, categoryId);
+        public VenueBuilder(string name, string categoryId)
+            => _venue = Venue.CreateWithoutLocation(name, categoryId);
+
+        public VenueBuilder WithLocation(long locationId)
+        {
+            _venue.AssignLocation(locationId);
+            return this;
+        }
 
         public VenueBuilder WithDescription(string description)
         {
