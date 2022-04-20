@@ -1,12 +1,11 @@
-﻿using System.Threading.Tasks;
-using Library.Shared.Models.Pagination;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Venue.API.Application.Database.PersistenceModels;
-using Venue.API.Application.Features.GetVenues;
 
 namespace Venue.API.Application.Database.Repositories
 {
     public interface IVenueRepository : IGenericRepository<VenuePersistenceModel>
     {
-        Task<IPagedList<VenuePersistenceModel>> GetPaginatedVenuesAsync(GetVenuesQuery query);
+        Task<IReadOnlyList<VenuePersistenceModel>> GetVenuesByLocationsIdsAsync(IEnumerable<long> locationsIds);
     }
 }

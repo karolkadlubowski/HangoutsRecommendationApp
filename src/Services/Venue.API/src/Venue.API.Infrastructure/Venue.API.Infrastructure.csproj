@@ -9,8 +9,4 @@
       <ProjectReference Include="..\Venue.API.Domain\Venue.API.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Events\Consumers" />
-    </ItemGroup>
-
 </Project>

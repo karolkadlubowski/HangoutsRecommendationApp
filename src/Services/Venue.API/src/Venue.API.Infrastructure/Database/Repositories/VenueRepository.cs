@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
-using Library.Shared.Models.Pagination;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Venue.API.Application.Database.PersistenceModels;
 using Venue.API.Application.Database.Repositories;
-using Venue.API.Application.Features.GetVenues;
 
 namespace Venue.API.Infrastructure.Database.Repositories
 {
@@ -12,6 +13,9 @@ namespace Venue.API.Infrastructure.Database.Repositories
         {
         }
 
-        public Task<IPagedList<VenuePersistenceModel>> GetPaginatedVenuesAsync(GetVenuesQuery query) => throw new System.NotImplementedException();
+        public async Task<IReadOnlyList<VenuePersistenceModel>> GetVenuesByLocationsIdsAsync(IEnumerable<long> locationsIds)
+            => await _dbContext.Venues
+                .Where(v => locationsIds.Contains(v.LocationId))
+                .ToListAsync();
     }
 }
