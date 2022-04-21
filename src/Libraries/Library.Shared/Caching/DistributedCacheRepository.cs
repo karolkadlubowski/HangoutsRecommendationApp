@@ -22,7 +22,9 @@ namespace Library.Shared.Caching
         {
             var value = await _cache.GetStringAsync(key);
 
-            return string.IsNullOrEmpty(value) ? null : value.FromJSON<T>();
+            return string.IsNullOrEmpty(value)
+                ? null
+                : value.FromJSON<T>();
         }
 
         public virtual async Task SetValueAsync(string key, T value)

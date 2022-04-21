@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj" />
+      <ProjectReference Include="..\..\..\..\Libraries\Library.Shared.Models\Library.Shared.Models.csproj" />
+      <ProjectReference Include="..\UserProfile.API.Domain\UserProfile.API.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Abstractions" />
+      <Folder Include="Features" />
+      <Folder Include="Services" />
+    </ItemGroup>
+
+</Project>
