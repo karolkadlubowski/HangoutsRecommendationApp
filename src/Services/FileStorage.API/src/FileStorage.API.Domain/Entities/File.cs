@@ -17,7 +17,7 @@ namespace FileStorage.API.Domain.Entities
         {
             var file = new File
             {
-                FileId = new GuidId(),
+                FileId = new GuidIdentifier(),
                 Name = new FileName(name)
             };
 
@@ -28,6 +28,6 @@ namespace FileStorage.API.Domain.Entities
         }
 
         public void SetUrl(string baseUrl)
-            => FileUrl = FileUrlFactory.CombineUrl(baseUrl, Key);
+            => FileUrl = FileUrlFactory.Prepare(baseUrl, Key);
     }
 }

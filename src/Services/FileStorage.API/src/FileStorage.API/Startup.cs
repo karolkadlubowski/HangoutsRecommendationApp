@@ -40,8 +40,7 @@ namespace FileStorage.API
                 Configuration,
                 "FileStorage.API.Application");
 
-            services
-                .AddFileStorageDbContext(Configuration);
+            services.AddFileStorageDbContext(Configuration);
             _logger.Trace("> FileStorage database context registered");
 
             services.AddRepositories();
@@ -52,7 +51,7 @@ namespace FileStorage.API
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
-            
+
             services
                 .AddHealthChecks()
                 .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));

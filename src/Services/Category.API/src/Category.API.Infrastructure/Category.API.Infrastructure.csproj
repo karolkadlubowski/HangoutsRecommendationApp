@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Category.API.Application\Category.API.Application.csproj" />
+      <ProjectReference Include="..\Category.API.Domain\Category.API.Domain.csproj" />
+    </ItemGroup>
+
+</Project>
