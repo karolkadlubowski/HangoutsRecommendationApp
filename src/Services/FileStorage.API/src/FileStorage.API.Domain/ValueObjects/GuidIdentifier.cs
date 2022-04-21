@@ -3,9 +3,9 @@ using Library.Shared.Models;
 
 namespace FileStorage.API.Domain.ValueObjects
 {
-    public record GuidId : ValueObject<string>
+    public record GuidIdentifier : ValueObject<string>
     {
-        public GuidId()
+        public GuidIdentifier()
             => Value = Guid.NewGuid().ToString("N");
     }
 }

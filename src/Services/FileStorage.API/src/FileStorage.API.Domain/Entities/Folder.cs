@@ -17,12 +17,15 @@ namespace FileStorage.API.Domain.Entities
         public static Folder CreateDefault(string folderKey)
             => new Folder
             {
-                FolderId = new GuidId(),
+                FolderId = new GuidIdentifier(),
                 Key = new FolderKey(folderKey)
             };
 
         public void AddOrReplaceFile(File file)
         {
+            if (file is null)
+                throw new ArgumentNullException(nameof(file));
+
             var existingFile = Files.FirstOrDefault(f => f.Key == file.Key);
 
             if (existingFile is not null)
