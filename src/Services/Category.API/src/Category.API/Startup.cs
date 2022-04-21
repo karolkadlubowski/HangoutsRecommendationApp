@@ -1,5 +1,4 @@
-using System.IO;
-using FileStorage.API.Application.Mapper;
+using Category.API.Application.Mapper;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
 using Microsoft.AspNetCore.Builder;
@@ -8,21 +7,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
-using FileStorage.API.DI;
-using FileStorage.API.HealthChecks;
-using Microsoft.Extensions.FileProviders;
-using SimpleFileSystem;
-using SimpleFileSystem.DependencyInjection;
-using IConfigurationProvider = FileStorage.API.Application.Providers.IConfigurationProvider;
+using Category.API.DI;
+using Category.API.HealthChecks;
+using IConfigurationProvider = Category.API.Application.Providers.IConfigurationProvider;
 
-namespace FileStorage.API
+namespace Category.API
 {
     public class Startup
     {
         private readonly ILogger _logger;
-
-        private const string FileServerBasePathKey = "FileServerConfig:FileServerBasePath";
-        private const string FileServerUrlKey = "FileServerConfig:FileServerUrl";
 
         public Startup(IConfiguration configuration)
         {
@@ -38,10 +31,10 @@ namespace FileStorage.API
 
             services.InjectDefaultConfigs(_logger,
                 Configuration,
-                "FileStorage.API.Application");
+                "Category.API.Application");
 
-            services.AddFileStorageDbContext(Configuration);
-            _logger.Trace("> FileStorage database context registered");
+            services.AddCategoryDbContext(Configuration);
+            _logger.Trace("> Category database context registered");
 
             services.AddRepositories();
             _logger.Trace("> Database repositories registered");
@@ -52,16 +45,13 @@ namespace FileStorage.API
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
 
+            services.AddKafkaMessageBroker(Configuration);
+            _logger.Trace("> Kafka message broker registered");
+
             services
                 .AddHealthChecks()
                 .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
-
-            services.AddSimpleFileSystem(() => new FileSystemConfigurationBuilder()
-                .SetBasePath(Configuration.GetValue<string>(FileServerBasePathKey))
-                .SetBaseUrl(Configuration.GetValue<string>(FileServerUrlKey))
-                .Build());
-            _logger.Trace("> Simple File System registered");
 
             services.AddAutoMapper(typeof(MapperProfile));
             _logger.Trace("> AutoMapper profile registered");
@@ -78,19 +68,11 @@ namespace FileStorage.API
                 app.UseDeveloperExceptionPage();
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FileStorage.API v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Category.API v1"));
 
             app.UseHealthChecks("/health");
 
             app.UseRouting();
-
-            app.UseDefaultFiles();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, Configuration.GetValue<string>(FileServerBasePathKey))),
-                RequestPath = $"/{Configuration.GetValue<string>(FileServerBasePathKey)}"
-            });
 
             app.UseAuthorization();
 

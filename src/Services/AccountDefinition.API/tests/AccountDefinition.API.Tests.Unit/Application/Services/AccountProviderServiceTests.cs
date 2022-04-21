@@ -31,7 +31,7 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
         private Mock<IMapper> _mapper;
         private Mock<ILogger> _logger;
 
-        private TestAccountProvider _accountProvider;
+        private StubAccountProvider _accountProvider;
         private AccountProviderPersistenceModel _accountProviderPersistenceModel;
 
         private AddAccountProviderCommand _addAccountProviderCommand;
@@ -42,7 +42,7 @@ namespace AccountDefinition.API.Tests.Unit.Application.Services
         [SetUp]
         public void SetUp()
         {
-            _accountProvider = new TestAccountProvider(ExpectedProvider, _createdOn);
+            _accountProvider = new StubAccountProvider(ExpectedProvider, _createdOn);
             _accountProviderPersistenceModel = new AccountProviderPersistenceModel {Provider = ExpectedProvider, CreatedOn = _createdOn};
 
             _accountProviderRepository = new Mock<IAccountProviderRepository>();
