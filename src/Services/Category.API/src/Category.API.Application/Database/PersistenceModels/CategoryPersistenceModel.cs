@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace Category.API.Application.Database.PersistenceModels
 {
     [BsonCollection("Categories")]
-    public record CategoryPersistenceModel : BasePersistenceModel
+    public class CategoryPersistenceModel : BasePersistenceModel
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
