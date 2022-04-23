@@ -43,6 +43,6 @@ namespace UserProfile.API.Infrastructure.Events
 
         public async Task StopAsync(CancellationToken cancellationToken)
             => await Task.Run(()
-                => _logger.Info($"{nameof(EventConsumerHostedService)} hosted service stopped. Events consuming stopped"));
+                => _logger.Info($"{nameof(EventConsumerHostedService)} hosted service stopped. Events consuming and aggregating stopped"));
     }
 }
