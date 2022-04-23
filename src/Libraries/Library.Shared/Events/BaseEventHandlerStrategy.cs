@@ -13,6 +13,8 @@ namespace Library.Shared.Events
         protected BaseEventHandlerStrategy(IMediator mediator)
             => _mediator = mediator;
 
+        public abstract EventType EventType { get; }
+
         public abstract Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default);
     }
 }

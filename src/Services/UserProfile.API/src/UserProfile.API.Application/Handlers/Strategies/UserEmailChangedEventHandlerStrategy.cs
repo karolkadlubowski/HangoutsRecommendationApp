@@ -14,6 +14,8 @@ namespace UserProfile.API.Application.Handlers.Strategies
         {
         }
 
+        public override EventType EventType => EventType.USER_EMAIL_CHANGED;
+
         public async override Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default)
         {
             var dataModel = @event.GetData<UserEmailChangedEventDataModel>();

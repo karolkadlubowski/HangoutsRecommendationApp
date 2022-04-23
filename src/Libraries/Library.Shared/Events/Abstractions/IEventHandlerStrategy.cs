@@ -6,6 +6,8 @@ namespace Library.Shared.Events.Abstractions
 {
     public interface IEventHandlerStrategy
     {
+        EventType EventType { get; }
+
         Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default);
     }
 }
