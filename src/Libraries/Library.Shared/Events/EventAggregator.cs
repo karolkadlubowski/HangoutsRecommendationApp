@@ -58,7 +58,7 @@ namespace Library.Shared.Events
             else
                 EventsTransactions[receivedEvent.TransactionId] = new HashSet<Event>(new[] { receivedEvent });
 
-            _logger.Trace($"Event #{receivedEvent.EventId} in transaction #{receivedEvent.TransactionId} added to the dictionary");
+            _logger.Trace($"Event #{receivedEvent.EventId} in transaction #{receivedEvent.TransactionId} added to the memory cache dictionary");
         }
     }
 }
