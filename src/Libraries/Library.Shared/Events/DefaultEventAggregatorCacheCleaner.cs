@@ -30,7 +30,10 @@ namespace Library.Shared.Events
                 if (!eventsInTransaction.Any())
                     continue;
 
-                var lastEventCreatedOn = eventsInTransaction.LastOrDefault()?.CreatedOn;
+                var lastEventCreatedOn = eventsInTransaction
+                    .OrderByDescending(e => e.CreatedOn)
+                    .LastOrDefault()
+                    ?.CreatedOn;
 
                 if (!lastEventCreatedOn.HasValue)
                     continue;
