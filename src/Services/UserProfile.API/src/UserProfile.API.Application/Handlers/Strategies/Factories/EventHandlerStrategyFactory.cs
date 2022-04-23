@@ -1,7 +1,7 @@
 ﻿using Library.EventBus;
+using Library.Shared.Events.Abstractions;
 using Library.Shared.Exceptions;
 using MediatR;
-using UserProfile.API.Application.Abstractions;
 
 namespace UserProfile.API.Application.Handlers.Strategies.Factories
 {

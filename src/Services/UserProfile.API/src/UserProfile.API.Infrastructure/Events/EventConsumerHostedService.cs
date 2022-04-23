@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Library.EventBus;
 using Library.EventBus.Abstractions;
+using Library.Shared.Events.Abstractions;
 using Library.Shared.Logging;
 using Microsoft.Extensions.Hosting;
-using UserProfile.API.Application.Abstractions;
 
 namespace UserProfile.API.Infrastructure.Events
 {
@@ -29,7 +29,10 @@ namespace UserProfile.API.Infrastructure.Events
             try
             {
                 _logger.Info($"{nameof(EventConsumerHostedService)} hosted service started. Events consuming and aggregating started");
+
                 await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Identity, cancellationToken);
+                _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Identity}'");
+
                 await _eventAggregator.AggregateEventsAsync(cancellationToken);
             }
             catch (Exception e)

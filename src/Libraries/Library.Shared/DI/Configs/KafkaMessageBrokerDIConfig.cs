@@ -1,8 +1,4 @@
-﻿using Library.EventBus;
-using Library.EventBus.Abstractions;
-using Library.EventBus.AppConfigs;
-using Library.Shared.Events;
-using Library.Shared.Events.Abstractions;
+﻿using Library.EventBus.AppConfigs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -13,10 +9,8 @@ namespace Library.Shared.DI.Configs
     {
         public static IServiceCollection AddKafkaMessageBroker(this IServiceCollection services, IConfiguration configuration)
             => services
+                .AddEventBus()
                 .Configure<KafkaConfig>(configuration.GetSection(nameof(KafkaConfig)))
-                .AddSingleton<KafkaConfig>(s => s.GetRequiredService<IOptions<KafkaConfig>>().Value)
-                .AddScoped<IEventPublisher, KafkaEventPublisher>()
-                .AddSingleton<IEventConsumer, KafkaEventConsumer>()
-                .AddScoped<IEventSender, EventSender>();
+                .AddSingleton<KafkaConfig>(s => s.GetRequiredService<IOptions<KafkaConfig>>().Value);
     }
 }

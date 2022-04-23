@@ -1,7 +1,6 @@
 ﻿using Library.EventBus;
-using UserProfile.API.Application.Abstractions;
 
-namespace UserProfile.API.Application.Handlers.Strategies.Factories
+namespace Library.Shared.Events.Abstractions
 {
     public interface IEventHandlerStrategyFactory
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Library.EventBus;
 
-namespace UserProfile.API.Application.Abstractions
+namespace Library.Shared.Events.Abstractions
 {
     public interface IEventHandlerStrategy
     {

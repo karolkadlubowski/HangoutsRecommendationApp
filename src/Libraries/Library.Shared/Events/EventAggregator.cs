@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Library.EventBus;
 using Library.EventBus.Abstractions;
+using Library.Shared.Events.Abstractions;
 using Library.Shared.Logging;
-using UserProfile.API.Application.Abstractions;
-using UserProfile.API.Application.Handlers.Strategies.Factories;
 
-namespace UserProfile.API.Application.Handlers
+namespace Library.Shared.Events
 {
     public class EventAggregator : IEventAggregator
     {
@@ -24,6 +25,8 @@ namespace UserProfile.API.Application.Handlers
             _logger = logger;
         }
 
+        public ConcurrentDictionary<Guid, HashSet<Event>> EventsTransactions { get; } = new ConcurrentDictionary<Guid, HashSet<Event>>();
+
         public async Task AggregateEventsAsync(CancellationToken cancellationToken = default)
             => await Task.Run(() => _eventConsumer.EventReceived += (_, receivedEvent)
                 => Task.Run(async () => await HandleEventAsync(receivedEvent)));
@@ -39,11 +42,23 @@ namespace UserProfile.API.Application.Handlers
 
                 await eventHandlerStrategy.HandleEventAsync(receivedEvent);
                 _logger.Info($"<< Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' for entity #{receivedEvent.EntityId} in transaction #{receivedEvent.TransactionId} consumed");
+
+                AddOrUpdateEventsTransactionsDictionary(receivedEvent);
             }
             catch (Exception e)
             {
                 _logger.Error(e.Message, e);
             }
+        }
+
+        private void AddOrUpdateEventsTransactionsDictionary(Event receivedEvent)
+        {
+            if (EventsTransactions.TryGetValue(receivedEvent.TransactionId, out var events))
+                events.Add(receivedEvent);
+            else
+                EventsTransactions[receivedEvent.TransactionId] = new HashSet<Event>(new[] { receivedEvent });
+
+            _logger.Trace($"Event #{receivedEvent.EventId} in transaction #{receivedEvent.TransactionId} added to the dictionary");
         }
     }
 }
