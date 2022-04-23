@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 
 namespace Library.EventBus
 {
@@ -9,7 +10,7 @@ namespace Library.EventBus
             => new TEvent
             {
                 EntityId = entityId?.ToString(),
-                Data = data
+                Data = JsonSerializer.Serialize(data)
             };
 
         public static TEvent CreateEventWithoutData(object entityId)
@@ -23,7 +24,7 @@ namespace Library.EventBus
             {
                 TransactionId = transactionId,
                 EntityId = entityId?.ToString(),
-                Data = data
+                Data = JsonSerializer.Serialize(data)
             };
     }
 }

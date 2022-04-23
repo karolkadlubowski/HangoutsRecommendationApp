@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using UserProfile.API.DI;
+using UserProfile.API.Infrastructure.Events;
 using IConfigurationProvider = UserProfile.API.Application.Providers.IConfigurationProvider;
 
 namespace UserProfile.API
@@ -33,7 +34,7 @@ namespace UserProfile.API
 
             services.AddDistributedCache(Configuration);
             _logger.Trace("> Redis cache database registered");
-            
+
             services.AddRepositories();
             _logger.Trace("> Database repositories registered");
 
@@ -42,6 +43,9 @@ namespace UserProfile.API
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
+
+            services.AddHostedService<EventConsumerHostedService>();
+            _logger.Trace("> Hosted services registered");
 
             services.AddHealthChecks();
             _logger.Trace("> Health checks registered");

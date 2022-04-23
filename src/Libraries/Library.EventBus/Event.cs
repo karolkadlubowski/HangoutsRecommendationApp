@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 
 namespace Library.EventBus
 {
@@ -10,11 +11,12 @@ namespace Library.EventBus
         public string EntityId { get; init; }
         public DateTime CreatedOn { get; init; } = DateTime.UtcNow;
 
-        public object Data { get; init; }
+        public string Data { get; init; }
 
         public string EventName => EventTypeConverter.Convert(EventType);
 
         public virtual TData GetData<TData>() where TData : class
-            => Data as TData;
+            => JsonSerializer.Deserialize<TData>(Data)
+               ?? throw new ArgumentNullException(nameof(Data));
     }
 }
