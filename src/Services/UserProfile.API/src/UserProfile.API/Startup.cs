@@ -42,7 +42,7 @@ namespace UserProfile.API
             services
                 .AddKafkaMessageBroker(Configuration)
                 .AddEventHandlersStrategies(Assembly.Load("UserProfile.API.Application"));
-            _logger.Trace("> Event bus registered");
+            _logger.Trace("> Kafka message broker registered");
 
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
