@@ -9,7 +9,7 @@ using Library.Shared.Options;
 
 namespace Library.Shared.Utils
 {
-    public static class BehaviourUtils<TRequest, TResponse> where TResponse : BaseApiResponse
+    public static class BehaviourUtils<TRequest, TResponse> where TResponse : BaseResponse
     {
         public static TResponse HandleException(Exception e, string errorCode, ILogger logger)
         {

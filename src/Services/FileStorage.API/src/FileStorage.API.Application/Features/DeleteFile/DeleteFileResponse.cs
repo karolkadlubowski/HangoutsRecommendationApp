@@ -2,7 +2,7 @@
 
 namespace FileStorage.API.Application.Features.DeleteFile
 {
-    public record DeleteFileResponse : BaseApiResponse
+    public record DeleteFileResponse : BaseResponse
     {
         public string DeletedFileId { get; init; }
 

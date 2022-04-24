@@ -3,7 +3,7 @@ using Library.Shared.Models.Response;
 
 namespace Category.API.Application.Features.AddCategory
 {
-    public record AddCategoryResponse : BaseApiResponse
+    public record AddCategoryResponse : BaseResponse
     {
         public CategoryDto AddedCategory { get; init; }
 

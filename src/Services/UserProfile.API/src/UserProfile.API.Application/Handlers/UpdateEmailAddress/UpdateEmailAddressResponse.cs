@@ -2,7 +2,7 @@
 
 namespace UserProfile.API.Application.Handlers.UpdateEmailAddress
 {
-    public record UpdateEmailAddressResponse : BaseApiResponse
+    public record UpdateEmailAddressResponse : BaseResponse
     {
         public long UserId { get; init; }
         public string CurrentEmailAddress { get; init; }

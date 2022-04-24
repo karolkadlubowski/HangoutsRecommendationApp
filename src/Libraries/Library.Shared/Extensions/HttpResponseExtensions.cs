@@ -12,7 +12,7 @@ namespace Library.Shared.Extensions
     {
         public static async Task WriteErrorResponseAsync(this HttpContext context, Exception e, string errorCode)
         {
-            var response = new BaseApiResponse(new Error(errorCode, e.Message, ExceptionDictionary.GetStatusCode(e)));
+            var response = new BaseResponse(new Error(errorCode, e.Message, ExceptionDictionary.GetStatusCode(e)));
             var jsonResponse = response.ToJSON();
 
             context.Response.ContentType = "application/json";

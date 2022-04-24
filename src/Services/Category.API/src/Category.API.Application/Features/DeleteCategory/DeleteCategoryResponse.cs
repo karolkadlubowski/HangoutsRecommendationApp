@@ -2,7 +2,7 @@
 
 namespace Category.API.Application.Features.DeleteCategory
 {
-    public record DeleteCategoryResponse : BaseApiResponse
+    public record DeleteCategoryResponse : BaseResponse
     {
         public string DeletedCategoryId { get; init; }
 

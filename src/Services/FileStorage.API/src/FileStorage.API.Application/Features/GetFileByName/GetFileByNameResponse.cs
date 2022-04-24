@@ -3,7 +3,7 @@ using Library.Shared.Models.Response;
 
 namespace FileStorage.API.Application.Features.GetFileByName
 {
-    public record GetFileByNameResponse : BaseApiResponse
+    public record GetFileByNameResponse : BaseResponse
     {
         public FileDto File { get; init; }
 

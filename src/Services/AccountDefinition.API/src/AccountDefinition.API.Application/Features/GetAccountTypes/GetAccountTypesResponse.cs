@@ -5,7 +5,7 @@ using Library.Shared.Models.Response;
 
 namespace AccountDefinition.API.Application.Features.GetAccountTypes
 {
-    public record GetAccountTypesResponse : BaseApiResponse
+    public record GetAccountTypesResponse : BaseResponse
     {
         public IReadOnlyList<AccountTypeDto> AccountTypes { get; init; } = ImmutableList<AccountTypeDto>.Empty;
 

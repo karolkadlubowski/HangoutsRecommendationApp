@@ -11,7 +11,7 @@ using MediatR;
 namespace Library.Shared.Behaviours
 {
     public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TResponse : BaseApiResponse
+        where TResponse : BaseResponse
     {
         private readonly ILogger _logger;
 
