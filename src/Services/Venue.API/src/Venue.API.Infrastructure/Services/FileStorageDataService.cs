@@ -53,13 +53,12 @@ namespace Venue.API.Infrastructure.Services
             {
                 _logger.Info($">> Sending request to the FileStorage API: '{_restClientConfig.BaseApiUrl}'. Request: {nameof(PutFileRequest)}");
 
-                var request = RestRequestAbstractFactory.PutFileRequest(new PutFileRequest
-                {
-                    FolderKey = CreateFolderKey(venueId),
-                    File = photo
-                });
                 var response = await _restClient.ExecuteAsync<PutFileResponse>(
-                    request);
+                    RestRequestAbstractFactory.PutFileRequest(new PutFileRequest
+                    {
+                        FolderKey = CreateFolderKey(venueId),
+                        File = photo
+                    }));
                 var putFileResponse = response?.Content?.FromJSON<PutFileResponse>(JsonOptions.JsonSerializerOptions);
 
                 _logger.Trace($"Response from the FileStorage API: {putFileResponse?.ToJSON()}");
@@ -69,10 +68,11 @@ namespace Venue.API.Infrastructure.Services
                     _logger.Info($"<< Response from the FileStorage API is successful. File #{putFileResponse.File.FileId} uploaded to the storage");
                     uploadedFiles.Add(putFileResponse.File);
                 }
-
-                _logger.Warning($"Uploading photos to the FileStorage API failed. Message: {putFileResponse.Error?.Message}");
-
-                throw new ServerException($"Uploading photos for the venue #{venueId} failed");
+                else
+                {
+                    _logger.Warning($"Uploading photos to the FileStorage API failed. Message: {putFileResponse.Error?.Message}");
+                    throw new ServerException($"Uploading photos for the venue #{venueId} failed");
+                }
             }
             catch (Exception e)
             {

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Library.Database.Transaction.Abstractions;
@@ -10,6 +11,7 @@ using Library.Shared.Logging;
 using Library.Shared.Models.Venue.Dtos;
 using MediatR;
 using Venue.API.Application.Abstractions;
+using Venue.API.Domain.Entities;
 
 namespace Venue.API.Application.Features.CreateVenue
 {
@@ -60,6 +62,7 @@ namespace Venue.API.Application.Features.CreateVenue
                 var createdVenueToReturn = _mapper.Map<VenueDto>(createdVenue);
 
                 var uploadedPhotos = await _fileStorageDataService.UploadPhotosAsync(request.Photos, createdVenue.VenueId);
+                createdVenue.AddPhotos(_mapper.Map<IEnumerable<Photo>>(uploadedPhotos));
                 _logger.Info($"{uploadedPhotos.Count} photos uploaded to the storage successfully");
 
                 await _eventSender.SendEventAsync(EventBusTopics.Venue, createdVenue.FirstStoredEvent,

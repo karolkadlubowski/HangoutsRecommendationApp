@@ -12,6 +12,11 @@ namespace Venue.API.Infrastructure.Services.Requests.Factories
         public static IRestRequest PutFileRequest(PutFileRequest request)
             => new RestRequest(Method.PUT)
                 .AddParameter(nameof(request.FolderKey), request.FolderKey)
-                .AddParameter(nameof(request.File), request.File);
+                .AddFile("File", writer: s =>
+                {
+                    var stream = request.File.OpenReadStream();
+                    stream.CopyTo(s);
+                    stream.Dispose();
+                }, request.File.FileName, request.File.Length, "multipart/form-data");
     }
 }

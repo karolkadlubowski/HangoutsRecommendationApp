@@ -62,10 +62,12 @@ namespace Venue.API.Application.Services
             _logger.Info(
                 $"Venue #{venuePersistenceModel.VenueId} with persist state '{venuePersistenceModel.PersistState}' inserted to the database successfully. Venue status: {venuePersistenceModel.Status}");
 
+            venue = _mapper.Map<VenuePersistenceModel, Domain.Entities.Venue>(venuePersistenceModel);
+
             venue.AddDomainEvent(EventFactory<VenueCreatedWithoutLocationEvent>.CreateEvent(venue.VenueId,
                 _mapper.Map<VenueCreatedWithoutLocationEventDataModel>(venue)));
 
-            return _mapper.Map<VenuePersistenceModel, Domain.Entities.Venue>(venuePersistenceModel);
+            return venue;
         }
     }
 }
