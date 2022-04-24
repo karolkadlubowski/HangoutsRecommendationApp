@@ -1,3 +1,4 @@
+using System.Reflection;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
 using Microsoft.AspNetCore.Builder;
@@ -43,14 +44,21 @@ namespace Venue.API
             services.AddMemoryCache(Configuration);
             _logger.Trace("> Memory cache registered");
 
+            services
+                .AddKafkaMessageBroker(Configuration)
+                .AddEventHandlersStrategies(Assembly.Load("Venue.API.Application"));
+            _logger.Trace("> Kafka message broker registered");
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
 
-            services.AddKafkaMessageBroker(Configuration);
-            _logger.Trace("> Kafka message broker registered");
+            services
+                .AddKafkaMessageBroker(Configuration)
+                .AddEventHandlersStrategies(Assembly.Load("Venue.API.Application"));
+            _logger.Trace("> Event bus registered");
 
             services.AddHostedService<CategoryDataHostedService>();
             _logger.Trace("> Hosted services registered");
