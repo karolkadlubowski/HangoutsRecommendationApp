@@ -23,6 +23,7 @@ namespace UserProfile.API.HealthChecks
             try
             {
                 await _userProfileRepository.SetValueAsync(CacheKey, new UserProfilePersistenceModel());
+                var x = await _userProfileRepository.GetUserProfileAsync(1);
                 await _userProfileRepository.DeleteValueAsync(CacheKey);
 
                 return new HealthCheckResult(HealthStatus.Healthy);
