@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 
 namespace Library.Shared.Models.Response
 {
@@ -7,7 +6,6 @@ namespace Library.Shared.Models.Response
     (
         string ErrorCode,
         string Message,
-        HttpStatusCode StatusCode = HttpStatusCode.InternalServerError,
         IDictionary<string, IEnumerable<string>> Validations = null
     );
 }

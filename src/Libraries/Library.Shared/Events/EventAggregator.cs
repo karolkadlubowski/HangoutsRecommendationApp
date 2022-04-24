@@ -5,8 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Library.EventBus;
 using Library.EventBus.Abstractions;
+using Library.Shared.Constants;
 using Library.Shared.Events.Abstractions;
-using Library.Shared.Logging;
+using NLog;
+using ILogger = Library.Shared.Logging.ILogger;
 
 namespace Library.Shared.Events
 {
@@ -33,21 +35,28 @@ namespace Library.Shared.Events
 
         private async Task HandleEventAsync(Event receivedEvent)
         {
-            try
+            using (MappedDiagnosticsLogicalContext.SetScoped(LoggingConstants.Scope,
+                       LoggingConstants.GetScopeValue($"EventID: {receivedEvent.EventId}",
+                           $"EntityID: {receivedEvent.EntityId}",
+                           $"TransactionID: {receivedEvent.TransactionId}",
+                           $"{receivedEvent.EventType}")))
             {
-                _logger.Info($">> Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' for entity #{receivedEvent.EntityId} in transaction #{receivedEvent.TransactionId} received");
+                try
+                {
+                    _logger.Info($">> Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' received");
 
-                var eventHandlerStrategy = _eventHandlerStrategyFactory.CreateStrategy(receivedEvent);
-                _logger.Trace($"Event handler strategy of type '{receivedEvent.EventType}' found");
+                    var eventHandlerStrategy = _eventHandlerStrategyFactory.CreateStrategy(receivedEvent);
+                    _logger.Trace($"Event handler strategy of type '{receivedEvent.EventType}' found");
 
-                await eventHandlerStrategy.HandleEventAsync(receivedEvent);
-                _logger.Info($"<< Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' for entity #{receivedEvent.EntityId} in transaction #{receivedEvent.TransactionId} consumed");
+                    await eventHandlerStrategy.HandleEventAsync(receivedEvent);
+                    _logger.Info($"<< Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' consumed");
 
-                AddOrUpdateEventsTransactionsDictionary(receivedEvent);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e.Message, e);
+                    AddOrUpdateEventsTransactionsDictionary(receivedEvent);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e.Message, e);
+                }
             }
         }
 

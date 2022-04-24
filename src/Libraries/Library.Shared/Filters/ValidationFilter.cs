@@ -23,7 +23,6 @@ namespace Library.Shared.Filters
                 var validationResponse = new BaseResponse(new Error(
                     ErrorCodes.ValidationFailed,
                     ValidationException.CustomMessage,
-                    HttpStatusCode.UnprocessableEntity,
                     errors
                 ));
 
