@@ -6,6 +6,7 @@ namespace Venue.API.Application.Abstractions
 {
     public interface ICategoryDataService
     {
-        Task<IReadOnlyList<CategoryDto>> GetCategoriesAsync();
+        Task<IList<CategoryDto>> GetCategoriesAsync();
+        Task StoreCategoriesInCacheAsync(IList<CategoryDto> categories);
     }
 }

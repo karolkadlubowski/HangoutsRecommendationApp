@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Venue.API.Application.Abstractions;
 using Venue.API.Application.Services;
+using Venue.API.Infrastructure.Caching;
 using Venue.API.Infrastructure.Clients.Factories;
 using Venue.API.Infrastructure.Services;
 
@@ -19,6 +20,9 @@ namespace Venue.API.DI
             services
                 .AddSingleton<IRestClientFactory, CategoryRestClientFactory>()
                 .AddSingleton<ICategoryDataService, CategoryDataService>();
+
+            services
+                .AddSingleton<ICategoriesCacheRepository, CategoriesCacheRepository>();
 
             return services;
         }

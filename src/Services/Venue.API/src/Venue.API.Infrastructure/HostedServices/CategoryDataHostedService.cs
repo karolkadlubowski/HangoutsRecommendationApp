@@ -1,8 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Library.Shared.Logging;
+using Library.Shared.Constants;
 using Microsoft.Extensions.Hosting;
+using NLog;
 using Venue.API.Application.Abstractions;
+using ILogger = Library.Shared.Logging.ILogger;
 
 namespace Venue.API.Infrastructure.HostedServices
 {
@@ -20,7 +23,23 @@ namespace Venue.API.Infrastructure.HostedServices
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                using (MappedDiagnosticsLogicalContext.SetScoped(LoggingConstants.Scope,
+                           LoggingConstants.GetScopeValue($"{nameof(CategoryDataHostedService)}")))
+                {
+                    _logger.Info($"{nameof(CategoryDataHostedService)} hosted service started. Fetching categories data from the API");
+
+                    var categories = await _categoryDataService.GetCategoriesAsync();
+                    await _categoryDataService.StoreCategoriesInCacheAsync(categories);
+
+                    _logger.Info("Categories stored in the memory cache successfully");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message, e);
+            }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

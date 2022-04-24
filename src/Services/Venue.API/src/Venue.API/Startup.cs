@@ -9,6 +9,7 @@ using NLog;
 using Venue.API.Application.Mapper;
 using Venue.API.DI;
 using Venue.API.HealthChecks;
+using Venue.API.Infrastructure.HostedServices;
 using IConfigurationProvider = Venue.API.Application.Providers.IConfigurationProvider;
 
 namespace Venue.API
@@ -39,6 +40,9 @@ namespace Venue.API
             services.AddRepositories();
             _logger.Trace("> Database repositories registered");
 
+            services.AddMemoryCache(Configuration);
+            _logger.Trace("> Memory cache registered");
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
@@ -47,6 +51,9 @@ namespace Venue.API
 
             services.AddKafkaMessageBroker(Configuration);
             _logger.Trace("> Kafka message broker registered");
+
+            services.AddHostedService<CategoryDataHostedService>();
+            _logger.Trace("> Hosted services registered");
 
             services
                 .AddHealthChecks()

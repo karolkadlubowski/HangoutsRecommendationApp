@@ -2,6 +2,6 @@
 {
     public record GetCategoriesRequest : IRestRequestEndpoint
     {
-        public string Endpoint => string.Empty;
+        public string Endpoint => "list";
     }
 }
