@@ -11,7 +11,7 @@ using Venue.API.Tests.Unit.Utilities.Factories;
 namespace Venue.API.Tests.Unit.Domain.Entities
 {
     [TestFixture]
-    public class VenueEntity
+    public class VenueTests
     {
         #region CreateDefault
 
