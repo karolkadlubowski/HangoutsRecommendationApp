@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Library.Shared.Logging;
 using Venue.API.Application.Abstractions;
 using Venue.API.Application.Database;
-using Venue.API.Application.Features.GetVenuesByLocationsIds;
+using Venue.API.Application.Features.GetVenues;
 
 namespace Venue.API.Application.Services
 {
@@ -23,9 +24,13 @@ namespace Venue.API.Application.Services
             _logger = logger;
         }
 
-        public async Task<IReadOnlyList<Domain.Entities.Venue>> GetVenuesByLocationsIdsAsync(GetVenuesByLocationsIdsQuery query)
+        public async Task<IReadOnlyList<Domain.Entities.Venue>> GetVenuesAsync(GetVenuesQuery query)
         {
-            throw new System.NotImplementedException();
+            var venuesPersistenceModels = await _unitOfWork.VenueRepository.GetPaginatedVenuesAsync(query.PageNumber, query.PageSize);
+
+            _logger.Info($"Venues: {venuesPersistenceModels.CurrentPage} page loaded with {venuesPersistenceModels.Count()} records from the database");
+
+            return _mapper.Map<IReadOnlyList<Domain.Entities.Venue>>(venuesPersistenceModels);
         }
     }
 }
