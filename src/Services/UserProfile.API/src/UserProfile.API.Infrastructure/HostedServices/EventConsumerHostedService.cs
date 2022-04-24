@@ -7,7 +7,7 @@ using Library.Shared.Events.Abstractions;
 using Library.Shared.Logging;
 using Microsoft.Extensions.Hosting;
 
-namespace UserProfile.API.Infrastructure.Events
+namespace UserProfile.API.Infrastructure.HostedServices
 {
     public class EventConsumerHostedService : IHostedService
     {
