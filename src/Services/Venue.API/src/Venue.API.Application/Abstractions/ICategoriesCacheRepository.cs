@@ -7,6 +7,7 @@ namespace Venue.API.Application.Abstractions
 {
     public interface ICategoriesCacheRepository : IMemoryCacheRepository<IList<CategoryDto>>
     {
+        Task<IReadOnlyList<CategoryDto>> GetCategoriesAsync();
         Task StoreCategoryAsync(CategoryDto category);
     }
 }
