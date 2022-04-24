@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Library.Shared.Models.Pagination;
 using Venue.API.Application.Features.GetVenues;
 
 namespace Venue.API.Application.Abstractions
 {
     public interface IReadOnlyVenueService
     {
-        Task<IReadOnlyList<Domain.Entities.Venue>> GetVenuesAsync(GetVenuesQuery query);
+        Task<IPagedList<Domain.Entities.Venue>> GetVenuesAsync(GetVenuesQuery query);
     }
 }

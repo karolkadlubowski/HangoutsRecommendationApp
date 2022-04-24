@@ -6,6 +6,7 @@ namespace Library.Shared.Models.Pagination
     public class PagedList<T> : List<T>, IPagedList<T>
     {
         public int CurrentPage { get; }
+        public int CurrentCount { get; }
         public int PageSize { get; }
         public int TotalCount { get; }
         public int TotalPages { get; }
@@ -16,7 +17,16 @@ namespace Library.Shared.Models.Pagination
             PageSize = pageSize;
             TotalCount = count;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+
             this.AddRange(items);
+
+            CurrentCount = Count;
         }
+
+        private PagedList()
+        {
+        }
+
+        public static IPagedList<T> Empty => new PagedList<T>();
     }
 }
