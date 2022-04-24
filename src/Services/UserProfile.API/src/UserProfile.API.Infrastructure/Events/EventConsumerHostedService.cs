@@ -30,7 +30,7 @@ namespace UserProfile.API.Infrastructure.Events
             {
                 _logger.Info($"{nameof(EventConsumerHostedService)} hosted service started. Events consuming and aggregating started");
 
-                await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Category, cancellationToken);
+                await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Identity, cancellationToken);
                 _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Identity}'");
 
                 await _eventAggregator.AggregateEventsAsync(cancellationToken);
