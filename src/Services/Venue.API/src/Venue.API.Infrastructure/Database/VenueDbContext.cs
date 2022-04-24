@@ -37,6 +37,8 @@ namespace Venue.API.Infrastructure.Database
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.HasDefaultSchema("Venue");
+
             VenueEntityConfig.Create().Configure(modelBuilder.Entity<VenuePersistenceModel>());
         }
     }

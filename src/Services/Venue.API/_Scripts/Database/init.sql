@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "Venue"."Venues"
     "VenueId"       bigserial PRIMARY KEY,
     "Name"          varchar(200)                                                   NOT NULL,
     "Description"   varchar(2000),
-    "LocationId"    bigint UNIQUE                                                  NOT NULL,
+    "LocationId"    bigint UNIQUE,                                                  
     "CategoryId"    varchar(24)                                                    NOT NULL,
     "CreatorId"     bigint,
     "Status"        int DEFAULT 0,

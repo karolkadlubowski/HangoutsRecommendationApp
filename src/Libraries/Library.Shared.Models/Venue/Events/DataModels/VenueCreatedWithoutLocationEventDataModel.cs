@@ -1,8 +1,8 @@
 ﻿using Library.Shared.Models.Venue.Enums;
 
-namespace Library.Shared.Models.Venue.Dtos
+namespace Library.Shared.Models.Venue.Events.DataModels
 {
-    public record VenueDto
+    public record VenueCreatedWithoutLocationEventDataModel
     {
         public long VenueId { get; init; }
         public string Name { get; init; }

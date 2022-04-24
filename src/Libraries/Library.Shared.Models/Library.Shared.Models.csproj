@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <Folder Include="UserProfile" />
-      <Folder Include="Venue\Events" />
     </ItemGroup>
 
 </Project>

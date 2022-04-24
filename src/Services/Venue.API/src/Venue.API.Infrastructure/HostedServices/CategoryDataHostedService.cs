@@ -33,7 +33,7 @@ namespace Venue.API.Infrastructure.HostedServices
                     var categories = await _categoryDataService.GetCategoriesAsync();
                     await _categoryDataService.StoreCategoriesInCacheAsync(categories);
 
-                    _logger.Info("Categories stored in the memory cache successfully");
+                    _logger.Info($"{categories.Count} categories stored in the memory cache successfully");
                 }
             }
             catch (Exception e)

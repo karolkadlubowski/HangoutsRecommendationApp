@@ -19,7 +19,11 @@ namespace Venue.API.DI
 
             services
                 .AddSingleton<IRestClientFactory, CategoryRestClientFactory>()
-                .AddSingleton<ICategoryDataService, CategoryDataService>();
+                .AddSingleton<IRestClientFactory, FileStorageRestClientFactory>();
+
+            services
+                .AddSingleton<ICategoryDataService, CategoryDataService>()
+                .AddSingleton<IFileStorageDataService, FileStorageDataService>();
 
             services
                 .AddSingleton<ICategoriesCacheRepository, CategoriesCacheRepository>();

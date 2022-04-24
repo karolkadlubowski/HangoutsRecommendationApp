@@ -1,7 +1,12 @@
-﻿using Library.Shared.Controllers;
+﻿using System.Net;
+using System.Threading.Tasks;
+using Library.Shared.Controllers;
+using Library.Shared.Extensions;
 using Library.Shared.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Venue.API.Application.Features.CreateVenue;
+using Venue.API.Application.Features.GetVenues;
 
 namespace Venue.API.Controllers
 {
@@ -14,6 +19,44 @@ namespace Venue.API.Controllers
     {
         public VenueController(IMediator mediator, ILogger logger) : base(mediator, logger)
         {
+        }
+
+        /// <summary>
+        /// Returns Venue entities from the database using pagination
+        /// </summary>
+        [HttpGet("list")]
+        [ProducesResponseType(typeof(GetVenuesResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetVenuesResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetVenues([FromQuery] GetVenuesQuery query)
+        {
+            _logger.Info($"Sending query: {nameof(GetVenuesQuery)}");
+
+            var response = await _mediator.Send(query);
+
+            return this.CreateResponse(response);
+        }
+
+        /// <summary>
+        /// Create new Venue entity in the database. Begin distributed transaction
+        /// </summary>
+        /// <param name="command">
+        /// Name - cannot be null or empty, cannot exceed 200 characters
+        /// Description - cannot exceed 2000 characters
+        /// CategoryName - cannot be null or empty
+        /// Photos - cannot contain more than 6 photos
+        /// </param>
+        [HttpPost]
+        [ProducesResponseType(typeof(CreateVenueResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CreateVenueResponse), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(CreateVenueResponse), (int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(CreateVenueResponse), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> CreateVenue([FromForm] CreateVenueCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(CreateVenueCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
         }
     }
 }
