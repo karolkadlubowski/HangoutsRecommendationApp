@@ -9,10 +9,6 @@ namespace UserProfile.API.DI
     {
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services
-                .AddKafkaMessageBroker(configuration)
-                .AddEventHandlersStrategies(Assembly.Load("UserProfile.API.Application"));
-
             return services;
         }
     }

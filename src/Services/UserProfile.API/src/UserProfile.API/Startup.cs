@@ -1,3 +1,4 @@
+using System.Reflection;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +38,11 @@ namespace UserProfile.API
 
             services.AddRepositories();
             _logger.Trace("> Database repositories registered");
+
+            services
+                .AddKafkaMessageBroker(Configuration)
+                .AddEventHandlersStrategies(Assembly.Load("UserProfile.API.Application"));
+            _logger.Trace("> Event bus registered");
 
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
