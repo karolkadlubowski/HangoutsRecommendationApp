@@ -22,13 +22,13 @@ namespace Venue.API.Application.Features.GetVenues
 
         public async Task<GetVenuesResponse> Handle(GetVenuesQuery request, CancellationToken cancellationToken)
         {
-            var venues = await _venueService.GetVenuesAsync(request);
-            var venuesToReturn = _mapper.Map<IPagedList<VenueDto>>(venues);
+            var venuesPaginationTuple = await _venueService.GetVenuesAsync(request);
+            var venuesToReturn = _mapper.Map<PagedList<VenueDto>>(venuesPaginationTuple.List);
 
             return new GetVenuesResponse
             {
                 Venues = venuesToReturn,
-                Pagination = PaginationResponseDecorator<VenueDto>.Create(venuesToReturn)
+                Pagination = venuesPaginationTuple.Pagination
             };
         }
     }

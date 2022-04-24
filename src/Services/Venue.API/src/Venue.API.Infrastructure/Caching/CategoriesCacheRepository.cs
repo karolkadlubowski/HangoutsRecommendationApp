@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Library.Shared.AppConfigs;
@@ -20,6 +21,10 @@ namespace Venue.API.Infrastructure.Caching
         public async Task<IReadOnlyList<CategoryDto>> GetCategoriesAsync()
             => (await GetValueOrDefaultAsync(Constants.CacheKeys.Categories))?.ToList()
                ?? new List<CategoryDto>();
+
+        public async Task<CategoryDto> FindCategoryByNameAsync(string name)
+            => (await GetCategoriesAsync())
+                .FirstOrDefault(category => category.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
         public async Task StoreCategoryAsync(CategoryDto category)
         {

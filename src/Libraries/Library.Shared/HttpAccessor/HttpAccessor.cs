@@ -17,9 +17,9 @@ namespace Library.Shared.HttpAccessor
         public bool IsAuthenticated => _httpContextAccessor.HttpContext.IsAuthenticated();
 
         public long CurrentUserId => int.Parse(_httpContextAccessor.HttpContext
-            .User
+            .User?
             .FindFirst(ClaimTypes.NameIdentifier)?
-            .Value ?? string.Empty);
+            .Value ?? "0");
 
         public string CurrentJwtToken => _httpContextAccessor.HttpContext.Request.Headers[Headers.Authorization];
     }

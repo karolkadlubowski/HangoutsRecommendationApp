@@ -48,7 +48,7 @@ namespace Venue.API.Infrastructure.Services
 
             if (getCategoriesResponse.IsSucceeded)
             {
-                _logger.Info($"<< Response from the Category API is successful. Categories count: {getCategoriesResponse.Categories.Count}");
+                _logger.Info($"<< Response from the Category API is successful. Categories loaded count: {getCategoriesResponse.Categories.Count}");
                 return getCategoriesResponse.Categories.ToList();
             }
 

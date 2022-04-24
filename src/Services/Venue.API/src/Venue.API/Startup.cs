@@ -1,4 +1,5 @@
 using System.Reflection;
+using Library.Database.DI;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
 using Microsoft.AspNetCore.Builder;
@@ -35,7 +36,9 @@ namespace Venue.API
                 Configuration,
                 "Venue.API.Application");
 
-            services.AddVenueDbContext(Configuration);
+            services
+                .AddVenueDbContext(Configuration)
+                .AddTransactionManager();
             _logger.Trace("> Venue database context registered");
 
             services.AddRepositories();

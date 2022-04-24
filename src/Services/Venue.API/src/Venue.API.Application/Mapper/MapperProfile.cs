@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Library.Shared.Models.Venue.Dtos;
 using Venue.API.Application.Database.PersistenceModels;
 
 namespace Venue.API.Application.Mapper
@@ -7,7 +8,11 @@ namespace Venue.API.Application.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<VenuePersistenceModel, Domain.Entities.Venue>();
+            CreateMap<VenuePersistenceModel, Domain.Entities.Venue>()
+                .ReverseMap();
+
+            CreateMap<Domain.Entities.Venue, VenueDto>()
+                .ReverseMap();
         }
     }
 }

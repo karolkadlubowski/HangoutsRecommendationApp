@@ -10,6 +10,7 @@ namespace Library.Shared.Models.Venue.Dtos
         public long LocationId { get; init; }
         public string CategoryId { get; init; }
         public long? CreatorId { get; init; }
+        public VenueStatus Status { get; init; }
         public VenuePersistState PersistState { get; init; }
     }
 }
