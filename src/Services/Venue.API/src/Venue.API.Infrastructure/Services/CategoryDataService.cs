@@ -47,7 +47,7 @@ namespace Venue.API.Infrastructure.Services
                 return getCategoriesResponse.Categories;
             }
 
-            _logger.Warning("Fetching data from the Category API failed");
+            _logger.Warning($"Fetching data from the Category API failed. Message: {getCategoriesResponse.Error?.Message}");
 
             return ImmutableList<CategoryDto>.Empty;
         }
