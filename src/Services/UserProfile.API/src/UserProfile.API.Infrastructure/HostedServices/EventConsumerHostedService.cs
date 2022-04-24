@@ -3,9 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Library.EventBus;
 using Library.EventBus.Abstractions;
+using Library.Shared.Constants;
 using Library.Shared.Events.Abstractions;
-using Library.Shared.Logging;
 using Microsoft.Extensions.Hosting;
+using NLog;
+using ILogger = Library.Shared.Logging.ILogger;
 
 namespace UserProfile.API.Infrastructure.HostedServices
 {
@@ -28,12 +30,16 @@ namespace UserProfile.API.Infrastructure.HostedServices
         {
             try
             {
-                _logger.Info($"{nameof(EventConsumerHostedService)} hosted service started. Events consuming and aggregating started");
+                using (MappedDiagnosticsLogicalContext.SetScoped(LoggingConstants.Scope,
+                           LoggingConstants.GetScopeValue($"{nameof(EventConsumerHostedService)}")))
+                {
+                    _logger.Info($"{nameof(EventConsumerHostedService)} hosted service started. Events consuming and aggregating started");
 
-                await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Identity, cancellationToken);
-                _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Identity}'");
+                    await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Identity, cancellationToken);
+                    _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Identity}'");
 
-                await _eventAggregator.AggregateEventsAsync(cancellationToken);
+                    await _eventAggregator.AggregateEventsAsync(cancellationToken);
+                }
             }
             catch (Exception e)
             {
