@@ -13,6 +13,7 @@ using Library.Shared.Options;
 using Microsoft.AspNetCore.Http;
 using Venue.API.Application.Abstractions;
 using Venue.API.Application.Providers;
+using Venue.API.Domain.ValueObjects;
 using Venue.API.Infrastructure.Clients.Factories;
 using Venue.API.Infrastructure.Services.Requests.Factories;
 using Venue.API.Infrastructure.Services.Requests.FileStorageApi;
@@ -56,7 +57,7 @@ namespace Venue.API.Infrastructure.Services
                 var response = await _restClient.ExecuteAsync<PutFileResponse>(
                     RestRequestAbstractFactory.PutFileRequest(new PutFileRequest
                     {
-                        FolderKey = CreateFolderKey(venueId),
+                        FolderKey = new PhotosFolderKey(venueId),
                         File = photo
                     }));
                 var putFileResponse = response?.Content?.FromJSON<PutFileResponse>(JsonOptions.JsonSerializerOptions);
@@ -81,7 +82,5 @@ namespace Venue.API.Infrastructure.Services
                 throw;
             }
         }
-
-        private static string CreateFolderKey(long venueId) => $"VENUES/{venueId}";
     }
 }
