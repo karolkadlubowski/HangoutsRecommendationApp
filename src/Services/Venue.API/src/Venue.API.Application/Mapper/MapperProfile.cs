@@ -4,6 +4,7 @@ using Library.Shared.Models.Venue.Dtos;
 using Library.Shared.Models.Venue.Events.DataModels;
 using Venue.API.Application.Database.PersistenceModels;
 using Venue.API.Domain.Entities;
+using Venue.API.Domain.Entities.Models;
 
 namespace Venue.API.Application.Mapper
 {

@@ -12,6 +12,7 @@ using Library.Shared.Models.Venue.Dtos;
 using MediatR;
 using Venue.API.Application.Abstractions;
 using Venue.API.Domain.Entities;
+using Venue.API.Domain.Entities.Models;
 
 namespace Venue.API.Application.Features.CreateVenue
 {

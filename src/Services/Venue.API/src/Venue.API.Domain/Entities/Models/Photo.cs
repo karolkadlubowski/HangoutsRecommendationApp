@@ -1,4 +1,4 @@
-﻿namespace Venue.API.Domain.Entities
+﻿namespace Venue.API.Domain.Entities.Models
 {
     public record Photo
     {

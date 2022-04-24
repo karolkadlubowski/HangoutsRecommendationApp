@@ -3,6 +3,7 @@ using System.Linq;
 using Library.Shared.Exceptions;
 using Library.Shared.Models;
 using Library.Shared.Models.Venue.Enums;
+using Venue.API.Domain.Entities.Models;
 using Venue.API.Domain.Validation;
 using Venue.API.Domain.ValueObjects;
 
