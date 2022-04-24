@@ -8,8 +8,6 @@ using Library.Shared.Exceptions;
 using Library.Shared.HttpAccessor;
 using Library.Shared.Logging;
 using Library.Shared.Models.Venue.Dtos;
-using Library.Shared.Models.Venue.Events;
-using Library.Shared.Models.Venue.Events.DataModels;
 using MediatR;
 using Venue.API.Application.Abstractions;
 
@@ -20,6 +18,7 @@ namespace Venue.API.Application.Features.CreateVenue
         private readonly IVenueService _venueService;
         private readonly ITransactionManager _transactionManager;
         private readonly ICategoriesCacheRepository _cacheRepository;
+        private readonly IFileStorageDataService _fileStorageDataService;
         private readonly IEventSender _eventSender;
         private readonly IMapper _mapper;
         private readonly IReadOnlyHttpAccessor _httpAccessor;
@@ -28,6 +27,7 @@ namespace Venue.API.Application.Features.CreateVenue
         public CreateVenueCommandHandler(IVenueService venueService,
             ITransactionManager transactionManager,
             ICategoriesCacheRepository cacheRepository,
+            IFileStorageDataService fileStorageDataService,
             IEventSender eventSender,
             IMapper mapper,
             IReadOnlyHttpAccessor httpAccessor,
@@ -36,6 +36,7 @@ namespace Venue.API.Application.Features.CreateVenue
             _venueService = venueService;
             _transactionManager = transactionManager;
             _cacheRepository = cacheRepository;
+            _fileStorageDataService = fileStorageDataService;
             _eventSender = eventSender;
             _mapper = mapper;
             _httpAccessor = httpAccessor;
@@ -58,15 +59,17 @@ namespace Venue.API.Application.Features.CreateVenue
 
                 var createdVenueToReturn = _mapper.Map<VenueDto>(createdVenue);
 
-                await _eventSender.SendEventAsync(EventBusTopics.Venue, EventFactory<VenueCreatedWithoutLocationEvent>.CreateEvent(createdVenue.VenueId,
-                        new VenueCreatedWithoutLocationEventDataModel { CreatedVenue = createdVenueToReturn }),
+                var uploadedPhotos = await _fileStorageDataService.UploadPhotosAsync(request.Photos, createdVenue.VenueId);
+                _logger.Info($"{uploadedPhotos.Count} photos uploaded to the storage successfully");
+
+                await _eventSender.SendEventAsync(EventBusTopics.Venue, createdVenue.FirstStoredEvent,
                     cancellationToken);
 
                 scope.Complete();
 
                 _logger.Trace("< Database transaction committed");
 
-                return new CreateVenueResponse { CreatedVenue = _mapper.Map<VenueDto>(createdVenue) };
+                return new CreateVenueResponse { CreatedVenue = createdVenueToReturn };
             }
         }
     }

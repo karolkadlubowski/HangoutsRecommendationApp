@@ -1,4 +1,4 @@
-﻿namespace Venue.API.Domain.Configuration
+﻿namespace Library.Shared.AppConfigs
 {
     public record RestClientConfig
     {

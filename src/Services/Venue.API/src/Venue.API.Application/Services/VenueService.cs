@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Library.EventBus;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using Library.Shared.Models.Pagination;
 using Library.Shared.Models.Pagination.Models;
 using Library.Shared.Models.Venue.Enums;
+using Library.Shared.Models.Venue.Events;
+using Library.Shared.Models.Venue.Events.DataModels;
 using Venue.API.Application.Abstractions;
 using Venue.API.Application.Database;
 using Venue.API.Application.Database.PersistenceModels;
@@ -58,6 +61,9 @@ namespace Venue.API.Application.Services
 
             _logger.Info(
                 $"Venue #{venuePersistenceModel.VenueId} with persist state '{venuePersistenceModel.PersistState}' inserted to the database successfully. Venue status: {venuePersistenceModel.Status}");
+
+            venue.AddDomainEvent(EventFactory<VenueCreatedWithoutLocationEvent>.CreateEvent(venue.VenueId,
+                _mapper.Map<VenueCreatedWithoutLocationEventDataModel>(venue)));
 
             return _mapper.Map<VenuePersistenceModel, Domain.Entities.Venue>(venuePersistenceModel);
         }

@@ -19,7 +19,7 @@ namespace Venue.API.Infrastructure.Caching
         }
 
         public async Task<IReadOnlyList<CategoryDto>> GetCategoriesAsync()
-            => (await GetValueOrDefaultAsync(Constants.CacheKeys.Categories))?.ToList()
+            => (await GetValueOrDefaultAsync(CacheKeys.Categories))?.ToList()
                ?? new List<CategoryDto>();
 
         public async Task<CategoryDto> FindCategoryByNameAsync(string name)
@@ -28,12 +28,12 @@ namespace Venue.API.Infrastructure.Caching
 
         public async Task StoreCategoryAsync(CategoryDto category)
         {
-            var categories = await GetValueOrDefaultAsync(Constants.CacheKeys.Categories)
+            var categories = await GetValueOrDefaultAsync(CacheKeys.Categories)
                              ?? new List<CategoryDto>();
 
             categories.Add(category);
 
-            await SetValueAsync(Constants.CacheKeys.Categories, categories);
+            await SetValueAsync(CacheKeys.Categories, categories);
         }
     }
 }
