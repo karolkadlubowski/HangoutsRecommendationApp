@@ -1,4 +1,5 @@
-﻿using Library.Shared.AppConfigs;
+﻿using System.Threading.Tasks;
+using Library.Shared.AppConfigs;
 using Library.Shared.Caching;
 using Microsoft.Extensions.Caching.Distributed;
 using UserProfile.API.Application.Database.PersistenceModels;
@@ -12,5 +13,11 @@ namespace UserProfile.API.Infrastructure.Database.Repositories
             : base(cache, cacheConfig)
         {
         }
+
+        public async Task<UserProfilePersistenceModel> GetUserProfileAsync(long userId)
+            => await GetValueOrDefaultAsync(userId.ToString());
+
+        public async Task UpdateUserProfileAsync(long userId, UserProfilePersistenceModel userProfile)
+            => await SetValueAsync(userId.ToString(), userProfile);
     }
 }

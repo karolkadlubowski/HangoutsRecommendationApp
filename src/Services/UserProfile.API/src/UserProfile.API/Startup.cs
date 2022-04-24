@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using UserProfile.API.Application.Mapper;
 using UserProfile.API.DI;
 using UserProfile.API.Infrastructure.HostedServices;
 using IConfigurationProvider = UserProfile.API.Application.Providers.IConfigurationProvider;
@@ -58,6 +59,9 @@ namespace UserProfile.API
 
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");
+
+            services.AddAutoMapper(typeof(MapperProfile));
+            _logger.Trace("> AutoMapper profile registered");
 
             _logger.Info("Application registered successfully");
         }
