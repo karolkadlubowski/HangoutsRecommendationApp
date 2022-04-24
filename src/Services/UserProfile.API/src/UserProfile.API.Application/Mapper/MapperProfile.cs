@@ -9,7 +9,7 @@ namespace UserProfile.API.Application.Mapper
         public MapperProfile()
         {
             CreateMap<Domain.Entities.UserProfile, UserProfileDto>();
-            CreateMap<UserProfilePersistenceModel, UserProfileDto>();
+            CreateMap<UserProfilePersistenceModel, Domain.Entities.UserProfile>();
         }
     }
 }
