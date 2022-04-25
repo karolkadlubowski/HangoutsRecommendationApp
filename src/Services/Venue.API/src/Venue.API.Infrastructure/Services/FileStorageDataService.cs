@@ -48,6 +48,21 @@ namespace Venue.API.Infrastructure.Services
             return uploadedFiles;
         }
 
+        public async Task DeletePhotosFolderAsync(long venueId)
+        {
+            var response = await _restClient.ExecuteAsync<DeleteFolderResponse>(RestRequestAbstractFactory.DeleteFolderRequest(new DeleteFolderRequest
+            {
+                FolderKey = new PhotosFolderKey(venueId)
+            }));
+
+            _logger.Trace($"Response from the FileStorage API: {response.Content}");
+
+            var deleteFolderResponse = response.Content?.FromJSON<DeleteFolderResponse>(JsonOptions.JsonSerializerOptions);
+
+            if (deleteFolderResponse is not null && deleteFolderResponse.IsSucceeded)
+                _logger.Info("Operation rollback completed. Photos deleted from the storage");
+        }
+
         private async Task UploadPhotoAsync(IFormFile photo, long venueId, List<FileDto> uploadedFiles)
         {
             try
@@ -78,7 +93,9 @@ namespace Venue.API.Infrastructure.Services
             catch (Exception e)
             {
                 _logger.Warning($"Rollback operation. Uploading photos for the venue #{venueId} failed due to: {e.Message}");
-                //TODO remove created folder from the storage
+
+                await DeletePhotosFolderAsync(venueId);
+
                 throw;
             }
         }

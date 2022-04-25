@@ -7,6 +7,6 @@ namespace Venue.API.Infrastructure.Services.Requests.FileStorageApi
         public string FolderKey { get; init; }
         public IFormFile File { get; init; }
 
-        public string Endpoint => string.Empty;
+        public string Endpoint => "file";
     }
 }
