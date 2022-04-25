@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Library.Shared.Constants;
+using Library.Shared.Policies.Abstractions;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using Venue.API.Application.Abstractions;
 using Venue.API.Infrastructure.Policies;
-using Venue.API.Infrastructure.Policies.Abstractions;
 using ILogger = Library.Shared.Logging.ILogger;
 
 namespace Venue.API.Infrastructure.HostedServices
@@ -35,7 +35,7 @@ namespace Venue.API.Infrastructure.HostedServices
                 {
                     _logger.Info($"{nameof(CategoryDataHostedService)} hosted service started. Fetching categories data from the API");
 
-                    await _retryPolicy.RetryPolicy.ExecuteAsync(async () =>
+                    await _retryPolicy.ExecutePolicyAsync(async () =>
                     {
                         var categories = await _categoryDataService.GetCategoriesAsync();
                         await _categoryDataService.StoreCategoriesInCacheAsync(categories);

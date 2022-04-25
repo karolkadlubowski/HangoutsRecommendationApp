@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Venue.API.Infrastructure.Policies.Abstractions;
+using Library.Shared.Policies.Abstractions;
 
-namespace Venue.API.Infrastructure.Policies
+namespace Library.Shared.Policies
 {
     public class RetryPolicyRegistry : IRetryPolicyRegistry
     {

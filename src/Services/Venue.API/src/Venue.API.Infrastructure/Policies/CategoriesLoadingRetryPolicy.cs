@@ -1,22 +1,41 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Library.Shared.Logging;
+using Library.Shared.Policies.Abstractions;
 using Polly;
-using Venue.API.Infrastructure.Policies.Abstractions;
+using Venue.API.Application.Providers;
 
 namespace Venue.API.Infrastructure.Policies
 {
     public class CategoriesLoadingRetryPolicy : IRetryPolicy
     {
-        private const int RetryAttemptDelayInSeconds = 30;
+        private readonly IAsyncPolicy _retryPolicy;
 
-        public IAsyncPolicy RetryPolicy { get; }
+        private const int DefaultRetryAttemptDelayInSeconds = 30;
 
-        public CategoriesLoadingRetryPolicy(ILogger logger)
-            => RetryPolicy = Policy
+        public CategoriesLoadingRetryPolicy(IConfigurationProvider configurationProvider,
+            ILogger logger)
+        {
+            var retryAttemptDelayInSeconds = GetRetryAttemptDelayInSeconds(configurationProvider);
+
+            _retryPolicy = Policy
                 .Handle<Exception>()
                 .WaitAndRetryForeverAsync(retryAttempt
-                    => TimeSpan.FromSeconds(RetryAttemptDelayInSeconds), (exception, retryAttempt, timeSpan)
+                    => TimeSpan.FromSeconds(retryAttemptDelayInSeconds), (exception, retryAttempt, _)
                     => logger.Warning(
-                        $"{retryAttempt} attempt to load categories from the Category API due to an error: {exception.Message}\nNext attempt: {DateTime.UtcNow.AddSeconds(RetryAttemptDelayInSeconds)}"));
+                        $"{retryAttempt} attempt to load categories from the Category API due to an error: {exception.Message}\nNext attempt: {DateTime.Now.AddSeconds(retryAttemptDelayInSeconds)}"));
+        }
+
+        public async Task ExecutePolicyAsync(Func<Task> execute)
+            => await _retryPolicy.ExecuteAsync(execute);
+
+        private static int GetRetryAttemptDelayInSeconds(IConfigurationProvider configurationProvider)
+        {
+            var retryPolicyConfig = configurationProvider.GetConfiguration()
+                .RetryPoliciesConfig?
+                .GetPolicyConfig(nameof(CategoriesLoadingRetryPolicy));
+
+            return retryPolicyConfig?.RetryAttemptDelayInSeconds ?? DefaultRetryAttemptDelayInSeconds;
+        }
     }
 }

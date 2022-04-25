@@ -1,4 +1,4 @@
-﻿namespace Venue.API.Infrastructure.Policies.Abstractions
+﻿namespace Library.Shared.Policies.Abstractions
 {
     public interface IRetryPolicyRegistry
     {
