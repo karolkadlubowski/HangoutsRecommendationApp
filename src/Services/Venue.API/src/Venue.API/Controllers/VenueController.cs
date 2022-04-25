@@ -6,6 +6,7 @@ using Library.Shared.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Venue.API.Application.Features.CreateVenue;
+using Venue.API.Application.Features.GetVenue;
 using Venue.API.Application.Features.GetVenues;
 
 namespace Venue.API.Controllers
@@ -22,7 +23,22 @@ namespace Venue.API.Controllers
         }
 
         /// <summary>
-        /// Returns Venue entities from the database using pagination
+        /// Return Venue entity from the database. Append photos from the FileStorage API
+        /// </summary>
+        [HttpGet]
+        [ProducesResponseType(typeof(GetVenueResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetVenueResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetVenues([FromQuery] GetVenueQuery query)
+        {
+            _logger.Info($"Sending query: {nameof(GetVenueQuery)}");
+
+            var response = await _mediator.Send(query);
+
+            return this.CreateResponse(response);
+        }
+
+        /// <summary>
+        /// Return Venue entities from the database using pagination
         /// </summary>
         [HttpGet("list")]
         [ProducesResponseType(typeof(GetVenuesResponse), (int)HttpStatusCode.OK)]
