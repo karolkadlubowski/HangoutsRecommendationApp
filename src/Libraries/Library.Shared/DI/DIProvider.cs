@@ -13,6 +13,9 @@ namespace Library.Shared.DI
             _serviceProvider = serviceProvider;
         }
 
+        public IDIScope CreateScope()
+            => new DefaultDIScope(_serviceProvider.CreateScope());
+
         public TService ResolveService<TService>()
             => _serviceProvider.GetRequiredService<TService>();
 

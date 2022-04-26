@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Library.EventBus;
 using Library.EventBus.Abstractions;
 using Library.Shared.Constants;
+using Library.Shared.DI;
 using Library.Shared.Events.Abstractions;
 using NLog;
 using ILogger = Library.Shared.Logging.ILogger;
@@ -14,16 +15,16 @@ namespace Library.Shared.Events
 {
     public class EventAggregator : IEventAggregator
     {
-        private readonly IEventHandlerStrategyFactory _eventHandlerStrategyFactory;
         private readonly IEventConsumer _eventConsumer;
+        private readonly IDIProvider _diProvider;
         private readonly ILogger _logger;
 
-        public EventAggregator(IEventHandlerStrategyFactory eventHandlerStrategyFactory,
-            IEventConsumer eventConsumer,
+        public EventAggregator(IEventConsumer eventConsumer,
+            IDIProvider diProvider,
             ILogger logger)
         {
-            _eventHandlerStrategyFactory = eventHandlerStrategyFactory;
             _eventConsumer = eventConsumer;
+            _diProvider = diProvider;
             _logger = logger;
         }
 
@@ -43,15 +44,20 @@ namespace Library.Shared.Events
             {
                 try
                 {
-                    _logger.Info($">> Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' received");
+                    using (var scope = _diProvider.CreateScope())
+                    {
+                        var eventHandlerStrategyFactory = scope.ResolveService<IEventHandlerStrategyFactory>();
 
-                    var eventHandlerStrategy = _eventHandlerStrategyFactory.CreateStrategy(receivedEvent);
-                    _logger.Trace($"Event handler strategy of type '{receivedEvent.EventType}' found");
+                        _logger.Info($">> Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' received");
 
-                    await eventHandlerStrategy.HandleEventAsync(receivedEvent);
-                    _logger.Info($"<< Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' consumed");
+                        var eventHandlerStrategy = eventHandlerStrategyFactory.CreateStrategy(receivedEvent);
+                        _logger.Trace($"Event handler strategy of type '{receivedEvent.EventType}' found");
 
-                    AddOrUpdateEventsTransactionsDictionary(receivedEvent);
+                        await eventHandlerStrategy.HandleEventAsync(receivedEvent);
+                        _logger.Info($"<< Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' consumed");
+
+                        AddOrUpdateEventsTransactionsDictionary(receivedEvent);
+                    }
                 }
                 catch (Exception e)
                 {

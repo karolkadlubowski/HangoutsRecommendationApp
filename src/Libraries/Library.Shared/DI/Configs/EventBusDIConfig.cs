@@ -20,11 +20,10 @@ namespace Library.Shared.DI.Configs
                 .AddEventHandlerStrategyFactory<EventHandlerStrategyFactory>();
 
         public static IServiceCollection AddEventHandlersStrategies(this IServiceCollection services, Assembly assembly)
-            => services.RegisterAllTypes<IEventHandlerStrategy>(new[] { assembly },
-                lifetime: ServiceLifetime.Singleton);
+            => services.RegisterAllTypes<IEventHandlerStrategy>(new[] { assembly });
 
         public static IServiceCollection AddEventHandlerStrategyFactory<TEventHandlerStrategyFactory>(this IServiceCollection services)
             where TEventHandlerStrategyFactory : class, IEventHandlerStrategyFactory
-            => services.AddSingleton<IEventHandlerStrategyFactory, TEventHandlerStrategyFactory>();
+            => services.AddScoped<IEventHandlerStrategyFactory, TEventHandlerStrategyFactory>();
     }
 }
