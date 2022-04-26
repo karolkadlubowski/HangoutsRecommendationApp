@@ -12,19 +12,16 @@ namespace UserProfile.API.Application.Features.GetUserProfileQuery
         private readonly IReadOnlyUserProfileService _userProfileService;
         private readonly IMapper _mapper;
 
-        public GetUserProfileQueryHandler(IReadOnlyUserProfileService userProfileService,IMapper mapper)
+        public GetUserProfileQueryHandler(IReadOnlyUserProfileService userProfileService, IMapper mapper)
         {
             _userProfileService = userProfileService;
             _mapper = mapper;
         }
 
         public async Task<GetUserProfileResponse> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
-        {
-            var elo = await _userProfileService.GetUserProfileAsync(request);
-            return new GetUserProfileResponse()
+            => new GetUserProfileResponse()
             {
-                UserProfile = _mapper.Map<UserProfileDto>(elo)
+                UserProfile = _mapper.Map<UserProfileDto>(await _userProfileService.GetUserProfileAsync(request))
             };
-        }
     }
 }

@@ -5,6 +5,6 @@ namespace UserProfile.API.Application.Abstractions
 {
     public interface IReadOnlyUserProfileService
     {
-        Task<Domain.Entities.UserProfile> GetUserProfileAsync(GetUserProfileQuery query);
+        Task<Domain.Entities.UserProfile> GetUserProfileAsync(GetUserProfileQuery request);
     }
 }

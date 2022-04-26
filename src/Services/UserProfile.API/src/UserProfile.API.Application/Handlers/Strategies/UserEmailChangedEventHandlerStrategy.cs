@@ -14,12 +14,12 @@ namespace UserProfile.API.Application.Handlers.Strategies
         {
         }
 
-        public override EventType EventType => EventType.USER_EMAIL_CHANGED;
+        public override EventType EventType => EventType.CATEGORY_ADDED;
 
         public async override Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default)
         {
-            var dataModel = @event.GetData<UserEmailChangedEventDataModel>();
-
+            //var dataModel = @event.GetData<UserEmailChangedEventDataModel>();
+            var dataModel = new {UserId = 1, CurrentEmailAddress = "kitek@gmail.com"};
             await _mediator.Send(new UpdateEmailAddressCommand(dataModel.UserId,
                     dataModel.CurrentEmailAddress),
                 cancellationToken);

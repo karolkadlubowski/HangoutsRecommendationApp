@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Library.EventBus;
 using Library.EventBus.Abstractions;
 using Library.Shared.Constants;
+using Library.Shared.DI;
 using Library.Shared.Events.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using ILogger = Library.Shared.Logging.ILogger;
@@ -14,15 +16,18 @@ namespace UserProfile.API.Infrastructure.HostedServices
     public class EventConsumerHostedService : IHostedService
     {
         private readonly IEventConsumer _eventConsumer;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IServiceProvider _serviceProvider;
+
+        //private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
 
         public EventConsumerHostedService(IEventConsumer eventConsumer,
-            IEventAggregator eventAggregator,
+            IServiceProvider serviceProvider,
             ILogger logger)
         {
             _eventConsumer = eventConsumer;
-            _eventAggregator = eventAggregator;
+            _serviceProvider = serviceProvider;
+            //_eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -33,12 +38,17 @@ namespace UserProfile.API.Infrastructure.HostedServices
                 using (MappedDiagnosticsLogicalContext.SetScoped(LoggingConstants.Scope,
                            LoggingConstants.GetScopeValue($"{nameof(EventConsumerHostedService)}")))
                 {
-                    _logger.Info($"{nameof(EventConsumerHostedService)} hosted service started. Events consuming and aggregating started");
+                    using (var scope = _serviceProvider.CreateScope())
+                    {
+                        var eventAggregator = scope.ServiceProvider.GetRequiredService<IEventAggregator>();
+                        _logger.Info($"{nameof(EventConsumerHostedService)} hosted service started. Events consuming and aggregating started");
 
-                    await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Identity, cancellationToken);
-                    _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Identity}'");
+                        //await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Identity, cancellationToken);
+                        await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Category, cancellationToken);
+                        _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Identity}'");
 
-                    await _eventAggregator.AggregateEventsAsync(cancellationToken);
+                        await eventAggregator.AggregateEventsAsync(cancellationToken);   
+                    }
                 }
             }
             catch (Exception e)
