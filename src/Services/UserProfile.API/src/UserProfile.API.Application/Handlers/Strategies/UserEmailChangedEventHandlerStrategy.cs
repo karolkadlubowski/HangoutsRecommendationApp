@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Library.EventBus;
 using Library.Shared.Events;
-using Library.Shared.Models.Identity.Events.DataModels;
 using MediatR;
 using UserProfile.API.Application.Handlers.UpdateEmailAddress;
 
