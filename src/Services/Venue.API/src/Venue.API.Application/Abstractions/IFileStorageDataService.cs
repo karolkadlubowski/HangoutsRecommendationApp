@@ -7,6 +7,8 @@ namespace Venue.API.Application.Abstractions
 {
     public interface IFileStorageDataService
     {
+        Task<IReadOnlyList<FileDto>> GetPhotosFromFolderAsync(long venueId);
         Task<IReadOnlyList<FileDto>> UploadPhotosAsync(ICollection<IFormFile> photos, long venueId);
+        Task DeletePhotosFolderAsync(long venueId);
     }
 }

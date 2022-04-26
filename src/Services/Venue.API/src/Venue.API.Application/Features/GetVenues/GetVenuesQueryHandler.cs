@@ -23,7 +23,7 @@ namespace Venue.API.Application.Features.GetVenues
         public async Task<GetVenuesResponse> Handle(GetVenuesQuery request, CancellationToken cancellationToken)
         {
             var venuesPaginationTuple = await _venueService.GetVenuesAsync(request);
-            var venuesToReturn = _mapper.Map<PagedList<VenueDto>>(venuesPaginationTuple.List);
+            var venuesToReturn = _mapper.Map<PagedList<VenueListDto>>(venuesPaginationTuple.List);
 
             return new GetVenuesResponse
             {

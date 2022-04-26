@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Library.Shared.Models.FileStorage.Dtos;
-using Library.Shared.Models.Venue.Enums;
+﻿using Library.Shared.Models.Venue.Enums;
 
 namespace Library.Shared.Models.Venue.Dtos
 {
-    public record VenueDto
+    public record VenueListDto
     {
         public long VenueId { get; init; }
         public string Name { get; init; }
@@ -14,7 +12,5 @@ namespace Library.Shared.Models.Venue.Dtos
         public long? CreatorId { get; init; }
         public VenueStatus Status { get; init; }
         public VenuePersistState PersistState { get; init; }
-
-        public ICollection<FileDto> Photos { get; init; } = new HashSet<FileDto>();
     }
 }

@@ -66,6 +66,9 @@ namespace Venue.API
             services.AddHostedService<CategoryDataHostedService>();
             _logger.Trace("> Hosted services registered");
 
+            services.AddRetryPolicyRegistry();
+            _logger.Trace("> Retry policy registry registered");
+
             services
                 .AddHealthChecks()
                 .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
