@@ -16,10 +16,7 @@ namespace Library.EventBus
 
         public KafkaEventConsumer(KafkaConfig kafkaConfig)
         {
-            _clusterClient = new ClusterClient(new Configuration
-            {
-                Seeds = kafkaConfig.BootstrapServers
-            }, new DevNullLogger());
+            _clusterClient = new ClusterClient(new Configuration { Seeds = kafkaConfig.BootstrapServers }, new DevNullLogger());
         }
 
         public event EventHandler<Event> EventReceived;
@@ -29,14 +26,24 @@ namespace Library.EventBus
             {
                 _clusterClient.ConsumeFromLatest(topic);
 
-                _clusterClient.MessageReceived += record =>
-                {
-                    var serializedEvent = Encoding.UTF8.GetString(record.Value as byte[] ?? Array.Empty<byte>());
-                    var @event = JsonSerializer.Deserialize<Event>(serializedEvent);
-
-                    if (serializedEvent != null)
-                        EventReceived?.Invoke(this, @event);
-                };
+                _clusterClient.MessageReceived += record => ReceiveEvent(record);
             });
+
+        public async Task ConsumeFromEarliestAsync(string topic, CancellationToken cancellationToken = default)
+            => await Task.Factory.StartNew(() =>
+            {
+                _clusterClient.ConsumeFromEarliest(topic);
+
+                _clusterClient.MessageReceived += record => ReceiveEvent(record);
+            });
+
+        private void ReceiveEvent(RawKafkaRecord record)
+        {
+            var serializedEvent = Encoding.UTF8.GetString(record.Value as byte[] ?? Array.Empty<byte>());
+            var @event = JsonSerializer.Deserialize<Event>(serializedEvent);
+
+            if (serializedEvent != null)
+                EventReceived?.Invoke(this, @event);
+        }
     }
 }
