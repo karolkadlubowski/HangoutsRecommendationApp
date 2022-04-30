@@ -8,7 +8,11 @@ namespace UserProfile.API.Domain.Entities
         public long UserId { get; protected set; }
         public string EmailAddress { get; protected set; }
 
-        public static UserProfile Create(string emailAdress)
-            => new UserProfile {EmailAddress = new EmailAddress(emailAdress)};
+        public static UserProfile Create(long userId, string emailAdress)
+            => new UserProfile
+            {
+                UserId = userId,
+                EmailAddress = new EmailAddress(emailAdress)
+            };
     }
 }

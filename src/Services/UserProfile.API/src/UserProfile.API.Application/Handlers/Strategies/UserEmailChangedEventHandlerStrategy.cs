@@ -18,7 +18,7 @@ namespace UserProfile.API.Application.Handlers.Strategies
         public async override Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default)
         {
             // var dataModel = @event.GetData<UserEmailChangedEventDataModel>();
-            var dataModel = new { UserId = 1, CurrentEmailAddress = "kiwi@gmail.com" };
+            var dataModel = new { UserId = 1, CurrentEmailAddress = "@gmail.com" };
 
             await _mediator.Send(new UpdateEmailAddressCommand(dataModel.UserId,
                     dataModel.CurrentEmailAddress),
