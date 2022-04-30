@@ -21,8 +21,4 @@
       <ProjectReference Include="..\..\src\Venue.API.Infrastructure\Venue.API.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Application\Features" />
-    </ItemGroup>
-
 </Project>
