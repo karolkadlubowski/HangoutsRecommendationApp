@@ -91,9 +91,8 @@ namespace Venue.API.Tests.Unit.Application.Features
         {
             //Arrange
             var categoryId = CategoryIdFactory.CategoryId;
-            long creatorId = 1337;
-            var venueId = 1338;
-            long locationId = 1339;
+            const long CreatorId = 1;
+            const long LocationId = 10;
 
             _transactionManager.Setup(x => x.CreateScope(TransactionScopeOption.Required))
                 .Returns(new DefaultTransactionScope(new TransactionScope()));
@@ -103,10 +102,10 @@ namespace Venue.API.Tests.Unit.Application.Features
                     CategoryId = categoryId,
                     Name = CategoryName
                 });
-            _venueService.Setup(x => x.CreateVenueAsync(_command, categoryId, creatorId))
-                .ReturnsAsync(API.Domain.Entities.Venue.CreateDefault(Name, locationId, categoryId));
+            _venueService.Setup(x => x.CreateVenueAsync(_command, categoryId, CreatorId))
+                .ReturnsAsync(API.Domain.Entities.Venue.CreateDefault(Name, LocationId, categoryId));
             _httpAccessor.Setup(x => x.CurrentUserId)
-                .Returns(creatorId);
+                .Returns(CreatorId);
             _mapper.Setup(x => x.Map<VenueDto>(It.IsAny<API.Domain.Entities.Venue>()))
                 .Returns(new VenueDto());
             _fileStorageDataService.Setup(x => x.UploadPhotosAsync(new List<IFormFile>(), It.IsAny<long>()))

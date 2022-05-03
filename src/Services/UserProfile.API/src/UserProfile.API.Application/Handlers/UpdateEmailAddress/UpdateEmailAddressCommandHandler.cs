@@ -18,6 +18,7 @@ namespace UserProfile.API.Application.Handlers.UpdateEmailAddress
         public async Task<UpdateEmailAddressResponse> Handle(UpdateEmailAddressCommand request, CancellationToken cancellationToken)
         {
             var updatedUserProfile = await _userProfileService.UpdateUserProfileAsync(request);
+            
             return new UpdateEmailAddressResponse
             {
                 UserId = updatedUserProfile.UserId,

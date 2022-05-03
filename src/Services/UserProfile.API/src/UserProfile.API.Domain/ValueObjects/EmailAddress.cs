@@ -12,7 +12,7 @@ namespace UserProfile.API.Domain.ValueObjects
             if (string.IsNullOrWhiteSpace(emailAddress))
                 throw new ValidationException($"{nameof(emailAddress)} cannot be null or empty");
 
-            Value = Regex.Match(emailAddress, ValidationRules.emailAdressRegex).Success
+            Value = Regex.Match(emailAddress, ValidationRules.EmailAdressRegex).Success
                 ? emailAddress
                 : throw new ValidationException($"{emailAddress} has invalid email address format");
         }

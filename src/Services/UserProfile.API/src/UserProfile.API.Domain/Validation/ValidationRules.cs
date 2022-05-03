@@ -1,9 +1,7 @@
-﻿using System.Text.RegularExpressions;
-
-namespace UserProfile.API.Domain.Validation
+﻿namespace UserProfile.API.Domain.Validation
 {
     public static class ValidationRules
     {
-        public static string emailAdressRegex = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)";
+        public const string EmailAdressRegex = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$)";
     }
 }

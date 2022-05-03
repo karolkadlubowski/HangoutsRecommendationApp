@@ -8,11 +8,8 @@ namespace UserProfile.API.DI
     public static class ServicesDIConfig
     {
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            services
+            => services
                 .AddScoped<IReadOnlyUserProfileService, UserProfileService>()
                 .AddScoped<IUserProfileService, UserProfileService>();
-            return services;
-        }
     }
 }

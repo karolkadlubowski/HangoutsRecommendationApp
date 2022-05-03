@@ -21,16 +21,18 @@ namespace UserProfile.API.Controllers
         }
 
         /// <summary>
-        /// Returns UserProfile at given id from database
+        /// Returns UserProfile at given ID from database
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(GetUserProfileResponse),(int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(GetUserProfileResponse),(int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(GetUserProfileResponse),(int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(GetUserProfileResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetUserProfileResponse), (int) HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(GetUserProfileResponse), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetUserProfile([FromQuery] GetUserProfileQuery query)
         {
-            _logger.Info($"Sending command: {nameof(query)}");
+            _logger.Info($"Sending query: {nameof(GetUserProfileQuery)}");
+
             var response = await _mediator.Send(query);
+
             return this.CreateResponse(response);
         }
     }
