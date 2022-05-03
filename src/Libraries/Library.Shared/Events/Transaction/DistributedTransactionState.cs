@@ -1,4 +1,4 @@
-﻿namespace Library.EventBus.Transaction
+﻿namespace Library.Shared.Events.Transaction
 {
     public enum DistributedTransactionState
     {

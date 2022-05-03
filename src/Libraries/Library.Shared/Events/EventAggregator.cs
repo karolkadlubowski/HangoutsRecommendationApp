@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Library.EventBus;
 using Library.EventBus.Abstractions;
-using Library.EventBus.Transaction;
 using Library.Shared.Constants;
 using Library.Shared.DI;
 using Library.Shared.Events.Abstractions;
+using Library.Shared.Events.Transaction;
 using NLog;
 using ILogger = Library.Shared.Logging.ILogger;
 
@@ -27,7 +27,7 @@ namespace Library.Shared.Events
             _logger = logger;
         }
 
-        public event EventHandler<DistributedTransactionResponse> TransactionUpdated;
+        public event EventHandler<DistributedTransactionResult> TransactionUpdated;
 
         public async Task AggregateEventsAsync(CancellationToken cancellationToken = default)
             => await Task.Run(() => _eventConsumer.EventReceived += (_, receivedEvent)

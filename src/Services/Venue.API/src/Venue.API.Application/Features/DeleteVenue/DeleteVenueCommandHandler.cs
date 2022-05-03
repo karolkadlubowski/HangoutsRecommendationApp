@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Library.Database.Transaction.Abstractions;
 using Library.EventBus;
 using Library.Shared.Events.Abstractions;
+using Library.Shared.Events.Transaction.Abstractions;
+using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using MediatR;
 using Venue.API.Application.Abstractions;
@@ -15,42 +17,48 @@ namespace Venue.API.Application.Features.DeleteVenue
         private readonly IVenueLocationService _venueLocationService;
         private readonly ITransactionManager _transactionManager;
         private readonly IEventSender _eventSender;
-        private readonly IEventAggregator _eventAggregator;
+        private readonly ISagaOrchestrator _sagaOrchestrator;
         private readonly ILogger _logger;
 
         public DeleteVenueCommandHandler(IVenueLocationService venueLocationService,
             ITransactionManager transactionManager,
             IEventSender eventSender,
-            IEventAggregator eventAggregator,
+            ISagaOrchestratorFactory sagaOrchestratorFactory,
             ILogger logger)
         {
             _venueLocationService = venueLocationService;
             _transactionManager = transactionManager;
             _eventSender = eventSender;
-            _eventAggregator = eventAggregator;
+            _sagaOrchestrator = sagaOrchestratorFactory.CreateSagaOrchestrator<DeleteVenueSagaOrchestrator>();
             _logger = logger;
         }
 
         public async Task<DeleteVenueResponse> Handle(DeleteVenueCommand request, CancellationToken cancellationToken)
         {
+            Domain.Entities.Venue venueWithoutLocation;
+
             using (var scope = _transactionManager.CreateScope())
             {
                 _logger.Trace("> Database transaction began");
 
-                var venueWithoutLocation = await _venueLocationService.DeleteLocationFromVenueAsync(request.VenueId);
+                venueWithoutLocation = await _venueLocationService.DeleteLocationFromVenueAsync(request.VenueId);
 
                 await _eventSender.SendEventAsync(EventBusTopics.Venue, venueWithoutLocation.FirstStoredEvent,
                     cancellationToken);
 
-                var response = await new DeleteVenueOrchestrator(_eventAggregator, _logger)
-                    .OrchestrateTransactionAsync(venueWithoutLocation.FirstStoredEvent.TransactionId, venueWithoutLocation.FirstStoredEvent.EventId);
-
                 scope.Complete();
 
                 _logger.Trace("< Database transaction committed");
-
-                return new DeleteVenueResponse { DeletedVenueId = venueWithoutLocation.VenueId };
             }
+
+            var distributedTransactionResult = await _sagaOrchestrator.OrchestrateTransactionAsync(venueWithoutLocation.FirstStoredEvent.TransactionId,
+                venueWithoutLocation.FirstStoredEvent.EventId,
+                cancellationToken);
+            _logger.Info($"< Distributed transaction #{distributedTransactionResult.TransactionId} completed with the state: '{distributedTransactionResult.State}'");
+
+            return distributedTransactionResult.IsCommitted
+                ? new DeleteVenueResponse { DeletedVenueId = venueWithoutLocation.VenueId }
+                : throw new ServerException($"Deleting venue #{request.VenueId} from the database failed. Distributed transaction state: '{distributedTransactionResult.State}'");
         }
     }
 }

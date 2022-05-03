@@ -49,7 +49,8 @@ namespace Venue.API
 
             services
                 .AddKafkaMessageBroker(Configuration)
-                .AddEventHandlersStrategies(Assembly.Load("Venue.API.Application"));
+                .AddEventHandlersStrategies(Assembly.Load("Venue.API.Application"))
+                .AddSagaOrchestrators(Assembly.Load("Venue.API.Application"));
             _logger.Trace("> Kafka message broker registered");
 
             services.AddServices(Configuration);
