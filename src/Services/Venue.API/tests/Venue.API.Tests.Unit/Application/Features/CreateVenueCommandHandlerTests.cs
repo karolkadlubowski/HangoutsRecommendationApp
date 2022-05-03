@@ -29,7 +29,7 @@ namespace Venue.API.Tests.Unit.Application.Features
     [TestFixture]
     public class CreateVenueCommandHandlerTests
     {
-        private Mock<IVenueService> _venueService;
+        private Mock<IVenueLocationService> _venueService;
         private Mock<ITransactionManager> _transactionManager;
         private Mock<ICategoriesCacheRepository> _cacheRepository;
         private Mock<IFileStorageDataService> _fileStorageDataService;
@@ -49,7 +49,7 @@ namespace Venue.API.Tests.Unit.Application.Features
         [SetUp]
         public void SetUp()
         {
-            _venueService = new Mock<IVenueService>();
+            _venueService = new Mock<IVenueLocationService>();
             _transactionManager = new Mock<ITransactionManager>();
             _cacheRepository = new Mock<ICategoriesCacheRepository>();
             _fileStorageDataService = new Mock<IFileStorageDataService>();
@@ -102,7 +102,7 @@ namespace Venue.API.Tests.Unit.Application.Features
                     CategoryId = categoryId,
                     Name = CategoryName
                 });
-            _venueService.Setup(x => x.CreateVenueAsync(_command, categoryId, CreatorId))
+            _venueService.Setup(x => x.CreateVenueWithoutLocationAsync(_command, categoryId, CreatorId))
                 .ReturnsAsync(API.Domain.Entities.Venue.CreateDefault(Name, LocationId, categoryId));
             _httpAccessor.Setup(x => x.CurrentUserId)
                 .Returns(CreatorId);

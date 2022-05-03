@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS "Venue"."Venues"
     "CreatorId"     bigint,
     "Status"        int DEFAULT 0,
     "PersistState"  int DEFAULT 0,
+    "IsDeleted"     boolean DEFAULT false                                          NOT NULL, 
     "CreatedOn"     timestamp without time zone DEFAULT (now() at time zone 'utc') NOT NULL,
     "ModifiedOn"    timestamp without time zone
 );

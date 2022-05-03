@@ -2,7 +2,7 @@
 using System.Linq;
 using Venue.API.Domain.Entities.Models;
 
-namespace Venue.API.Tests.Unit.Utilities.Stubs
+namespace Venue.API.Tests.Unit.Utilities.Models
 {
     public class StubVenue : API.Domain.Entities.Venue
     {

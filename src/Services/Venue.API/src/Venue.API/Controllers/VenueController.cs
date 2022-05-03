@@ -6,6 +6,7 @@ using Library.Shared.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Venue.API.Application.Features.CreateVenue;
+using Venue.API.Application.Features.DeleteVenue;
 using Venue.API.Application.Features.GetVenue;
 using Venue.API.Application.Features.GetVenues;
 
@@ -69,6 +70,22 @@ namespace Venue.API.Controllers
         public async Task<IActionResult> CreateVenue([FromForm] CreateVenueCommand command)
         {
             _logger.Info($"Sending command: {nameof(CreateVenueCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
+        }
+        
+        /// <summary>
+        /// Delete existing Venue entity from the database. Begin distributed transaction
+        /// </summary>
+        [HttpDelete]
+        [ProducesResponseType(typeof(DeleteVenueResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DeleteVenueResponse), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(DeleteVenueResponse), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> DeleteVenue([FromQuery] DeleteVenueCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(DeleteVenueCommand)}");
 
             var response = await _mediator.Send(command);
 

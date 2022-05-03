@@ -18,7 +18,7 @@ namespace Venue.API.Application.Features.CreateVenue
 {
     public class CreateVenueCommandHandler : IRequestHandler<CreateVenueCommand, CreateVenueResponse>
     {
-        private readonly IVenueService _venueService;
+        private readonly IVenueLocationService _venueLocationService;
         private readonly ITransactionManager _transactionManager;
         private readonly ICategoriesCacheRepository _cacheRepository;
         private readonly IFileStorageDataService _fileStorageDataService;
@@ -27,7 +27,7 @@ namespace Venue.API.Application.Features.CreateVenue
         private readonly IReadOnlyHttpAccessor _httpAccessor;
         private readonly ILogger _logger;
 
-        public CreateVenueCommandHandler(IVenueService venueService,
+        public CreateVenueCommandHandler(IVenueLocationService venueLocationService,
             ITransactionManager transactionManager,
             ICategoriesCacheRepository cacheRepository,
             IFileStorageDataService fileStorageDataService,
@@ -36,7 +36,7 @@ namespace Venue.API.Application.Features.CreateVenue
             IReadOnlyHttpAccessor httpAccessor,
             ILogger logger)
         {
-            _venueService = venueService;
+            _venueLocationService = venueLocationService;
             _transactionManager = transactionManager;
             _cacheRepository = cacheRepository;
             _fileStorageDataService = fileStorageDataService;
@@ -56,7 +56,7 @@ namespace Venue.API.Application.Features.CreateVenue
                                ?? throw new EntityNotFoundException($"Category with name '{request.CategoryName}' does not exist");
                 _logger.Trace($"Category #{category.CategoryId} with name '{category.Name}' found in the memory cache");
 
-                var createdVenue = await _venueService.CreateVenueAsync(request,
+                var createdVenue = await _venueLocationService.CreateVenueWithoutLocationAsync(request,
                     category.CategoryId,
                     _httpAccessor.CurrentUserId);
 
