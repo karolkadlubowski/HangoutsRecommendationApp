@@ -3,7 +3,7 @@ using Library.Shared.Models.Response;
 
 namespace FileStorage.API.Application.Features.PutFile
 {
-    public record PutFileResponse : BaseApiResponse
+    public record PutFileResponse : BaseResponse
     {
         public FileDto File { get; init; }
 

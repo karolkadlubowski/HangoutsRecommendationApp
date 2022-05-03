@@ -12,11 +12,11 @@ namespace Library.Shared.Extensions
     {
         public static async Task WriteErrorResponseAsync(this HttpContext context, Exception e, string errorCode)
         {
-            var response = new BaseApiResponse(new Error(errorCode, e.Message, ExceptionDictionary.GetStatusCode(e)));
+            var response = new BaseResponse(new Error(errorCode, e.Message));
             var jsonResponse = response.ToJSON();
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)response.Error.StatusCode;
+            context.Response.StatusCode = (int)ErrorStatusCodeDictionary.GetStatusCode(errorCode);
             context.Response.ContentLength = Encoding.UTF8.GetBytes(jsonResponse).Length;
 
             context.Response.AddApplicationError(e.Message);

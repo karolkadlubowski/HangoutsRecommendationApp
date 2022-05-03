@@ -8,4 +8,9 @@
       <ProjectReference Include="..\Library.EventBus\Library.EventBus.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="UserProfile" />
+      <Folder Include="Venue\Events" />
+    </ItemGroup>
+
 </Project>

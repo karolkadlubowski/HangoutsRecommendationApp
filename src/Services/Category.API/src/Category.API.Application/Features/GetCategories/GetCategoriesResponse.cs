@@ -5,7 +5,7 @@ using Library.Shared.Models.Response;
 
 namespace Category.API.Application.Features.GetCategories
 {
-    public record GetCategoriesResponse : BaseApiResponse
+    public record GetCategoriesResponse : BaseResponse
     {
         public IReadOnlyList<CategoryDto> Categories { get; init; } = ImmutableList<CategoryDto>.Empty;
 

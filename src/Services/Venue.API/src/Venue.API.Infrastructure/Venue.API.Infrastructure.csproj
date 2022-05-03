@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Venue.API.Application\Venue.API.Application.csproj" />
+      <ProjectReference Include="..\Venue.API.Domain\Venue.API.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.10" />
+      <PackageReference Include="Polly" Version="7.2.3" />
+    </ItemGroup>
+
+</Project>

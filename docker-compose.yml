@@ -38,6 +38,7 @@ services:
     ports:
       - 6000:5432
     volumes:
+      - ./src/Services/Venue.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_venue.sql:ro
       - ./src/Services/AccountDefinition.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_accountdefinition.sql:ro
   
   category.database:
@@ -52,6 +53,13 @@ services:
       - 6020:27017
     volumes:
       - ./src/Services/Category.API/_Scripts/Database:/docker-entrypoint-initdb.d:ro
+     
+  userprofile.database:
+    container_name: userprofile.database
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - 6015:6379
   
   filestorage.database:
     container_name: filestorage.database

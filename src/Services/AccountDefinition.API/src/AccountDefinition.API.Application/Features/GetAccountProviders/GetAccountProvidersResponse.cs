@@ -5,7 +5,7 @@ using Library.Shared.Models.Response;
 
 namespace AccountDefinition.API.Application.Features.GetAccountProviders
 {
-    public record GetAccountProvidersResponse : BaseApiResponse
+    public record GetAccountProvidersResponse : BaseResponse
     {
         public IReadOnlyList<AccountProviderDto> AccountProviders { get; init; } = ImmutableList<AccountProviderDto>.Empty;
 

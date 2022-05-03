@@ -3,7 +3,7 @@ using Library.Shared.Models.Response;
 
 namespace FileStorage.API.Application.Features.GetFolderByKey
 {
-    public record GetFolderByKeyResponse : BaseApiResponse
+    public record GetFolderByKeyResponse : BaseResponse
     {
         public FolderDto Folder { get; init; }
 

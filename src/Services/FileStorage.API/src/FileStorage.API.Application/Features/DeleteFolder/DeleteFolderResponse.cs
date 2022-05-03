@@ -2,7 +2,7 @@
 
 namespace FileStorage.API.Application.Features.DeleteFolder
 {
-    public record DeleteFolderResponse : BaseApiResponse
+    public record DeleteFolderResponse : BaseResponse
     {
         public string DeletedFolderId { get; init; }
         public string DeletedFolderKey { get; init; }

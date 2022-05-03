@@ -20,10 +20,9 @@ namespace Library.Shared.Filters
                         e => e.Value.Errors
                             .Select(me => me.ErrorMessage));
 
-                var validationResponse = new BaseApiResponse(new Error(
+                var validationResponse = new BaseResponse(new Error(
                     ErrorCodes.ValidationFailed,
                     ValidationException.CustomMessage,
-                    HttpStatusCode.UnprocessableEntity,
                     errors
                 ));
 

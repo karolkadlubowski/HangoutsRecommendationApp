@@ -3,7 +3,7 @@ using Library.Shared.Models.Response;
 
 namespace AccountDefinition.API.Application.Features.AddAccountProvider
 {
-    public record AddAccountProviderResponse : BaseApiResponse
+    public record AddAccountProviderResponse : BaseResponse
     {
         public AccountProviderDto AddedAccountProvider { get; init; }
 

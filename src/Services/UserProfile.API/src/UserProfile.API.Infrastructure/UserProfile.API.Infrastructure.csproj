@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UserProfile.API.Application\UserProfile.API.Application.csproj" />
+      <ProjectReference Include="..\UserProfile.API.Domain\UserProfile.API.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

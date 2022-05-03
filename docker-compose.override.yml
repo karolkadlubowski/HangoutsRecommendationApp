@@ -15,11 +15,16 @@ services:
     volumes:
       - filestorage_data:/data/db
       - filestorage_configdb:/data/configdb
+    
+  userprofile.database:
+    volumes:
+      - userprofile_data:/data
 
 volumes:
   postgres_data:
   postgres_init_scripts:
   category_data:
   category_configdb:
+  userprofile_data:
   filestorage_data:
   filestorage_configdb:

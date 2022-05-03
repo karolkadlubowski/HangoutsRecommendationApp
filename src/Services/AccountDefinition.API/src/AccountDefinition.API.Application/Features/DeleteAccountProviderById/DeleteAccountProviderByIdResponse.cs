@@ -2,7 +2,7 @@
 
 namespace AccountDefinition.API.Application.Features.DeleteAccountProviderById
 {
-    public record DeleteAccountProviderByIdResponse : BaseApiResponse
+    public record DeleteAccountProviderByIdResponse : BaseResponse
     {
         public long DeletedAccountProviderId { get; init; }
 

@@ -14,7 +14,7 @@ using ValidationException = Library.Shared.Exceptions.ValidationException;
 namespace Library.Shared.Behaviours
 {
     public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TResponse : BaseApiResponse
+        where TResponse : BaseResponse
     {
         private readonly ILogger _logger;
         private readonly IEnumerable<IValidator<TRequest>> _validators;

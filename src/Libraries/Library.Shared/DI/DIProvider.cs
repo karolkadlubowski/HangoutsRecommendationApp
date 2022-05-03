@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Library.Shared.DI
@@ -12,7 +13,15 @@ namespace Library.Shared.DI
             _serviceProvider = serviceProvider;
         }
 
+        public IDIScope CreateScope()
+            => new DefaultDIScope(_serviceProvider.CreateScope());
+
         public TService ResolveService<TService>()
             => _serviceProvider.GetRequiredService<TService>();
+
+        public TService ResolveServiceWhere<TService, TImplementation>()
+            where TImplementation : TService
+            => _serviceProvider.GetServices<TService>()
+                .SingleOrDefault(s => s.GetType() == typeof(TImplementation));
     }
 }

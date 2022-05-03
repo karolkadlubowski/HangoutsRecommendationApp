@@ -24,7 +24,7 @@ namespace Library.Shared.Events
             await _eventPublisher.PublishAsync(topic, @event, cancellationToken);
 
             _logger.Info(
-                $">> Event #{@event.EventId} with type '{@event.EventType}' sent to the message broker topic: '{topic}' in transaction #{@event.TransactionId}");
+                $">> Event #{@event.EventId} of type '{@event.EventType}' sent to the message broker topic: '{topic}' in transaction #{@event.TransactionId}");
 
             return @event;
         }

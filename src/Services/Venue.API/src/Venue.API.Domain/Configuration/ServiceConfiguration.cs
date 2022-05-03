@@ -1,0 +1,11 @@
+﻿using Library.Shared.AppConfigs;
+
+namespace Venue.API.Domain.Configuration
+{
+    public record ServiceConfiguration
+    {
+        public DatabaseConfig DatabaseConfig { get; init; }
+        public VenueRestClientsConfig RestClientsConfig { get; init; }
+        public VenueRetryPoliciesConfig RetryPoliciesConfig { get; init; }
+    }
+}

@@ -9,5 +9,6 @@ namespace Library.EventBus.Abstractions
         event EventHandler<Event> EventReceived;
 
         Task ConsumeFromLatestAsync(string topic, CancellationToken cancellationToken = default);
+        Task ConsumeFromEarliestAsync(string topic, CancellationToken cancellationToken = default);
     }
 }
