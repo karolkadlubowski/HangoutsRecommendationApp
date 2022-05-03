@@ -63,7 +63,9 @@ namespace Venue.API
                 .AddEventHandlersStrategies(Assembly.Load("Venue.API.Application"));
             _logger.Trace("> Event bus registered");
 
-            services.AddHostedService<CategoryDataHostedService>();
+            services
+                .AddHostedService<EventConsumerHostedService>()
+                .AddHostedService<CategoryDataHostedService>();
             _logger.Trace("> Hosted services registered");
 
             services.AddRetryPolicyRegistry();
