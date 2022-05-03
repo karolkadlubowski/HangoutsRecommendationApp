@@ -9,13 +9,10 @@ namespace UserProfile.API.Application.Handlers.UpdateEmailAddress
     public class UpdateEmailAddressCommandHandler : IRequestHandler<UpdateEmailAddressCommand, UpdateEmailAddressResponse>
     {
         private readonly IUserProfileService _userProfileService;
-        private readonly ILogger _logger;
 
-        public UpdateEmailAddressCommandHandler(IUserProfileService userProfileService,
-            ILogger logger)
+        public UpdateEmailAddressCommandHandler(IUserProfileService userProfileService)
         {
             _userProfileService = userProfileService;
-            _logger = logger;
         }
 
         public async Task<UpdateEmailAddressResponse> Handle(UpdateEmailAddressCommand request, CancellationToken cancellationToken)

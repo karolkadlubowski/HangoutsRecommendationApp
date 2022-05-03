@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Library.EventBus;
 using Library.Shared.Events;
+using Library.Shared.Models.Identity.Events.DataModels;
 using MediatR;
 using UserProfile.API.Application.Handlers.UpdateEmailAddress;
 
@@ -13,13 +14,11 @@ namespace UserProfile.API.Application.Handlers.Strategies
         {
         }
 
-        public override EventType EventType => EventType.CATEGORY_ADDED;
+        public override EventType EventType => EventType.USER_EMAIL_CHANGED;
 
         public async override Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default)
         {
-            // var dataModel = @event.GetData<UserEmailChangedEventDataModel>();
-            var dataModel = new { UserId = 1, CurrentEmailAddress = "kiwi@gmail.com" };
-
+            var dataModel = @event.GetData<UserEmailChangedEventDataModel>();
             await _mediator.Send(new UpdateEmailAddressCommand(dataModel.UserId,
                     dataModel.CurrentEmailAddress),
                 cancellationToken);
