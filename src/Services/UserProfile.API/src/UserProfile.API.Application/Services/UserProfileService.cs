@@ -28,15 +28,20 @@ namespace UserProfile.API.Application.Services
             var userProfilePersistenceModel = await _userProfileRepository.GetUserProfileAsync(request.UserId);
             //TODO Implement downloading from IdentityApi if response is null
             var userProfile = _mapper.Map<Domain.Entities.UserProfile>(userProfilePersistenceModel);
+
             _logger.Info($"User profile #{userProfile.UserId} fetched from the database");
+
             return userProfile;
         }
 
         public async Task<Domain.Entities.UserProfile> UpdateUserProfileAsync(UpdateEmailAddressCommand command)
         {
-            var userProfile = Domain.Entities.UserProfile.Create(command.UserId,command.EmailAddress);
+            var userProfile = Domain.Entities.UserProfile.Create(command.UserId, command.EmailAddress);
+
+            await _userProfileRepository.UpdateUserProfileAsync(command.UserId, _mapper.Map<UserProfilePersistenceModel>(userProfile));
+
             _logger.Info($"User profile #{command.UserId} updated in database");
-            await _userProfileRepository.UpdateUserProfileAsync(command.UserId,_mapper.Map<UserProfilePersistenceModel>(userProfile));
+
             return userProfile;
         }
     }

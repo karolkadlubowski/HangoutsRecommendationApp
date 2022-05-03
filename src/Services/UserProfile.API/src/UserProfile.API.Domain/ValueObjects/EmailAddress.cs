@@ -11,13 +11,10 @@ namespace UserProfile.API.Domain.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(emailAddress))
                 throw new ValidationException($"{nameof(emailAddress)} cannot be null or empty");
-            var regex = new Regex(ValidationRules.emailAdressRegex);
-            if (regex.Match(emailAddress).Success)
-                Value = emailAddress;
-            else
-            {
-                throw new ValidationException($"{emailAddress} is not correct email");
-            }
+
+            Value = Regex.Match(emailAddress, ValidationRules.emailAdressRegex).Success
+                ? emailAddress
+                : throw new ValidationException($"{emailAddress} has invalid email address format");
         }
     }
 }

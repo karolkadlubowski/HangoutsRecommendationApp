@@ -20,14 +20,16 @@ namespace UserProfile.API.Tests.Unit.Application.Features
         {
             _userProfileService = new Mock<IUserProfileService>();
             _mapper = new Mock<IMapper>();
+            
             _getUserProfileQueryHandler = new GetUserProfileQueryHandler(_userProfileService.Object, _mapper.Object);
         }
 
         [Test]
         public async Task Handle_WhenCalled_ShouldInvokeProperMethodsOnce()
         {
-            const long ExpectedId = 1337;
-            const string ExpectedEmailAddress = "FilipToKoozak@gmail.com";
+            const long ExpectedId = 1;
+            const string ExpectedEmailAddress = "test@test.com";
+            
             var userProfile = API.Domain.Entities.UserProfile.Create(ExpectedId, ExpectedEmailAddress);
 
             var query = new GetUserProfileQuery
@@ -37,13 +39,13 @@ namespace UserProfile.API.Tests.Unit.Application.Features
 
             _userProfileService.Setup(x => x.GetUserProfileAsync(It.IsNotNull<GetUserProfileQuery>()))
                 .ReturnsAsync(userProfile);
-            
+
             //Act
             await _getUserProfileQueryHandler.Handle(query, default);
-            
+
             //Assert
-            _userProfileService.Verify(x => x.GetUserProfileAsync(query),Times.Once);
-            _mapper.Verify(x=>x.Map<UserProfileDto>(userProfile),Times.Once);
+            _userProfileService.Verify(x => x.GetUserProfileAsync(query), Times.Once);
+            _mapper.Verify(x => x.Map<UserProfileDto>(userProfile), Times.Once);
         }
     }
 }

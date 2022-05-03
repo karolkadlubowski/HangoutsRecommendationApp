@@ -20,6 +20,7 @@ namespace UserProfile.API.Tests.Unit.Application.Handlers
         public void SetUp()
         {
             _userProfileService = new Mock<IUserProfileService>();
+            
             _updateEmailAddressCommandHandler = new UpdateEmailAddressCommandHandler(_userProfileService.Object);
         }
 
@@ -27,12 +28,15 @@ namespace UserProfile.API.Tests.Unit.Application.Handlers
         public async Task Handle_WhenCalled_ReturnUpdatedEmailAdressResponse()
         {
             //Arrange
-            const long ExpectedId = 1337;
-            const string ExpectedEmailAddress = "FilipToKoozak@gmail.com";
+            const long ExpectedId = 1;
+            const string ExpectedEmailAddress = "test@test.com";
+
             var userProfile = API.Domain.Entities.UserProfile.Create(ExpectedId, ExpectedEmailAddress);
             var command = new UpdateEmailAddressCommand(ExpectedId, ExpectedEmailAddress);
+
             _userProfileService.Setup(x => x.UpdateUserProfileAsync(command))
                 .ReturnsAsync(userProfile);
+
             var expectedResponse = new UpdateEmailAddressResponse
             {
                 UserId = ExpectedId,
@@ -41,7 +45,7 @@ namespace UserProfile.API.Tests.Unit.Application.Handlers
 
             //Act
             var result = await _updateEmailAddressCommandHandler.Handle(command, default);
-            
+
             //Assert
             result.Should().BeEquivalentTo(expectedResponse);
         }
@@ -50,20 +54,20 @@ namespace UserProfile.API.Tests.Unit.Application.Handlers
         public async Task Handle_WhenCalled_ShouldInvokeProperMethodsOnce()
         {
             //Arrange
-            const long userId = 1337;
-            const string emailAddress = "FilipToKoozak@gmail.com";
+            const long UserId = 1;
+            const string EmailAddress = "test@test.com";
 
-            var userProfile = API.Domain.Entities.UserProfile.Create(userId,emailAddress );
-            var command = new UpdateEmailAddressCommand(userId, emailAddress);
+            var userProfile = API.Domain.Entities.UserProfile.Create(UserId, EmailAddress);
+            var command = new UpdateEmailAddressCommand(UserId, EmailAddress);
 
             _userProfileService.Setup(x => x.UpdateUserProfileAsync(It.IsNotNull<UpdateEmailAddressCommand>()))
                 .ReturnsAsync(userProfile);
-            
+
             //Act
             await _updateEmailAddressCommandHandler.Handle(command, default);
-            
+
             //Assert
-            _userProfileService.Verify(x => x.UpdateUserProfileAsync(command),Times.Once);
+            _userProfileService.Verify(x => x.UpdateUserProfileAsync(command), Times.Once);
         }
     }
 }
