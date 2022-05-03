@@ -28,6 +28,8 @@ namespace Library.Shared.Events
             _logger = logger;
         }
 
+        public event EventHandler<Event> EventReceived;
+
         public ConcurrentDictionary<Guid, HashSet<Event>> EventsTransactions { get; } = new ConcurrentDictionary<Guid, HashSet<Event>>();
 
         public async Task AggregateEventsAsync(CancellationToken cancellationToken = default)
@@ -44,6 +46,8 @@ namespace Library.Shared.Events
             {
                 try
                 {
+                    EventReceived?.Invoke(this, receivedEvent);
+
                     using (var scope = _diProvider.CreateScope())
                     {
                         var eventHandlerStrategyFactory = scope.ResolveService<IEventHandlerStrategyFactory>();

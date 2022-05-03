@@ -14,21 +14,26 @@ namespace Venue.API.Application.Features.DeleteVenue
         private readonly IVenueLocationService _venueLocationService;
         private readonly ITransactionManager _transactionManager;
         private readonly IEventSender _eventSender;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
 
         public DeleteVenueCommandHandler(IVenueLocationService venueLocationService,
             ITransactionManager transactionManager,
             IEventSender eventSender,
+            IEventAggregator eventAggregator,
             ILogger logger)
         {
             _venueLocationService = venueLocationService;
             _transactionManager = transactionManager;
             _eventSender = eventSender;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
         public async Task<DeleteVenueResponse> Handle(DeleteVenueCommand request, CancellationToken cancellationToken)
         {
+            _eventAggregator.EventReceived += (_, e) => _logger.Info($"Event rec: '{e.EventName}'");
+
             using (var scope = _transactionManager.CreateScope())
             {
                 _logger.Trace("> Database transaction began");

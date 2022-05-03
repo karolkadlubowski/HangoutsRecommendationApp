@@ -9,6 +9,8 @@ namespace Library.Shared.Events.Abstractions
 {
     public interface IEventAggregator
     {
+        event EventHandler<Event> EventReceived;
+
         ConcurrentDictionary<Guid, HashSet<Event>> EventsTransactions { get; }
 
         Task AggregateEventsAsync(CancellationToken cancellationToken = default);
