@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Library.EventBus;
+using Library.EventBus.Transaction;
 
 namespace Library.Shared.Events.Abstractions
 {
@@ -8,6 +9,6 @@ namespace Library.Shared.Events.Abstractions
     {
         EventType EventType { get; }
 
-        Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default);
+        Task<DistributedTransactionResponse> HandleEventAsync(Event @event, CancellationToken cancellationToken = default);
     }
 }

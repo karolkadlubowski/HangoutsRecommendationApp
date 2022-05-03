@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Library.EventBus;
+using Library.EventBus.Transaction;
 
 namespace Library.Shared.Events.Abstractions
 {
     public interface IEventAggregator
     {
-        event EventHandler<Event> EventReceived;
-
-        ConcurrentDictionary<Guid, HashSet<Event>> EventsTransactions { get; }
+        event EventHandler<DistributedTransactionResponse> TransactionUpdated;
 
         Task AggregateEventsAsync(CancellationToken cancellationToken = default);
     }

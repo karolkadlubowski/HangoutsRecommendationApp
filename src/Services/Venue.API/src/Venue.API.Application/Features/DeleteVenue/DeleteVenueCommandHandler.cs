@@ -6,6 +6,7 @@ using Library.Shared.Events.Abstractions;
 using Library.Shared.Logging;
 using MediatR;
 using Venue.API.Application.Abstractions;
+using Venue.API.Application.Handlers;
 
 namespace Venue.API.Application.Features.DeleteVenue
 {
@@ -32,8 +33,6 @@ namespace Venue.API.Application.Features.DeleteVenue
 
         public async Task<DeleteVenueResponse> Handle(DeleteVenueCommand request, CancellationToken cancellationToken)
         {
-            _eventAggregator.EventReceived += (_, e) => _logger.Info($"Event rec: '{e.EventName}'");
-
             using (var scope = _transactionManager.CreateScope())
             {
                 _logger.Trace("> Database transaction began");
@@ -42,6 +41,9 @@ namespace Venue.API.Application.Features.DeleteVenue
 
                 await _eventSender.SendEventAsync(EventBusTopics.Venue, venueWithoutLocation.FirstStoredEvent,
                     cancellationToken);
+
+                var response = await new DeleteVenueOrchestrator(_eventAggregator, _logger)
+                    .OrchestrateTransactionAsync(venueWithoutLocation.FirstStoredEvent.TransactionId, venueWithoutLocation.FirstStoredEvent.EventId);
 
                 scope.Complete();
 

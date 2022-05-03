@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Library.EventBus;
+using Library.EventBus.Transaction;
 using Library.Shared.Events.Abstractions;
 using MediatR;
 
@@ -15,6 +16,6 @@ namespace Library.Shared.Events
 
         public abstract EventType EventType { get; }
 
-        public abstract Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default);
+        public abstract Task<DistributedTransactionResponse> HandleEventAsync(Event @event, CancellationToken cancellationToken = default);
     }
 }
