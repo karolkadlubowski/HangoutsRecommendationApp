@@ -6,6 +6,7 @@
         Began = 0,
         InProgress = 1,
         Committed = 2,
-        Rollbacked = 3
+        Rollbacked = 3,
+        Interrupted = 4
     }
 }

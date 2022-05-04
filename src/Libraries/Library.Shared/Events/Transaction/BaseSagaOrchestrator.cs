@@ -25,28 +25,24 @@ namespace Library.Shared.Events.Transaction
         public virtual async Task<DistributedTransactionResult> OrchestrateTransactionAsync(Event firstEvent,
             CancellationToken cancellationToken = default)
         {
+            var distributedTransactionResult = DistributedTransactionResult.CreateFrom(firstEvent, DistributedTransactionState.Began);
+
             try
             {
                 _logger.Info($"> Distributed transaction #{firstEvent.TransactionId} began");
 
                 await _eventAggregator.AggregateEventsAsync(cancellationToken);
 
-                var distributedTransactionResult = new DistributedTransactionResult(firstEvent.TransactionId,
-                    firstEvent.EventId,
-                    firstEvent.EventType,
-                    DistributedTransactionState.Began
-                );
-
                 _eventAggregator.TransactionUpdated += (_, currentTransactionResult) =>
                 {
                     if (currentTransactionResult is not null &&
                         distributedTransactionResult.IsInCurrentTransaction(currentTransactionResult.TransactionId))
                     {
-                        _logger.Info($"Distributed transaction #{firstEvent.TransactionId} updated with the new event #{currentTransactionResult.EventId}");
+                        _logger.Info($"Distributed transaction #{distributedTransactionResult.TransactionId} updated with the new event #{currentTransactionResult.EventId}");
 
                         Task.Run(async () => distributedTransactionResult = await OrchestrateNextAsync(currentTransactionResult));
 
-                        _logger.Info($"Current distributed transaction #{firstEvent.TransactionId} state is: '{distributedTransactionResult.State}'");
+                        _logger.Info($"Current distributed transaction #{distributedTransactionResult.TransactionId} state is: '{distributedTransactionResult.State}'");
                     }
                 };
 
@@ -61,13 +57,17 @@ namespace Library.Shared.Events.Transaction
                     await Task.Delay(OrchestratorLoopDelayInMilliseconds);
                 }
 
-                _logger.Trace($"< Closing distributed transaction #{firstEvent.TransactionId} with the default result");
-                return DistributedTransactionResult.Default(firstEvent.TransactionId, firstEvent.EventId);
+                _logger.Trace($"< Closing distributed transaction #{distributedTransactionResult.TransactionId} with the '{DistributedTransactionState.Interrupted}' state");
+                return DistributedTransactionResult.Interrupt(distributedTransactionResult.TransactionId,
+                    distributedTransactionResult.EventId,
+                    distributedTransactionResult.EventType);
             }
             catch (Exception e)
             {
                 _logger.Error(e.Message, e);
-                return DistributedTransactionResult.Default(firstEvent.TransactionId, firstEvent.EventId);
+                return DistributedTransactionResult.Interrupt(distributedTransactionResult.TransactionId,
+                    distributedTransactionResult.EventId,
+                    distributedTransactionResult.EventType);
             }
         }
 

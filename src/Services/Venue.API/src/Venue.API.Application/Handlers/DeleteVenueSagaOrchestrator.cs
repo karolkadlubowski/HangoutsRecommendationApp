@@ -16,9 +16,13 @@ namespace Venue.API.Application.Handlers
         protected override Task<DistributedTransactionResult> OrchestrateNextAsync(DistributedTransactionResult currentTransactionResult)
             => Task.FromResult(currentTransactionResult.EventType switch
             {
-                EventType.VENUE_LOCATION_DELETING_ROLLBACKED => new DistributedTransactionResult(currentTransactionResult.TransactionId,
-                    currentTransactionResult.EventId, EventType.VENUE_LOCATION_DELETING_ROLLBACKED, DistributedTransactionState.Rollbacked),
-                _ => DistributedTransactionResult.Default(currentTransactionResult.TransactionId, currentTransactionResult.EventId)
+                EventType.VENUE_LOCATION_DELETING_ROLLBACKED => DistributedTransactionResult.Create(currentTransactionResult.TransactionId,
+                    currentTransactionResult.EventId,
+                    EventType.VENUE_LOCATION_DELETING_ROLLBACKED,
+                    DistributedTransactionState.Rollbacked),
+                _ => DistributedTransactionResult.Interrupt(currentTransactionResult.TransactionId,
+                    currentTransactionResult.EventId,
+                    currentTransactionResult.EventType)
             });
     }
 }
