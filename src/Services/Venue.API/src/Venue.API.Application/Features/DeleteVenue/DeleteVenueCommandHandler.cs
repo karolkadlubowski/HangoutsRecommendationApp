@@ -41,7 +41,7 @@ namespace Venue.API.Application.Features.DeleteVenue
             {
                 _logger.Trace("> Database transaction began");
 
-                venueWithoutLocation = await _venueLocationService.DeleteLocationFromVenueAsync(request.VenueId);
+                venueWithoutLocation = await _venueLocationService.DeleteLocationFromVenueAsync(request);
 
                 await _eventSender.SendEventAsync(EventBusTopics.Venue, venueWithoutLocation.FirstStoredEvent,
                     cancellationToken);
@@ -51,8 +51,7 @@ namespace Venue.API.Application.Features.DeleteVenue
                 _logger.Trace("< Database transaction committed");
             }
 
-            var distributedTransactionResult = await _sagaOrchestrator.OrchestrateTransactionAsync(venueWithoutLocation.FirstStoredEvent.TransactionId,
-                venueWithoutLocation.FirstStoredEvent.EventId,
+            var distributedTransactionResult = await _sagaOrchestrator.OrchestrateTransactionAsync(venueWithoutLocation.FirstStoredEvent,
                 cancellationToken);
             _logger.Info($"< Distributed transaction #{distributedTransactionResult.TransactionId} completed with the state: '{distributedTransactionResult.State}'");
 

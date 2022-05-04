@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Library.EventBus;
 using Library.Shared.Events.Abstractions;
 using Library.Shared.Events.Transaction.Abstractions;
 using Library.Shared.Logging;
@@ -21,42 +22,53 @@ namespace Library.Shared.Events.Transaction
             _logger = logger;
         }
 
-        public virtual async Task<DistributedTransactionResult> OrchestrateTransactionAsync(Guid transactionId, Guid firstEventId,
+        public virtual async Task<DistributedTransactionResult> OrchestrateTransactionAsync(Event firstEvent,
             CancellationToken cancellationToken = default)
         {
-            _logger.Info($"> Distributed transaction #{transactionId} began");
-
-            await _eventAggregator.AggregateEventsAsync(cancellationToken);
-
-            var distributedTransactionResult = new DistributedTransactionResult(transactionId,
-                firstEventId,
-                DistributedTransactionState.Began
-            );
-
-            _eventAggregator.TransactionUpdated += (_, currentTransactionResult) =>
+            try
             {
-                if (currentTransactionResult is not null &&
-                    distributedTransactionResult.IsInCurrentTransaction(currentTransactionResult.TransactionId))
+                _logger.Info($"> Distributed transaction #{firstEvent.TransactionId} began");
+
+                await _eventAggregator.AggregateEventsAsync(cancellationToken);
+
+                var distributedTransactionResult = new DistributedTransactionResult(firstEvent.TransactionId,
+                    firstEvent.EventId,
+                    firstEvent.EventType,
+                    DistributedTransactionState.Began
+                );
+
+                _eventAggregator.TransactionUpdated += (_, currentTransactionResult) =>
                 {
-                    _logger.Info($"Distributed transaction #{transactionId} updated with the new event #{currentTransactionResult.EventId}");
+                    if (currentTransactionResult is not null &&
+                        distributedTransactionResult.IsInCurrentTransaction(currentTransactionResult.TransactionId))
+                    {
+                        _logger.Info($"Distributed transaction #{firstEvent.TransactionId} updated with the new event #{currentTransactionResult.EventId}");
 
-                    Task.Run(async () => await OrchestrateNextAsync(currentTransactionResult));
+                        Task.Run(async () => distributedTransactionResult = await OrchestrateNextAsync(currentTransactionResult));
 
-                    _logger.Info($"Current distributed transaction #{transactionId} state is: '{distributedTransactionResult.State}'");
+                        _logger.Info($"Current distributed transaction #{firstEvent.TransactionId} state is: '{distributedTransactionResult.State}'");
+                    }
+                };
+
+                _logger.Trace($">> Waiting for distributed transaction #{firstEvent.TransactionId} updating events...");
+
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    if (distributedTransactionResult.IsCompleted
+                        || distributedTransactionResult.IsCancelled)
+                        return distributedTransactionResult;
+
+                    await Task.Delay(OrchestratorLoopDelayInMilliseconds);
                 }
-            };
 
-            _logger.Trace($">> Waiting for distributed transaction #{transactionId} updating events...");
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                if (distributedTransactionResult.IsCompleted)
-                    return distributedTransactionResult;
-
-                await Task.Delay(OrchestratorLoopDelayInMilliseconds);
+                _logger.Trace($"< Closing distributed transaction #{firstEvent.TransactionId} with the default result");
+                return DistributedTransactionResult.Default(firstEvent.TransactionId, firstEvent.EventId);
             }
-
-            _logger.Trace($"< Closing distributed transaction #{transactionId} with the default result");
-            return DistributedTransactionResult.Default(transactionId, firstEventId);
+            catch (Exception e)
+            {
+                _logger.Error(e.Message, e);
+                return DistributedTransactionResult.Default(firstEvent.TransactionId, firstEvent.EventId);
+            }
         }
 
         protected abstract Task<DistributedTransactionResult> OrchestrateNextAsync(DistributedTransactionResult currentTransactionResult);

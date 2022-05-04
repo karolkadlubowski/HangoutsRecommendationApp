@@ -10,6 +10,8 @@ using Venue.API.Application.Abstractions;
 using Venue.API.Application.Database;
 using Venue.API.Application.Database.PersistenceModels;
 using Venue.API.Application.Features.CreateVenue;
+using Venue.API.Application.Features.DeleteVenue;
+using Venue.API.Application.Handlers.RollbackVenueLocationDeleting;
 using Venue.API.Domain.Entities.Builders;
 
 namespace Venue.API.Application.Services
@@ -56,10 +58,10 @@ namespace Venue.API.Application.Services
             return venue;
         }
 
-        public async Task<Domain.Entities.Venue> DeleteLocationFromVenueAsync(long venueId)
+        public async Task<Domain.Entities.Venue> DeleteLocationFromVenueAsync(DeleteVenueCommand command)
         {
-            var venuePersistenceModel = await _unitOfWork.VenueRepository.FindByIdAsync(venueId)
-                                        ?? throw new EntityNotFoundException($"Venue #{venueId} not found in the database");
+            var venuePersistenceModel = await _unitOfWork.VenueRepository.FindByIdAsync(command.VenueId)
+                                        ?? throw new EntityNotFoundException($"Venue #{command.VenueId} not found in the database");
 
             _logger.Info($"Venue #{venuePersistenceModel.VenueId} with persist state '{venuePersistenceModel.PersistState}' and location #{venuePersistenceModel.LocationId} found in the database");
 
@@ -76,6 +78,33 @@ namespace Venue.API.Application.Services
 
             venue.AddDomainEvent(EventFactory<VenueLocationDeletedEvent>.CreateEvent(venue.VenueId,
                 new VenueLocationDeletedEventDataModel { VenueId = venue.VenueId, LocationId = venue.LocationId.GetValueOrDefault() }));
+
+            return venue;
+        }
+
+        public async Task<Domain.Entities.Venue> RollbackLocationDeletingAsync(RollbackVenueLocationDeletingCommand command)
+        {
+            var venuePersistenceModel = await _unitOfWork.VenueRepository.FindByIdAsync(command.VenueId)
+                                        ?? throw new EntityNotFoundException($"Venue #{command.VenueId} not found in the database");
+
+            _logger.Info($"Venue #{venuePersistenceModel.VenueId} with persist state '{venuePersistenceModel.PersistState}' found in the database");
+
+            venuePersistenceModel.LocationId = command.LocationId;
+            venuePersistenceModel.PersistState = VenuePersistState.PersistedWithLocation;
+
+            _unitOfWork.VenueRepository.Update(venuePersistenceModel);
+
+            if (!await _unitOfWork.CompleteAsync())
+                throw new DatabaseOperationException(
+                    $"Venue #{venuePersistenceModel.VenueId} with location #{venuePersistenceModel.LocationId} persist state cannot be rollbacked to '{VenuePersistState.PersistedWithLocation}' in the database");
+
+            var venue = _mapper.Map<VenuePersistenceModel, Domain.Entities.Venue>(venuePersistenceModel);
+
+            _logger.Info($"Venue #{venue.VenueId} with location #{venue.LocationId} persist state rollbacked to '{VenuePersistState.PersistedWithLocation}' successfully");
+
+            venue.AddDomainEvent(EventFactory<VenueLocationDeletingRollbackedEvent>.CreateEventInTransaction(command.Event.TransactionId,
+                venue.VenueId,
+                new VenueLocationDeletingRollbackedEventDataModel { VenueId = venue.VenueId, LocationId = venue.LocationId.GetValueOrDefault() }));
 
             return venue;
         }

@@ -59,11 +59,11 @@ namespace Library.Shared.Events
 
                         _logger.Trace($"Event handler strategy of type '{receivedEvent.EventType}' found");
 
-                        var response = await eventHandlerStrategy.HandleEventAsync(receivedEvent);
+                        var result = await eventHandlerStrategy.HandleEventAsync(receivedEvent);
                         _logger.Info($"<< Event #{receivedEvent.EventId} of type '{receivedEvent.EventType}' consumed");
 
-                        if (response is not null)
-                            TransactionUpdated?.Invoke(this, response);
+                        if (result is not null)
+                            TransactionUpdated?.Invoke(this, result);
                     }
                 }
                 catch (Exception e)

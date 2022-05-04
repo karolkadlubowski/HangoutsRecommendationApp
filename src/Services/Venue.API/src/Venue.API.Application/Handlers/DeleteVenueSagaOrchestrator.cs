@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Library.EventBus;
 using Library.Shared.Events.Abstractions;
 using Library.Shared.Events.Transaction;
 using Library.Shared.Logging;
@@ -14,8 +14,11 @@ namespace Venue.API.Application.Handlers
         }
 
         protected override Task<DistributedTransactionResult> OrchestrateNextAsync(DistributedTransactionResult currentTransactionResult)
-        {
-            throw new NotImplementedException();
-        }
+            => Task.FromResult(currentTransactionResult.EventType switch
+            {
+                EventType.VENUE_LOCATION_DELETING_ROLLBACKED => new DistributedTransactionResult(currentTransactionResult.TransactionId,
+                    currentTransactionResult.EventId, EventType.VENUE_LOCATION_DELETING_ROLLBACKED, DistributedTransactionState.Rollbacked),
+                _ => DistributedTransactionResult.Default(currentTransactionResult.TransactionId, currentTransactionResult.EventId)
+            });
     }
 }

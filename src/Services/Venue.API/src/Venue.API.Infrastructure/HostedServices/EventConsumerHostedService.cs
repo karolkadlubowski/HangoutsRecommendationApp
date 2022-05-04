@@ -31,8 +31,8 @@ namespace Venue.API.Infrastructure.HostedServices
                 {
                     _logger.Info($"{nameof(EventConsumerHostedService)} hosted service started. Events consuming and aggregating started");
 
-                    await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Venue, cancellationToken);
-                    _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Venue}'");
+                    await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Location, cancellationToken);
+                    _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Location}'");
                 }
             }
             catch (Exception e)
