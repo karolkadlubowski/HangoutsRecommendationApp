@@ -36,6 +36,7 @@ namespace Venue.API.Application.Mapper
                 .ReverseMap();
 
             CreateMap<Domain.Entities.Venue, VenueCreatedEventDataModel>();
+            CreateMap<Domain.Entities.Venue, VenueUpdatedEventDataModel>();
         }
     }
 }

@@ -9,6 +9,7 @@ using Venue.API.Application.Features.CreateVenue;
 using Venue.API.Application.Features.DeleteVenue;
 using Venue.API.Application.Features.GetVenue;
 using Venue.API.Application.Features.GetVenues;
+using Venue.API.Application.Features.UpdateVenue;
 
 namespace Venue.API.Controllers
 {
@@ -60,6 +61,7 @@ namespace Venue.API.Controllers
         /// Name - cannot be null or empty, cannot exceed 200 characters
         /// Description - cannot exceed 2000 characters
         /// CategoryName - cannot be null or empty
+        /// Address - cannot be null or empty, cannot exceed 500 characters
         /// Photos - cannot contain more than 6 photos
         /// </param>
         [HttpPost]
@@ -75,7 +77,31 @@ namespace Venue.API.Controllers
 
             return this.CreateResponse(response);
         }
-        
+
+        /// <summary>
+        /// Update existing Venue entity found in the database by the VenueId
+        /// </summary>
+        /// <param name="command">
+        /// Name - cannot be null or empty, cannot exceed 200 characters
+        /// Description - cannot exceed 2000 characters
+        /// CategoryName - cannot be null or empty
+        /// Address - cannot be null or empty, cannot exceed 500 characters
+        /// Photos - cannot contain more than 6 photos
+        /// </param>
+        [HttpPut]
+        [ProducesResponseType(typeof(UpdateVenueResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UpdateVenueResponse), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(UpdateVenueResponse), (int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(UpdateVenueResponse), (int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> UpdateVenue(UpdateVenueCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(UpdateVenueCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
+        }
+
         /// <summary>
         /// Delete existing Venue entity from the database
         /// </summary>

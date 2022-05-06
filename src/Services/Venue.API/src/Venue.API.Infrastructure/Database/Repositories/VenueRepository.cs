@@ -14,7 +14,7 @@ namespace Venue.API.Infrastructure.Database.Repositories
         {
         }
 
-        public async Task<VenuePersistenceModel> FindVenueDetailsAsync(long venueId)
+        public async Task<VenuePersistenceModel> FindVenueWithDetailsAsync(long venueId)
             => await _dbContext.Venues
                 .Include(v => v.Location)
                 .ThenInclude(l => l.LocationCoordinate)

@@ -10,6 +10,7 @@ using Venue.API.Application.Database;
 using Venue.API.Application.Database.PersistenceModels;
 using Venue.API.Application.Features.CreateVenue;
 using Venue.API.Application.Features.DeleteVenue;
+using Venue.API.Application.Features.UpdateVenue;
 using Venue.API.Domain.Entities.Builders;
 
 namespace Venue.API.Application.Services
@@ -47,7 +48,7 @@ namespace Venue.API.Application.Services
             _logger.Info(
                 $"Venue #{venuePersistenceModel.VenueId} with location #{venuePersistenceModel.LocationId} and status '{venuePersistenceModel.Status}' inserted to the database successfully");
 
-            venue = _mapper.Map<VenuePersistenceModel, Domain.Entities.Venue>(venuePersistenceModel);
+            venue = _mapper.Map<Domain.Entities.Venue>(venuePersistenceModel);
 
             venue.AddDomainEvent(EventFactory<VenueCreatedEvent>.CreateEvent(venue.VenueId,
                 _mapper.Map<VenueCreatedEventDataModel>(venue)));
@@ -55,9 +56,36 @@ namespace Venue.API.Application.Services
             return venue;
         }
 
+        public async Task<Domain.Entities.Venue> UpdateVenueAsync(UpdateVenueCommand command, string categoryId, long userId)
+        {
+            var venuePersistenceModel = await _unitOfWork.VenueRepository.FindVenueWithDetailsAsync(command.VenueId)
+                                        ?? throw new EntityNotFoundException($"Venue #{command.VenueId} not found in the database");
+
+            _logger.Info($"Venue #{venuePersistenceModel.VenueId} with status '{venuePersistenceModel.Status}' and location #{venuePersistenceModel.LocationId} found in the database");
+
+            var venue = _mapper.Map<Domain.Entities.Venue>(venuePersistenceModel);
+
+            venue.Update(command.VenueName, categoryId, command.Description, command.Address,
+                command.Latitude, command.Longitude, userId);
+
+            venuePersistenceModel = _mapper.Map(venue, venuePersistenceModel);
+
+            _unitOfWork.VenueRepository.Update(venuePersistenceModel);
+
+            if (!await _unitOfWork.CompleteAsync())
+                throw new DatabaseOperationException($"Updating venue #{venuePersistenceModel.VenueId} and location #{venuePersistenceModel.LocationId} in the database failed");
+
+            _logger.Info($"Venue #{venue.VenueId} with location #{venue.LocationId} updated in the database successfully");
+
+            venue.AddDomainEvent(EventFactory<VenueUpdatedEvent>.CreateEvent(venue.VenueId,
+                _mapper.Map<VenueUpdatedEventDataModel>(venue)));
+
+            return venue;
+        }
+
         public async Task<Domain.Entities.Venue> DeleteVenueAsync(DeleteVenueCommand command)
         {
-            var venuePersistenceModel = await _unitOfWork.VenueRepository.FindVenueDetailsAsync(command.VenueId)
+            var venuePersistenceModel = await _unitOfWork.VenueRepository.FindVenueWithDetailsAsync(command.VenueId)
                                         ?? throw new EntityNotFoundException($"Venue #{command.VenueId} not found in the database");
 
             _logger.Info($"Venue #{venuePersistenceModel.VenueId} with status '{venuePersistenceModel.Status}' and location #{venuePersistenceModel.LocationId} found in the database");

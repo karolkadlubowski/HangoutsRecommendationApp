@@ -30,6 +30,18 @@ namespace Venue.API.Domain.Entities
                 CategoryId = new CategoryId(categoryId)
             };
 
+        public void Update(string name, string categoryId, string description,
+            string address, double latitude, double longitude, long userId)
+        {
+            if (CreatorId != userId)
+                throw new InsufficientPermissionsException($"User #{userId} has not permissions to update venue #{VenueId}");
+
+            Name = new VenueName(name);
+            CategoryId = new CategoryId(categoryId);
+            Description = new VenueDescription(description);
+            Location.Update(address, latitude, longitude);
+        }
+
         public void SetDescription(string description)
             => Description = new VenueDescription(description);
 

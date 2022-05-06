@@ -33,16 +33,16 @@ namespace Venue.API.Application.Features.DeleteVenue
             {
                 _logger.Trace("> Database transaction began");
 
-                var venue = await _venueService.DeleteVenueAsync(request);
+                var deletedVenue = await _venueService.DeleteVenueAsync(request);
 
-                await _eventSender.SendEventAsync(EventBusTopics.Venue, venue.FirstStoredEvent,
+                await _eventSender.SendEventAsync(EventBusTopics.Venue, deletedVenue.FirstStoredEvent,
                     cancellationToken);
 
                 scope.Complete();
 
                 _logger.Trace("< Database transaction committed");
 
-                return new DeleteVenueResponse { DeletedVenueId = venue.VenueId, DeletedLocationId = venue.LocationId };
+                return new DeleteVenueResponse { DeletedVenueId = deletedVenue.VenueId, DeletedLocationId = deletedVenue.LocationId };
             }
         }
     }

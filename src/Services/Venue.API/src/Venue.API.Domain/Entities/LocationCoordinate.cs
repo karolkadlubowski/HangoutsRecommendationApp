@@ -16,5 +16,11 @@ namespace Venue.API.Domain.Entities
                 Latitude = latitude,
                 Longitude = longitude
             };
+
+        public void UpdateCoordinates(double latitude, double longitude)
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+        }
     }
 }

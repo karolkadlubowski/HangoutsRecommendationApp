@@ -16,7 +16,16 @@ namespace Venue.API.Domain.Entities
                 Address = new LocationAddress(address)
             };
 
+        public void Update(string address, double latitude, double longitude)
+        {
+            Address = new LocationAddress(address);
+            UpdateCoordinates(latitude, longitude);
+        }
+
         public void SetCoordinates(double latitude, double longitude)
             => LocationCoordinate = LocationCoordinate.Create(LocationId, latitude, longitude);
+
+        public void UpdateCoordinates(double latitude, double longitude)
+            => LocationCoordinate.UpdateCoordinates(latitude, longitude);
     }
 }

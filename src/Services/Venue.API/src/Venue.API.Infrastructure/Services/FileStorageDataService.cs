@@ -42,27 +42,35 @@ namespace Venue.API.Infrastructure.Services
 
         public async Task<IReadOnlyList<FileDto>> GetPhotosFromFolderAsync(long venueId)
         {
-            _logger.Info($">> Sending request to the FileStorage API: '{_restClientConfig.BaseApiUrl}'. Request: {nameof(GetFolderRequest)}");
-
-            var response = await _restClient.ExecuteAsync<GetFolderResponse>(RestRequestAbstractFactory.GetFolderRequest(new GetFolderRequest
+            try
             {
-                FolderKey = new PhotosFolderKey(venueId)
-            }));
+                _logger.Info($">> Sending request to the FileStorage API: '{_restClientConfig.BaseApiUrl}'. Request: {nameof(GetFolderRequest)}");
 
-            _logger.Trace($"Response {nameof(GetFolderResponse)} from the FileStorage API: {response.Content}");
+                var response = await _restClient.ExecuteAsync<GetFolderResponse>(RestRequestAbstractFactory.GetFolderRequest(new GetFolderRequest
+                {
+                    FolderKey = new PhotosFolderKey(venueId)
+                }));
 
-            var getFolderResponse = response.Content?.FromJSON<GetFolderResponse>(JsonOptions.JsonSerializerOptions);
+                _logger.Trace($"Response {nameof(GetFolderResponse)} from the FileStorage API: {response.Content}");
 
-            if (getFolderResponse is not null && getFolderResponse.IsSucceeded)
-            {
-                var photos = getFolderResponse.Folder.Files;
-                _logger.Info($"Response {nameof(GetFolderResponse)} from the FileStorage API is successful. Returning {photos.Count} photos");
+                var getFolderResponse = response.Content?.FromJSON<GetFolderResponse>(JsonOptions.JsonSerializerOptions);
 
-                return photos.ToList();
+                if (getFolderResponse is not null && getFolderResponse.IsSucceeded)
+                {
+                    var photos = getFolderResponse.Folder.Files;
+                    _logger.Info($"Response {nameof(GetFolderResponse)} from the FileStorage API is successful. Returning {photos.Count} photos");
+
+                    return photos.ToList();
+                }
+
+                _logger.Info($"Venue #{venueId} has not any photos in the file storage");
+                return ImmutableList<FileDto>.Empty;
             }
-
-            _logger.Info($"Venue #{venueId} has not any photos in the file storage");
-            return ImmutableList<FileDto>.Empty;
+            catch (Exception e)
+            {
+                _logger.Warning($"Photos for venue #{venueId} cannot be loaded due to: {e.Message}");
+                return ImmutableList<FileDto>.Empty;
+            }
         }
 
         public async Task<IReadOnlyList<FileDto>> UploadPhotosAsync(ICollection<IFormFile> photos, long venueId)
