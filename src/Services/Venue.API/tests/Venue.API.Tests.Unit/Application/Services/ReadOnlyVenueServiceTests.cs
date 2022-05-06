@@ -58,7 +58,7 @@ namespace Venue.API.Tests.Unit.Application.Services
         public async Task GetVenueWithPhotosAsync_WhenVenueNotFoundInDatabase_ThrowEntityNotFoundException()
         {
             //Arrange
-            _unitOfWork.Setup(x => x.VenueRepository.FindByIdAsync(VenueId))
+            _unitOfWork.Setup(x => x.VenueRepository.FindVenueDetailsAsync(VenueId))
                 .ReturnsAsync(() => null);
 
             //Act
@@ -77,7 +77,7 @@ namespace Venue.API.Tests.Unit.Application.Services
 
             var expectedVenue = new StubVenue(VenueId, ImmutableList<Photo>.Empty);
 
-            _unitOfWork.Setup(x => x.VenueRepository.FindByIdAsync(VenueId))
+            _unitOfWork.Setup(x => x.VenueRepository.FindVenueDetailsAsync(VenueId))
                 .ReturnsAsync(venuePersistenceModel);
             _fileStorageDataService.Setup(x => x.GetPhotosFromFolderAsync(VenueId))
                 .ReturnsAsync(new List<FileDto>());

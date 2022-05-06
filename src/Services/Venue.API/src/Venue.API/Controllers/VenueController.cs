@@ -54,7 +54,7 @@ namespace Venue.API.Controllers
         }
 
         /// <summary>
-        /// Create new Venue entity in the database. Begin distributed transaction
+        /// Create new Venue entity in the database
         /// </summary>
         /// <param name="command">
         /// Name - cannot be null or empty, cannot exceed 200 characters
@@ -77,7 +77,7 @@ namespace Venue.API.Controllers
         }
         
         /// <summary>
-        /// Delete existing Venue entity from the database. Begin distributed transaction
+        /// Delete existing Venue entity from the database
         /// </summary>
         [HttpDelete]
         [ProducesResponseType(typeof(DeleteVenueResponse), (int)HttpStatusCode.OK)]

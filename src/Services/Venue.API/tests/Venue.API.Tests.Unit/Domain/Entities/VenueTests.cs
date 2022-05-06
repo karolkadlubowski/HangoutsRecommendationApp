@@ -20,49 +20,19 @@ namespace Venue.API.Tests.Unit.Domain.Entities
         {
             //Arrange
             const string Name = nameof(Name);
-            const long LocationId = 1;
             var categoryId = StringFactory.CreateStringWithLength(24, 'x');
 
             //Act
-            var venue = API.Domain.Entities.Venue.CreateDefault(Name, LocationId, categoryId);
+            var venue = API.Domain.Entities.Venue.CreateDefault(Name, categoryId);
 
             //Assert
             using (new AssertionScope())
             {
                 venue.Name.Should().Be(Name);
-                venue.LocationId.Should().Be(LocationId);
                 venue.CategoryId.Should().Be(categoryId);
                 venue.Description.Should().BeNull();
                 venue.CreatorId.Should().BeNull();
                 venue.Status.Should().Be(VenueStatus.Created);
-                venue.PersistState.Should().Be(VenuePersistState.NotPersisted);
-            }
-        }
-
-        #endregion
-
-        #region CreateWithoutLocation
-
-        [Test]
-        public void CreateWithoutLocation_WhenCalled_ShouldSetAllDefaultPropertiesAndLocationIdShouldBeNull()
-        {
-            //Arrange
-            const string Name = nameof(Name);
-            var categoryId = StringFactory.CreateStringWithLength(24, 'x');
-
-            //Act
-            var venue = API.Domain.Entities.Venue.CreateWithoutLocation(Name, categoryId);
-
-            //Assert
-            using (new AssertionScope())
-            {
-                venue.Name.Should().Be(Name);
-                venue.LocationId.Should().BeNull();
-                venue.CategoryId.Should().Be(categoryId);
-                venue.Description.Should().BeNull();
-                venue.CreatorId.Should().BeNull();
-                venue.Status.Should().Be(VenueStatus.Created);
-                venue.PersistState.Should().Be(VenuePersistState.NotPersisted);
             }
         }
 

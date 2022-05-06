@@ -14,24 +14,21 @@ namespace Venue.API.Domain.Entities
         public long VenueId { get; protected set; }
         public string Name { get; protected set; }
         public string Description { get; protected set; }
-        public long? LocationId { get; protected set; }
+        public long LocationId { get; protected set; }
         public string CategoryId { get; protected set; }
         public long? CreatorId { get; protected set; }
         public VenueStatus Status { get; protected set; } = VenueStatus.Created;
-        public VenuePersistState PersistState { get; protected set; } = VenuePersistState.NotPersisted;
+
+        public Location Location { get; protected set; }
 
         public ICollection<Photo> Photos { get; protected set; } = new HashSet<Photo>();
 
-        public static Venue CreateDefault(string name, long locationId, string categoryId)
+        public static Venue CreateDefault(string name, string categoryId)
             => new Venue
             {
                 Name = new VenueName(name),
-                LocationId = locationId,
                 CategoryId = new CategoryId(categoryId)
             };
-
-        public static Venue CreateWithoutLocation(string name, string categoryId)
-            => new Venue { Name = new VenueName(name), CategoryId = new CategoryId(categoryId) };
 
         public void SetDescription(string description)
             => Description = new VenueDescription(description);
@@ -42,11 +39,14 @@ namespace Venue.API.Domain.Entities
         public void CreatedBy(long creatorId)
             => CreatorId = creatorId;
 
-        public void UpdatePersistState(VenuePersistState persistState)
-            => PersistState = persistState;
-
         public void Accept()
             => Status = VenueStatus.Accepted;
+
+        public void SetLocationWithCoordinates(string address, double latitude, double longitude)
+        {
+            Location = Location.Create(address);
+            Location.SetCoordinates(latitude, longitude);
+        }
 
         public void AddPhotos(IEnumerable<Photo> photos)
         {

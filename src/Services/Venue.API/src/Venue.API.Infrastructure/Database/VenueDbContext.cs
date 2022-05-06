@@ -15,6 +15,8 @@ namespace Venue.API.Infrastructure.Database
         }
 
         public virtual DbSet<VenuePersistenceModel> Venues { get; protected set; }
+        public virtual DbSet<LocationPersistenceModel> Locations { get; protected set; }
+        public virtual DbSet<LocationCoordinatePersistenceModel> LocationCoordinates { get; protected set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -43,6 +45,8 @@ namespace Venue.API.Infrastructure.Database
             modelBuilder.HasDefaultSchema("Venue");
 
             VenueEntityConfig.Create().Configure(modelBuilder.Entity<VenuePersistenceModel>());
+            LocationEntityConfig.Create().Configure(modelBuilder.Entity<LocationPersistenceModel>());
+            LocationCoordinateEntityConfig.Create().Configure(modelBuilder.Entity<LocationCoordinatePersistenceModel>());
         }
     }
 }

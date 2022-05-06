@@ -11,14 +11,13 @@ using Library.Shared.Logging;
 using Library.Shared.Models.Venue.Dtos;
 using MediatR;
 using Venue.API.Application.Abstractions;
-using Venue.API.Domain.Entities;
 using Venue.API.Domain.Entities.Models;
 
 namespace Venue.API.Application.Features.CreateVenue
 {
     public class CreateVenueCommandHandler : IRequestHandler<CreateVenueCommand, CreateVenueResponse>
     {
-        private readonly IVenueLocationService _venueLocationService;
+        private readonly IVenueService _venueService;
         private readonly ITransactionManager _transactionManager;
         private readonly ICategoriesCacheRepository _cacheRepository;
         private readonly IFileStorageDataService _fileStorageDataService;
@@ -27,7 +26,7 @@ namespace Venue.API.Application.Features.CreateVenue
         private readonly IReadOnlyHttpAccessor _httpAccessor;
         private readonly ILogger _logger;
 
-        public CreateVenueCommandHandler(IVenueLocationService venueLocationService,
+        public CreateVenueCommandHandler(IVenueService venueService,
             ITransactionManager transactionManager,
             ICategoriesCacheRepository cacheRepository,
             IFileStorageDataService fileStorageDataService,
@@ -36,7 +35,7 @@ namespace Venue.API.Application.Features.CreateVenue
             IReadOnlyHttpAccessor httpAccessor,
             ILogger logger)
         {
-            _venueLocationService = venueLocationService;
+            _venueService = venueService;
             _transactionManager = transactionManager;
             _cacheRepository = cacheRepository;
             _fileStorageDataService = fileStorageDataService;
@@ -56,7 +55,7 @@ namespace Venue.API.Application.Features.CreateVenue
                                ?? throw new EntityNotFoundException($"Category with name '{request.CategoryName}' does not exist");
                 _logger.Trace($"Category #{category.CategoryId} with name '{category.Name}' found in the memory cache");
 
-                var createdVenue = await _venueLocationService.CreateVenueWithoutLocationAsync(request,
+                var createdVenue = await _venueService.CreateVenueAsync(request,
                     category.CategoryId,
                     _httpAccessor.CurrentUserId);
 

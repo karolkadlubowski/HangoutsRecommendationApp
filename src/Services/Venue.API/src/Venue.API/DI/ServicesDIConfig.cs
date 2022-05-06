@@ -15,7 +15,7 @@ namespace Venue.API.DI
         {
             services
                 .AddScoped<IReadOnlyVenueService, ReadOnlyVenueService>()
-                .AddScoped<IVenueLocationService, VenueLocationService>();
+                .AddScoped<IVenueService, VenueService>();
 
             services
                 .AddSingleton<IRestClientFactory, CategoryRestClientFactory>()

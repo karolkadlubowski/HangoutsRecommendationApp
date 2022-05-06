@@ -6,6 +6,7 @@ namespace Venue.API.Application.Database.Repositories
 {
     public interface IVenueRepository : IGenericRepository<VenuePersistenceModel>
     {
+        Task<VenuePersistenceModel> FindVenueDetailsAsync(long venueId);
         Task<IPagedList<VenuePersistenceModel>> GetPaginatedVenuesAsync(int pageNumber, int pageSize);
     }
 }

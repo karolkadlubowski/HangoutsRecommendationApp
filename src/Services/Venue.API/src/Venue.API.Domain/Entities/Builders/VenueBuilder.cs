@@ -5,13 +5,7 @@
         private readonly Venue _venue;
 
         public VenueBuilder(string name, string categoryId)
-            => _venue = Venue.CreateWithoutLocation(name, categoryId);
-
-        public VenueBuilder WithLocation(long locationId)
-        {
-            _venue.AssignLocation(locationId);
-            return this;
-        }
+            => _venue = Venue.CreateDefault(name, categoryId);
 
         public VenueBuilder WithDescription(string description)
         {
@@ -22,6 +16,12 @@
         public VenueBuilder CreatedBy(long creatorId)
         {
             _venue.CreatedBy(creatorId);
+            return this;
+        }
+
+        public VenueBuilder WithLocation(string address, double latitude, double longitude)
+        {
+            _venue.SetLocationWithCoordinates(address, latitude, longitude);
             return this;
         }
 

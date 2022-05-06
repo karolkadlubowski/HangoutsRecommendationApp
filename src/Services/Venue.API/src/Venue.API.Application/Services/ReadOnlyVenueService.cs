@@ -33,7 +33,7 @@ namespace Venue.API.Application.Services
 
         public async Task<Domain.Entities.Venue> GetVenueWithPhotosAsync(GetVenueQuery query)
         {
-            var venuePersistenceModel = await _unitOfWork.VenueRepository.FindByIdAsync(query.VenueId)
+            var venuePersistenceModel = await _unitOfWork.VenueRepository.FindVenueDetailsAsync(query.VenueId)
                                         ?? throw new EntityNotFoundException($"Venue #{query.VenueId} not found in the database");
 
             var photosFromApi = await _fileStorageDataService.GetPhotosFromFolderAsync(venuePersistenceModel.VenueId);

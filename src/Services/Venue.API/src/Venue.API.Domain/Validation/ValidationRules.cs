@@ -4,6 +4,7 @@
     {
         public const int MaxVenueNameLength = 200;
         public const int MaxVenueDescriptionLength = 2000;
+        public const int MaxAddressLength = 500;
         public const int CategoryIdLength = 24;
         public const int MaxPhotosCount = 6;
     }

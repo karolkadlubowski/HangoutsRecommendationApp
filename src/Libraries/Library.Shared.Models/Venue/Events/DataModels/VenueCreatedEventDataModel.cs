@@ -1,8 +1,9 @@
-﻿using Library.Shared.Models.Venue.Enums;
+﻿using Library.Shared.Models.Venue.Dtos;
+using Library.Shared.Models.Venue.Enums;
 
 namespace Library.Shared.Models.Venue.Events.DataModels
 {
-    public record VenueCreatedWithoutLocationEventDataModel
+    public record VenueCreatedEventDataModel
     {
         public long VenueId { get; init; }
         public string Name { get; init; }
@@ -11,6 +12,7 @@ namespace Library.Shared.Models.Venue.Events.DataModels
         public string CategoryId { get; init; }
         public long? CreatorId { get; init; }
         public VenueStatus Status { get; init; }
-        public VenuePersistState PersistState { get; init; }
+
+        public LocationDto Location { get; init; }
     }
 }

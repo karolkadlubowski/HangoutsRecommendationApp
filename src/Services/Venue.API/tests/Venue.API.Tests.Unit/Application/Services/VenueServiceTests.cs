@@ -20,13 +20,13 @@ using Venue.API.Tests.Unit.Utilities.Models;
 
 namespace Venue.API.Tests.Unit.Application.Services
 {
-    public class VenueLocationServiceTests
+    public class VenueServiceTests
     {
         private Mock<IUnitOfWork> _unitOfWork;
         private Mock<IMapper> _mapper;
         private Mock<ILogger> _logger;
 
-        private VenueLocationService _venueLocationService;
+        private VenueService _venueService;
 
         private const long VenueId = 1;
 
@@ -37,25 +37,26 @@ namespace Venue.API.Tests.Unit.Application.Services
             _mapper = new Mock<IMapper>();
             _logger = new Mock<ILogger>();
 
-            _venueLocationService = new VenueLocationService(_unitOfWork.Object,
+            _venueService = new VenueService(_unitOfWork.Object,
                 _mapper.Object,
                 _logger.Object);
         }
 
-        #region CreateVenueWithoutLocationAsync
+        #region CreateVenueAsync
 
         [Test]
-        public async Task CreateVenueWithoutLocationAsync_WhenCreatingVenueInDatabaseFailed_ThrowDatabaseOperationException()
+        public async Task CreateVenueAsync_WhenCreatingVenueInDatabaseFailed_ThrowDatabaseOperationException()
         {
             //Arrange
             var command = new CreateVenueCommand
             {
-                Name = "Name",
-                CategoryName = "Category"
+                VenueName = "Name",
+                CategoryName = "Category",
+                Address = "Address"
             };
 
             const long CreatorId = 1;
-            var venuePersistenceModel = new VenuePersistenceModel();
+            var venuePersistenceModel = new VenuePersistenceModel { Location = new LocationPersistenceModel() };
 
             _mapper.Setup(x => x.Map<VenuePersistenceModel>(It.IsAny<API.Domain.Entities.Venue>()))
                 .Returns(venuePersistenceModel);
@@ -64,27 +65,28 @@ namespace Venue.API.Tests.Unit.Application.Services
                 .ReturnsAsync(false);
 
             //Act
-            Func<Task> act = () => _venueLocationService.CreateVenueWithoutLocationAsync(command, Guid.NewGuid().ToString().Substring(0, 24), CreatorId);
+            Func<Task> act = () => _venueService.CreateVenueAsync(command, CategoryIdFactory.CategoryId, CreatorId);
 
             //Assert
             await act.Should().ThrowAsync<DatabaseOperationException>();
         }
 
         [Test]
-        public async Task CreateVenueWithoutLocationAsync_WhenCreatingVenueInDatabaseSucceeded_ReturnVenueWithVenueCreatedWithoutLocationEvent()
+        public async Task CreateVenueAsync_WhenCreatingVenueInDatabaseSucceeded_ReturnVenueWithVenueCreatedWithoutLocationEvent()
         {
             //Arrange
             var command = new CreateVenueCommand
             {
-                Name = "Name",
-                CategoryName = "Category"
+                VenueName = "Name",
+                CategoryName = "Category",
+                Address = "Address"
             };
 
             const long CreatorId = 1;
             var venuePersistenceModel = new VenuePersistenceModel();
 
             var venue = new StubVenue(VenueId, ImmutableList<Photo>.Empty);
-            venue.AddDomainEvent(new VenueCreatedWithoutLocationEvent());
+            venue.AddDomainEvent(new VenueCreatedEvent());
 
             _mapper.Setup(x => x.Map<VenuePersistenceModel>(It.IsAny<API.Domain.Entities.Venue>()))
                 .Returns(venuePersistenceModel);
@@ -95,14 +97,14 @@ namespace Venue.API.Tests.Unit.Application.Services
                 .Returns(venue);
 
             //Act
-            var result = await _venueLocationService.CreateVenueWithoutLocationAsync(command, CategoryIdFactory.CategoryId, CreatorId);
+            var result = await _venueService.CreateVenueAsync(command, CategoryIdFactory.CategoryId, CreatorId);
 
             //Assert
             using (new AssertionScope())
             {
                 result.Should().BeAssignableTo<API.Domain.Entities.Venue>();
                 result.Should().NotBeNull();
-                result.FirstStoredEvent.EventType.Should().Be(EventType.VENUE_CREATED_WITHOUT_LOCATION);
+                result.FirstStoredEvent.EventType.Should().Be(EventType.VENUE_CREATED);
             }
         }
 

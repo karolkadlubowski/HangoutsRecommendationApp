@@ -29,7 +29,7 @@ namespace Venue.API.Tests.Unit.Application.Features
     [TestFixture]
     public class CreateVenueCommandHandlerTests
     {
-        private Mock<IVenueLocationService> _venueService;
+        private Mock<IVenueService> _venueService;
         private Mock<ITransactionManager> _transactionManager;
         private Mock<ICategoriesCacheRepository> _cacheRepository;
         private Mock<IFileStorageDataService> _fileStorageDataService;
@@ -49,7 +49,7 @@ namespace Venue.API.Tests.Unit.Application.Features
         [SetUp]
         public void SetUp()
         {
-            _venueService = new Mock<IVenueLocationService>();
+            _venueService = new Mock<IVenueService>();
             _transactionManager = new Mock<ITransactionManager>();
             _cacheRepository = new Mock<ICategoriesCacheRepository>();
             _fileStorageDataService = new Mock<IFileStorageDataService>();
@@ -60,7 +60,7 @@ namespace Venue.API.Tests.Unit.Application.Features
 
             _command = new CreateVenueCommand
             {
-                Name = Name,
+                VenueName = Name,
                 CategoryName = CategoryName,
                 Description = CategoryDescription
             };
@@ -92,7 +92,6 @@ namespace Venue.API.Tests.Unit.Application.Features
             //Arrange
             var categoryId = CategoryIdFactory.CategoryId;
             const long CreatorId = 1;
-            const long LocationId = 10;
 
             _transactionManager.Setup(x => x.CreateScope(TransactionScopeOption.Required))
                 .Returns(new DefaultTransactionScope(new TransactionScope()));
@@ -102,8 +101,8 @@ namespace Venue.API.Tests.Unit.Application.Features
                     CategoryId = categoryId,
                     Name = CategoryName
                 });
-            _venueService.Setup(x => x.CreateVenueWithoutLocationAsync(_command, categoryId, CreatorId))
-                .ReturnsAsync(API.Domain.Entities.Venue.CreateDefault(Name, LocationId, categoryId));
+            _venueService.Setup(x => x.CreateVenueAsync(_command, categoryId, CreatorId))
+                .ReturnsAsync(API.Domain.Entities.Venue.CreateDefault(Name, categoryId));
             _httpAccessor.Setup(x => x.CurrentUserId)
                 .Returns(CreatorId);
             _mapper.Setup(x => x.Map<VenueDto>(It.IsAny<API.Domain.Entities.Venue>()))
@@ -124,7 +123,7 @@ namespace Venue.API.Tests.Unit.Application.Features
                 _cacheRepository.Verify(x => x.FindCategoryByNameAsync(It.IsAny<string>()), Times.Once);
                 _mapper.Verify(x => x.Map<VenueDto>(It.IsAny<API.Domain.Entities.Venue>()), Times.Once);
                 _fileStorageDataService.Verify(x => x.UploadPhotosAsync(It.IsAny<List<IFormFile>>(), It.IsAny<long>()), Times.Once);
-                _eventSender.Verify(x => x.SendEventAsync(EventBusTopics.Venue, It.IsAny<VenueCreatedWithoutLocationEvent>(), It.IsAny<CancellationToken>()), Times.Once);
+                _eventSender.Verify(x => x.SendEventAsync(EventBusTopics.Venue, It.IsAny<VenueCreatedEvent>(), It.IsAny<CancellationToken>()), Times.Once);
             }
         }
     }

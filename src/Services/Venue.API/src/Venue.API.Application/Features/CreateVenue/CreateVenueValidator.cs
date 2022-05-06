@@ -7,7 +7,7 @@ namespace Venue.API.Application.Features.CreateVenue
     {
         public CreateVenueValidator()
         {
-            RuleFor(x => x.Name)
+            RuleFor(x => x.VenueName)
                 .NotNull()
                 .NotEmpty()
                 .MaximumLength(ValidationRules.MaxVenueNameLength);
@@ -18,6 +18,11 @@ namespace Venue.API.Application.Features.CreateVenue
             RuleFor(x => x.CategoryName)
                 .NotNull()
                 .NotEmpty();
+
+            RuleFor(x => x.Address)
+                .NotNull()
+                .NotEmpty()
+                .MaximumLength(ValidationRules.MaxAddressLength);
         }
     }
 }
