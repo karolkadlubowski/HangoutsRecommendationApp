@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Library.Database;
 using Microsoft.EntityFrameworkCore;
@@ -19,15 +18,19 @@ namespace Venue.API.Infrastructure.Database
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var modifiedEntries = ChangeTracker.Entries()
-                .Where(x => x.State == EntityState.Modified)
-                .Select(x => x.Entity);
-
-            foreach (var modifiedEntry in modifiedEntries)
+            foreach (var entry in ChangeTracker.Entries<BasePersistenceModel>())
             {
-                var entity = modifiedEntry as BasePersistenceModel;
-                if (entity is not null)
-                    entity.UpdateNow();
+                switch (entry.State)
+                {
+                    case EntityState.Deleted:
+                        entry.Entity.Delete();
+                        entry.Entity.UpdateNow();
+                        entry.State = EntityState.Modified;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.UpdateNow();
+                        break;
+                }
             }
 
             return base.SaveChangesAsync(cancellationToken);
