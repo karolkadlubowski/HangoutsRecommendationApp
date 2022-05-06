@@ -22,13 +22,13 @@ namespace Venue.API.Infrastructure.Database
             {
                 switch (entry.State)
                 {
+                    case EntityState.Modified:
+                        entry.Entity.UpdateNow();
+                        break;
                     case EntityState.Deleted:
                         entry.Entity.Delete();
                         entry.Entity.UpdateNow();
                         entry.State = EntityState.Modified;
-                        break;
-                    case EntityState.Modified:
-                        entry.Entity.UpdateNow();
                         break;
                 }
             }
