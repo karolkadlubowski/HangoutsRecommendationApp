@@ -50,7 +50,8 @@ namespace Venue.API.Application.Services
 
         public async Task<PaginationTuple<Domain.Entities.Venue>> GetVenuesAsync(GetVenuesQuery query)
         {
-            var venuesPersistenceModels = await _unitOfWork.VenueRepository.GetPaginatedVenuesAsync(query.PageNumber, query.PageSize);
+            var venuesPersistenceModels = await _unitOfWork.VenueRepository.GetPaginatedVenuesAsync(query.PageNumber, query.PageSize,
+                query.LocationsIds);
             var pagination = PaginationResponseDecorator.Create(venuesPersistenceModels);
 
             _logger.Info($"Venues: {venuesPersistenceModels.CurrentPage} page with {venuesPersistenceModels.CurrentCount} records loaded from the database");

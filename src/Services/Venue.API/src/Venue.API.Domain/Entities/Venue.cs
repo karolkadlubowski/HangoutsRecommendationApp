@@ -14,7 +14,6 @@ namespace Venue.API.Domain.Entities
         public long VenueId { get; protected set; }
         public string Name { get; protected set; }
         public string Description { get; protected set; }
-        public long LocationId { get; protected set; }
         public string CategoryId { get; protected set; }
         public long? CreatorId { get; protected set; }
         public VenueStatus Status { get; protected set; } = VenueStatus.Created;
@@ -44,9 +43,6 @@ namespace Venue.API.Domain.Entities
 
         public void SetDescription(string description)
             => Description = new VenueDescription(description);
-
-        public void AssignLocation(long locationId)
-            => LocationId = locationId;
 
         public void CreatedBy(long creatorId)
             => CreatorId = creatorId;

@@ -12,13 +12,6 @@ namespace Venue.API.Infrastructure.Database.EntityConfigs
         {
             builder.HasKey(v => v.VenueId);
 
-            builder
-                .HasOne(v => v.Location)
-                .WithOne(l => l.Venue)
-                .HasForeignKey<VenuePersistenceModel>(v => v.LocationId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasIndex(v => v.CategoryId);
         }
     }

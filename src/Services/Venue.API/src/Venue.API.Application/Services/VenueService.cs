@@ -46,7 +46,7 @@ namespace Venue.API.Application.Services
                 throw new DatabaseOperationException($"Inserting venue with name '{venuePersistenceModel.Name}' and address '{venuePersistenceModel.Location.Address}' to the database failed");
 
             _logger.Info(
-                $"Venue #{venuePersistenceModel.VenueId} with location #{venuePersistenceModel.LocationId} and status '{venuePersistenceModel.Status}' inserted to the database successfully");
+                $"Venue #{venuePersistenceModel.VenueId} with location #{venuePersistenceModel.Location.LocationId} and status '{venuePersistenceModel.Status}' inserted to the database successfully");
 
             venue = _mapper.Map<Domain.Entities.Venue>(venuePersistenceModel);
 
@@ -61,7 +61,7 @@ namespace Venue.API.Application.Services
             var venuePersistenceModel = await _unitOfWork.VenueRepository.FindVenueWithDetailsAsync(command.VenueId)
                                         ?? throw new EntityNotFoundException($"Venue #{command.VenueId} not found in the database");
 
-            _logger.Info($"Venue #{venuePersistenceModel.VenueId} with status '{venuePersistenceModel.Status}' and location #{venuePersistenceModel.LocationId} found in the database");
+            _logger.Info($"Venue #{venuePersistenceModel.VenueId} with status '{venuePersistenceModel.Status}' and location #{venuePersistenceModel.Location.LocationId} found in the database");
 
             var venue = _mapper.Map<Domain.Entities.Venue>(venuePersistenceModel);
 
@@ -73,9 +73,9 @@ namespace Venue.API.Application.Services
             _unitOfWork.VenueRepository.Update(venuePersistenceModel);
 
             if (!await _unitOfWork.CompleteAsync())
-                throw new DatabaseOperationException($"Updating venue #{venuePersistenceModel.VenueId} and location #{venuePersistenceModel.LocationId} in the database failed");
+                throw new DatabaseOperationException($"Updating venue #{venuePersistenceModel.VenueId} and location #{venuePersistenceModel.Location.LocationId} in the database failed");
 
-            _logger.Info($"Venue #{venue.VenueId} with location #{venue.LocationId} updated in the database successfully");
+            _logger.Info($"Venue #{venue.VenueId} with location #{venue.Location.LocationId} updated in the database successfully");
 
             venue.AddDomainEvent(EventFactory<VenueUpdatedEvent>.CreateEvent(venue.VenueId,
                 _mapper.Map<VenueUpdatedEventDataModel>(venue)));
@@ -88,19 +88,19 @@ namespace Venue.API.Application.Services
             var venuePersistenceModel = await _unitOfWork.VenueRepository.FindVenueWithDetailsAsync(command.VenueId)
                                         ?? throw new EntityNotFoundException($"Venue #{command.VenueId} not found in the database");
 
-            _logger.Info($"Venue #{venuePersistenceModel.VenueId} with status '{venuePersistenceModel.Status}' and location #{venuePersistenceModel.LocationId} found in the database");
+            _logger.Info($"Venue #{venuePersistenceModel.VenueId} with status '{venuePersistenceModel.Status}' and location #{venuePersistenceModel.Location.LocationId} found in the database");
 
-            _unitOfWork.LocationRepository.Delete(venuePersistenceModel.Location);
+            _unitOfWork.VenueRepository.Delete(venuePersistenceModel);
 
             if (!await _unitOfWork.CompleteAsync())
                 throw new DatabaseOperationException($"Venue #{venuePersistenceModel.VenueId} cannot be deleted from the database");
 
             var venue = _mapper.Map<Domain.Entities.Venue>(venuePersistenceModel);
 
-            _logger.Info($"Venue #{venue.VenueId} with location #{venue.LocationId} deleted from the database successfully");
+            _logger.Info($"Venue #{venue.VenueId} with location #{venue} deleted from the database successfully");
 
             venue.AddDomainEvent(EventFactory<VenueDeletedEvent>.CreateEvent(venue.VenueId,
-                new VenueDeletedEventDataModel { VenueId = venue.VenueId, LocationId = venue.LocationId }));
+                new VenueDeletedEventDataModel { VenueId = venue.VenueId, LocationId = venue.Location.LocationId }));
 
             return venue;
         }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Library.Shared.Models.Pagination;
 using Library.Shared.Models.Pagination.Implementations;
@@ -9,5 +11,11 @@ namespace Library.Shared.Extensions
     {
         public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> queryable, int pageNumber, int pageSize)
             => await EntityFrameworkPagedList<T>.CreateAsync(queryable, pageNumber, pageSize);
+
+        public static IQueryable<TEntity> WhereIf<TEntity>(this IQueryable<TEntity> query, bool condition,
+            Expression<Func<TEntity, bool>> predicate)
+            => condition
+                ? query.Where(predicate)
+                : query;
     }
 }

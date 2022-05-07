@@ -1,9 +1,8 @@
-﻿using Library.Shared.Models.Venue.Dtos;
-using Library.Shared.Models.Venue.Enums;
+﻿using Library.Shared.Models.Venue.Enums;
 
-namespace Library.Shared.Models.Venue.Events.DataModels
+namespace Library.Shared.Models.Venue.Dtos
 {
-    public record VenueUpdatedEventDataModel
+    public record VenueListDto
     {
         public long VenueId { get; init; }
         public string Name { get; init; }

@@ -12,6 +12,13 @@ namespace Venue.API.Infrastructure.Database.EntityConfigs
         public void Configure(EntityTypeBuilder<LocationPersistenceModel> builder)
         {
             builder.HasKey(l => l.LocationId);
+
+            builder
+                .HasOne(l => l.Venue)
+                .WithOne(v => v.Location)
+                .HasForeignKey<LocationPersistenceModel>(l => l.VenueId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

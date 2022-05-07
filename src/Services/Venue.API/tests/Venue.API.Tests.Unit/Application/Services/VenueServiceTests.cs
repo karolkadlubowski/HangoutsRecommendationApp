@@ -83,7 +83,7 @@ namespace Venue.API.Tests.Unit.Application.Services
             };
 
             const long CreatorId = 1;
-            var venuePersistenceModel = new VenuePersistenceModel();
+            var venuePersistenceModel = new VenuePersistenceModel { Location = new LocationPersistenceModel() };
 
             var venue = new StubVenue(VenueId, ImmutableList<Photo>.Empty);
             venue.AddDomainEvent(new VenueCreatedEvent());

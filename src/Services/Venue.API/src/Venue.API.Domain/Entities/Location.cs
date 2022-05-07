@@ -6,6 +6,7 @@ namespace Venue.API.Domain.Entities
     public class Location : RootEntity
     {
         public long LocationId { get; protected set; }
+        public long VenueId { get; protected set; }
         public string Address { get; protected set; }
 
         public LocationCoordinate LocationCoordinate { get; protected set; }

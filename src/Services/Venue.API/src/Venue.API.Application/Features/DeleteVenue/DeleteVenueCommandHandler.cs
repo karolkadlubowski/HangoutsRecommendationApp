@@ -42,7 +42,7 @@ namespace Venue.API.Application.Features.DeleteVenue
 
                 _logger.Trace("< Database transaction committed");
 
-                return new DeleteVenueResponse { DeletedVenueId = deletedVenue.VenueId, DeletedLocationId = deletedVenue.LocationId };
+                return new DeleteVenueResponse { DeletedVenueId = deletedVenue.VenueId, DeletedLocationId = deletedVenue.Location.LocationId };
             }
         }
     }
