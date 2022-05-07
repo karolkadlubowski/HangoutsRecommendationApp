@@ -23,8 +23,6 @@ namespace Venue.API.Application.Mapper
 
             CreateMap<Domain.Entities.Venue, VenueDto>()
                 .ReverseMap();
-            CreateMap<Domain.Entities.Venue, VenueListDto>()
-                .ReverseMap();
 
             CreateMap<Location, LocationDto>()
                 .ReverseMap();

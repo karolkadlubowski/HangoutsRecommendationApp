@@ -93,7 +93,7 @@ namespace Venue.API.Tests.Unit.Application.Services
             _unitOfWork.Setup(x => x.VenueRepository.Add(venuePersistenceModel));
             _unitOfWork.Setup(x => x.CompleteAsync())
                 .ReturnsAsync(true);
-            _mapper.Setup(x => x.Map<VenuePersistenceModel, API.Domain.Entities.Venue>(venuePersistenceModel))
+            _mapper.Setup(x => x.Map<API.Domain.Entities.Venue>(venuePersistenceModel))
                 .Returns(venue);
 
             //Act
