@@ -14,7 +14,7 @@ namespace Venue.API.DI
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddScoped<IReadOnlyVenueService, VenueService>()
+                .AddScoped<IReadOnlyVenueService, ReadOnlyVenueService>()
                 .AddScoped<IVenueService, VenueService>();
 
             services

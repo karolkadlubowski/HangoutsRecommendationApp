@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Library.Shared.Exceptions;
 using Library.Shared.Models.Venue.Enums;
 using NUnit.Framework;
+using Venue.API.Domain.Entities.Models;
 using Venue.API.Domain.Validation;
 using Venue.API.Tests.Unit.Utilities.Factories;
+using Venue.API.Tests.Unit.Utilities.Models;
 
 namespace Venue.API.Tests.Unit.Domain.Entities
 {
@@ -20,50 +23,61 @@ namespace Venue.API.Tests.Unit.Domain.Entities
         {
             //Arrange
             const string Name = nameof(Name);
-            const long LocationId = 1;
             var categoryId = StringFactory.CreateStringWithLength(24, 'x');
 
             //Act
-            var venue = API.Domain.Entities.Venue.CreateDefault(Name, LocationId, categoryId);
+            var venue = API.Domain.Entities.Venue.CreateDefault(Name, categoryId);
 
             //Assert
             using (new AssertionScope())
             {
                 venue.Name.Should().Be(Name);
-                venue.LocationId.Should().Be(LocationId);
                 venue.CategoryId.Should().Be(categoryId);
                 venue.Description.Should().BeNull();
                 venue.CreatorId.Should().BeNull();
                 venue.Status.Should().Be(VenueStatus.Created);
-                venue.PersistState.Should().Be(VenuePersistState.NotPersisted);
+                venue.Location.Should().BeNull();
             }
         }
 
         #endregion
 
-        #region CreateWithoutLocation
+        #region Update
 
         [Test]
-        public void CreateWithoutLocation_WhenCalled_ShouldSetAllDefaultPropertiesAndLocationIdShouldBeNull()
+        public void Update_WhenUserIsNotCreatorOfVenue_ThrowInsufficientPermissionsException()
         {
             //Arrange
-            const string Name = nameof(Name);
-            var categoryId = StringFactory.CreateStringWithLength(24, 'x');
+            const long CreatorId = 1;
+
+            var venue = new StubVenue(1, ImmutableList<Photo>.Empty);
+            venue.CreatedBy(CreatorId);
 
             //Act
-            var venue = API.Domain.Entities.Venue.CreateWithoutLocation(Name, categoryId);
+            Action act = () => venue.Update(default, default,
+                default, default, default, default,
+                CreatorId + 1);
 
             //Assert
-            using (new AssertionScope())
-            {
-                venue.Name.Should().Be(Name);
-                venue.LocationId.Should().BeNull();
-                venue.CategoryId.Should().Be(categoryId);
-                venue.Description.Should().BeNull();
-                venue.CreatorId.Should().BeNull();
-                venue.Status.Should().Be(VenueStatus.Created);
-                venue.PersistState.Should().Be(VenuePersistState.NotPersisted);
-            }
+            act.Should().Throw<InsufficientPermissionsException>();
+        }
+
+        [Test]
+        public void Update_WhenUserIsCreatorOfVenue_ShouldNotThrowInsufficientPermissionsException()
+        {
+            //Arrange
+            const long CreatorId = 1;
+
+            var venue = new StubVenue(1, ImmutableList<Photo>.Empty);
+            venue.CreatedBy(CreatorId);
+
+            //Act
+            Action act = () => venue.Update(default, default,
+                default, default, default, default,
+                CreatorId);
+
+            //Assert
+            act.Should().NotThrow<InsufficientPermissionsException>();
         }
 
         #endregion

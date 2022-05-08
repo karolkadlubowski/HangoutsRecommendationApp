@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Library.EventBus;
+using Library.EventBus.Transaction;
 using Library.Shared.Events;
 using Library.Shared.Models.Identity.Events.DataModels;
 using MediatR;
@@ -16,12 +17,15 @@ namespace UserProfile.API.Application.Handlers.Strategies
 
         public override EventType EventType => EventType.USER_EMAIL_CHANGED;
 
-        public async override Task HandleEventAsync(Event @event, CancellationToken cancellationToken = default)
+        public override async Task<DistributedTransactionResponse> HandleEventAsync(Event @event, CancellationToken cancellationToken = default)
         {
             var dataModel = @event.GetData<UserEmailChangedEventDataModel>();
+
             await _mediator.Send(new UpdateEmailAddressCommand(dataModel.UserId,
                     dataModel.CurrentEmailAddress),
                 cancellationToken);
+
+            return DistributedTransactionResponse.Default(@event.TransactionId, @event.EventId);
         }
     }
 }

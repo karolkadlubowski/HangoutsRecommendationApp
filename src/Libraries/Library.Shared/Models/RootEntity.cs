@@ -11,8 +11,11 @@ namespace Library.Shared.Models
 
         public DateTime CreatedOn { get; protected set; } = DateTime.UtcNow;
         public DateTime? ModifiedOn { get; protected set; }
+        public bool IsDeleted { get; protected set; }
 
         public void UpdateNow() => ModifiedOn = DateTime.UtcNow;
+
+        public void Delete() => IsDeleted = true;
 
         public Event FirstStoredEvent
             => _domainEvents.Any()

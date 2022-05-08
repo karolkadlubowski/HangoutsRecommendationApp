@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Library.Shared.AppConfigs;
 using Library.Shared.Caching;
+using Library.Shared.Exceptions;
 using Library.Shared.Models.Category.Dtos;
 using Microsoft.Extensions.Caching.Memory;
 using Venue.API.Application.Abstractions;
@@ -31,7 +32,23 @@ namespace Venue.API.Infrastructure.Caching
             var categories = await GetValueOrDefaultAsync(CacheKeys.Categories)
                              ?? new List<CategoryDto>();
 
+            if (categories.Any(c => c.CategoryId == category.CategoryId
+                                    && c.Name.Equals(category.Name, StringComparison.InvariantCultureIgnoreCase)))
+                throw new DuplicateExistsException($"Category #{category.CategoryId} with name '{category.Name}' already exists in the cache");
+
             categories.Add(category);
+
+            await SetValueAsync(CacheKeys.Categories, categories);
+        }
+
+        public async Task DeleteCategoryAsync(string categoryId)
+        {
+            var categories = await GetValueOrDefaultAsync(CacheKeys.Categories)
+                             ?? new List<CategoryDto>();
+
+            var categoryToDelete = categories.FirstOrDefault(c => c.CategoryId == categoryId);
+
+            categories.Remove(categoryToDelete);
 
             await SetValueAsync(CacheKeys.Categories, categories);
         }

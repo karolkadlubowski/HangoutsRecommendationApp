@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Library.Database;
 using Microsoft.EntityFrameworkCore;
@@ -16,18 +15,24 @@ namespace Venue.API.Infrastructure.Database
         }
 
         public virtual DbSet<VenuePersistenceModel> Venues { get; protected set; }
+        public virtual DbSet<LocationPersistenceModel> Locations { get; protected set; }
+        public virtual DbSet<LocationCoordinatePersistenceModel> LocationCoordinates { get; protected set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var modifiedEntries = ChangeTracker.Entries()
-                .Where(x => x.State == EntityState.Modified)
-                .Select(x => x.Entity);
-
-            foreach (var modifiedEntry in modifiedEntries)
+            foreach (var entry in ChangeTracker.Entries<BasePersistenceModel>())
             {
-                var entity = modifiedEntry as BasePersistenceModel;
-                if (entity is not null)
-                    entity.UpdateNow();
+                switch (entry.State)
+                {
+                    case EntityState.Modified:
+                        entry.Entity.UpdateNow();
+                        break;
+                    case EntityState.Deleted:
+                        entry.Entity.Delete();
+                        entry.Entity.UpdateNow();
+                        entry.State = EntityState.Modified;
+                        break;
+                }
             }
 
             return base.SaveChangesAsync(cancellationToken);
@@ -40,6 +45,8 @@ namespace Venue.API.Infrastructure.Database
             modelBuilder.HasDefaultSchema("Venue");
 
             VenueEntityConfig.Create().Configure(modelBuilder.Entity<VenuePersistenceModel>());
+            LocationEntityConfig.Create().Configure(modelBuilder.Entity<LocationPersistenceModel>());
+            LocationCoordinateEntityConfig.Create().Configure(modelBuilder.Entity<LocationCoordinatePersistenceModel>());
         }
     }
 }

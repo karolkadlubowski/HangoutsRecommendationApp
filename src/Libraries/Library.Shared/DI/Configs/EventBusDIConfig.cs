@@ -16,7 +16,6 @@ namespace Library.Shared.DI.Configs
                 .AddScoped<IEventSender, EventSender>()
                 .AddSingleton<IEventConsumer, KafkaEventConsumer>()
                 .AddSingleton<IEventAggregator, EventAggregator>()
-                .AddSingleton<IEventAggregatorCacheCleaner, DefaultEventAggregatorCacheCleaner>()
                 .AddEventHandlerStrategyFactory<EventHandlerStrategyFactory>();
 
         public static IServiceCollection AddEventHandlersStrategies(this IServiceCollection services, Assembly assembly)

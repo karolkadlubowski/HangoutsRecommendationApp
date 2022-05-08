@@ -6,42 +6,55 @@ using Library.Shared.Policies.Abstractions;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using Venue.API.Application.Abstractions;
+using Venue.API.Application.Providers;
+using Venue.API.Domain.Configuration;
 using Venue.API.Infrastructure.Policies;
 using ILogger = Library.Shared.Logging.ILogger;
 
 namespace Venue.API.Infrastructure.HostedServices
 {
-    public class CategoryDataHostedService : IHostedService
+    public class CategoryDataHostedService : BackgroundService
     {
         private readonly ICategoryDataService _categoryDataService;
         private readonly IRetryPolicy _retryPolicy;
         private readonly ILogger _logger;
 
+        private readonly HostedServicesConfig _hostedServicesConfig;
+
         public CategoryDataHostedService(ICategoryDataService categoryDataService,
             IRetryPolicyRegistry retryPolicyRegistry,
+            IConfigurationProvider configurationProvider,
             ILogger logger)
         {
             _categoryDataService = categoryDataService;
             _retryPolicy = retryPolicyRegistry.GetPolicy<CategoriesLoadingRetryPolicy>();
             _logger = logger;
+
+            _hostedServicesConfig = configurationProvider.GetConfiguration().HostedServicesConfig;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             try
             {
                 using (MappedDiagnosticsLogicalContext.SetScoped(LoggingConstants.Scope,
                            LoggingConstants.GetScopeValue($"{nameof(CategoryDataHostedService)}")))
                 {
-                    _logger.Info($"{nameof(CategoryDataHostedService)} hosted service started. Fetching categories data from the API");
-
-                    await _retryPolicy.ExecutePolicyAsync(async () =>
+                    while (!cancellationToken.IsCancellationRequested)
                     {
-                        var categories = await _categoryDataService.GetCategoriesAsync();
-                        await _categoryDataService.StoreCategoriesInCacheAsync(categories);
+                        _logger.Info($"{nameof(CategoryDataHostedService)} hosted service started. Fetching categories data from the API");
 
-                        _logger.Info($"{categories.Count} categories stored in the memory cache successfully");
-                    });
+                        await _retryPolicy.ExecutePolicyAsync(async () =>
+                        {
+                            var categories = await _categoryDataService.GetCategoriesAsync();
+                            await _categoryDataService.StoreCategoriesInCacheAsync(categories);
+
+                            _logger.Info($"{categories.Count} categories stored in the memory cache successfully");
+                        });
+
+                        _logger.Info($"> Next hosted service iteration scheduled at: {DateTime.UtcNow.AddMinutes(_hostedServicesConfig.CategoryDataHostedServiceIntervalInMinutes)}");
+                        await Task.Delay(TimeSpan.FromMinutes(_hostedServicesConfig.CategoryDataHostedServiceIntervalInMinutes));
+                    }
                 }
             }
             catch (Exception e)
@@ -49,9 +62,5 @@ namespace Venue.API.Infrastructure.HostedServices
                 _logger.Error(e.Message, e);
             }
         }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
-            => await Task.Run(()
-                => _logger.Info($"{nameof(CategoryDataHostedService)} hosted service stopped"));
     }
 }

@@ -59,11 +59,8 @@ namespace Venue.API
             _logger.Trace("> Configuration provider registered");
 
             services
-                .AddKafkaMessageBroker(Configuration)
-                .AddEventHandlersStrategies(Assembly.Load("Venue.API.Application"));
-            _logger.Trace("> Event bus registered");
-
-            services.AddHostedService<CategoryDataHostedService>();
+                .AddHostedService<EventConsumerHostedService>()
+                .AddHostedService<CategoryDataHostedService>();
             _logger.Trace("> Hosted services registered");
 
             services.AddRetryPolicyRegistry();

@@ -12,7 +12,6 @@ namespace Venue.API.Infrastructure.Database.EntityConfigs
         {
             builder.HasKey(v => v.VenueId);
 
-            builder.HasIndex(v => v.LocationId);
             builder.HasIndex(v => v.CategoryId);
         }
     }

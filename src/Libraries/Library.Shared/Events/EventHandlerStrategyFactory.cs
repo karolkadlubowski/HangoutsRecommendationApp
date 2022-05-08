@@ -2,7 +2,6 @@
 using System.Linq;
 using Library.EventBus;
 using Library.Shared.Events.Abstractions;
-using Library.Shared.Exceptions;
 
 namespace Library.Shared.Events
 {
@@ -14,7 +13,6 @@ namespace Library.Shared.Events
             => _eventHandlerStrategies = eventHandlerStrategies;
 
         public IEventHandlerStrategy CreateStrategy(Event @event)
-            => _eventHandlerStrategies.SingleOrDefault(strategy => strategy.EventType == @event.EventType)
-               ?? throw new ServerException($"Event of type '{@event.EventType}' not recognized");
+            => _eventHandlerStrategies.SingleOrDefault(strategy => strategy.EventType == @event.EventType);
     }
 }

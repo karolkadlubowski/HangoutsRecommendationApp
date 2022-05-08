@@ -3,7 +3,9 @@
     public enum EventType
     {
         UNDEFINED = 0,
-        VENUE_CREATED_WITHOUT_LOCATION,
+        VENUE_CREATED,
+        VENUE_UPDATED,
+        VENUE_DELETED,
         USER_EMAIL_CHANGED,
         CATEGORY_ADDED,
         CATEGORY_DELETED,
