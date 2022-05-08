@@ -11,5 +11,6 @@ namespace Venue.API.Application.Abstractions
         Task<CategoryDto> FindCategoryByNameAsync(string name);
 
         Task StoreCategoryAsync(CategoryDto category);
+        Task DeleteCategoryAsync(string categoryId);
     }
 }

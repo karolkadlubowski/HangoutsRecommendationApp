@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Library.EventBus;
 using Library.EventBus.Abstractions;
 using Library.Shared.Constants;
+using Library.Shared.Events.Abstractions;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using ILogger = Library.Shared.Logging.ILogger;
@@ -13,12 +14,15 @@ namespace Venue.API.Infrastructure.HostedServices
     public class EventConsumerHostedService : IHostedService
     {
         private readonly IEventConsumer _eventConsumer;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
 
         public EventConsumerHostedService(IEventConsumer eventConsumer,
+            IEventAggregator eventAggregator,
             ILogger logger)
         {
             _eventConsumer = eventConsumer;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -31,8 +35,10 @@ namespace Venue.API.Infrastructure.HostedServices
                 {
                     _logger.Info($"{nameof(EventConsumerHostedService)} hosted service started. Events consuming and aggregating started");
 
-                    // await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Location, cancellationToken);
-                    // _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Location}'");
+                    await _eventConsumer.ConsumeFromLatestAsync(EventBusTopics.Category, cancellationToken);
+                    _logger.Info($"> Consuming from the message broker topic: '{EventBusTopics.Category}'");
+
+                    await _eventAggregator.AggregateEventsAsync(cancellationToken);
                 }
             }
             catch (Exception e)

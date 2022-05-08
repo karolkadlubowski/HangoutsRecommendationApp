@@ -1,3 +1,4 @@
+using System.Reflection;
 using Library.Database.DI;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
@@ -47,7 +48,8 @@ namespace Venue.API
             _logger.Trace("> Memory cache registered");
 
             services
-                .AddKafkaMessageBroker(Configuration);
+                .AddKafkaMessageBroker(Configuration)
+                .AddEventHandlersStrategies(Assembly.Load("Venue.API.Application"));
             _logger.Trace("> Kafka message broker registered");
 
             services.AddServices(Configuration);

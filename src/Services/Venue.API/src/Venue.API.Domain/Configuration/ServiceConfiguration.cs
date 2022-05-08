@@ -6,6 +6,7 @@ namespace Venue.API.Domain.Configuration
     {
         public DatabaseConfig DatabaseConfig { get; init; }
         public VenueRestClientsConfig RestClientsConfig { get; init; }
+        public HostedServicesConfig HostedServicesConfig { get; init; }
         public VenueRetryPoliciesConfig RetryPoliciesConfig { get; init; }
     }
 }
