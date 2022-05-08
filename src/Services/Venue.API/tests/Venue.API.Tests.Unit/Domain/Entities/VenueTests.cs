@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Library.Shared.Exceptions;
 using Library.Shared.Models.Venue.Enums;
 using NUnit.Framework;
+using Venue.API.Domain.Entities.Models;
 using Venue.API.Domain.Validation;
 using Venue.API.Tests.Unit.Utilities.Factories;
+using Venue.API.Tests.Unit.Utilities.Models;
 
 namespace Venue.API.Tests.Unit.Domain.Entities
 {
@@ -35,6 +38,46 @@ namespace Venue.API.Tests.Unit.Domain.Entities
                 venue.Status.Should().Be(VenueStatus.Created);
                 venue.Location.Should().BeNull();
             }
+        }
+
+        #endregion
+
+        #region Update
+
+        [Test]
+        public void Update_WhenUserIsNotCreatorOfVenue_ThrowInsufficientPermissionsException()
+        {
+            //Arrange
+            const long CreatorId = 1;
+
+            var venue = new StubVenue(1, ImmutableList<Photo>.Empty);
+            venue.CreatedBy(CreatorId);
+
+            //Act
+            Action act = () => venue.Update(default, default,
+                default, default, default, default,
+                CreatorId + 1);
+
+            //Assert
+            act.Should().Throw<InsufficientPermissionsException>();
+        }
+
+        [Test]
+        public void Update_WhenUserIsCreatorOfVenue_ShouldNotThrowInsufficientPermissionsException()
+        {
+            //Arrange
+            const long CreatorId = 1;
+
+            var venue = new StubVenue(1, ImmutableList<Photo>.Empty);
+            venue.CreatedBy(CreatorId);
+
+            //Act
+            Action act = () => venue.Update(default, default,
+                default, default, default, default,
+                CreatorId);
+
+            //Assert
+            act.Should().NotThrow<InsufficientPermissionsException>();
         }
 
         #endregion
