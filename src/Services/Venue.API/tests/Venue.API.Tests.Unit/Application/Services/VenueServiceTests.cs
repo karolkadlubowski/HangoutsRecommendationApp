@@ -13,6 +13,8 @@ using NUnit.Framework;
 using Venue.API.Application.Database;
 using Venue.API.Application.Database.PersistenceModels;
 using Venue.API.Application.Features.CreateVenue;
+using Venue.API.Application.Features.DeleteVenue;
+using Venue.API.Application.Features.UpdateVenue;
 using Venue.API.Application.Services;
 using Venue.API.Domain.Entities.Models;
 using Venue.API.Tests.Unit.Utilities.Factories;
@@ -105,6 +107,221 @@ namespace Venue.API.Tests.Unit.Application.Services
                 result.Should().BeAssignableTo<API.Domain.Entities.Venue>();
                 result.Should().NotBeNull();
                 result.FirstStoredEvent.EventType.Should().Be(EventType.VENUE_CREATED);
+            }
+        }
+
+        #endregion
+
+        #region UpdateVenueAsync
+
+        [Test]
+        public async Task UpdateVenueAsync_WhenVenueToUpdateNotFoundInDatabase_ThrowEntityNotFoundException()
+        {
+            //Arrange
+            var command = new UpdateVenueCommand
+            {
+                VenueId = VenueId,
+                VenueName = "Name",
+                CategoryName = "Category",
+                Address = "Address"
+            };
+
+            const long CreatorId = 1;
+
+            _unitOfWork.Setup(x => x.VenueRepository.FindVenueWithDetailsAsync(VenueId))
+                .ReturnsAsync(() => null);
+
+            //Act
+            Func<Task> act = () => _venueService.UpdateVenueAsync(command, CategoryIdFactory.CategoryId, CreatorId);
+
+            //Assert
+            await act.Should().ThrowAsync<EntityNotFoundException>();
+        }
+
+        [Test]
+        public async Task UpdateVenueAsync_WhenVenueUpdatingInDatabaseFailed_ThrowDatabaseOperationException()
+        {
+            //Arrange
+            const double Coordinate = 100.0;
+
+            var command = new UpdateVenueCommand
+            {
+                VenueId = VenueId,
+                VenueName = "Name",
+                CategoryName = "Category",
+                Address = "Address"
+            };
+
+            const long CreatorId = 1;
+
+            var venuePersistenceModel = new VenuePersistenceModel
+            {
+                CreatorId = CreatorId,
+                Location = new LocationPersistenceModel()
+            };
+
+            var venue = new StubVenue(VenueId, ImmutableList<Photo>.Empty);
+            venue.InitLocation(Coordinate, Coordinate);
+            venue.CreatedBy(CreatorId);
+
+            _unitOfWork.Setup(x => x.VenueRepository.FindVenueWithDetailsAsync(VenueId))
+                .ReturnsAsync(venuePersistenceModel);
+            _mapper.Setup(x => x.Map<API.Domain.Entities.Venue>(venuePersistenceModel))
+                .Returns(venue);
+            _mapper.Setup(x => x.Map(It.IsAny<API.Domain.Entities.Venue>(), venuePersistenceModel))
+                .Returns(venuePersistenceModel);
+            _unitOfWork.Setup(x => x.CompleteAsync())
+                .ReturnsAsync(false);
+
+            //Act
+            Func<Task> act = () => _venueService.UpdateVenueAsync(command, CategoryIdFactory.CategoryId, CreatorId);
+
+            //Assert
+            await act.Should().ThrowAsync<DatabaseOperationException>();
+        }
+
+        [Test]
+        public async Task UpdateVenueAsync_WhenVenueUpdatedInDatabase_ReturnVenueWithProperDomainEvent()
+        {
+            //Arrange
+            const double Coordinate = 100.0;
+
+            var command = new UpdateVenueCommand
+            {
+                VenueId = VenueId,
+                VenueName = "Name",
+                CategoryName = "Category",
+                Address = "Address"
+            };
+
+            const long CreatorId = 1;
+
+            var venuePersistenceModel = new VenuePersistenceModel
+            {
+                CreatorId = CreatorId,
+                Location = new LocationPersistenceModel()
+            };
+
+            var venue = new StubVenue(VenueId, ImmutableList<Photo>.Empty);
+            venue.InitLocation(Coordinate, Coordinate);
+            venue.CreatedBy(CreatorId);
+            venue.AddDomainEvent(new VenueUpdatedEvent());
+
+            _unitOfWork.Setup(x => x.VenueRepository.FindVenueWithDetailsAsync(VenueId))
+                .ReturnsAsync(venuePersistenceModel);
+            _mapper.Setup(x => x.Map<API.Domain.Entities.Venue>(venuePersistenceModel))
+                .Returns(venue);
+            _mapper.Setup(x => x.Map(It.IsAny<API.Domain.Entities.Venue>(), venuePersistenceModel))
+                .Returns(venuePersistenceModel);
+            _unitOfWork.Setup(x => x.CompleteAsync())
+                .ReturnsAsync(true);
+
+            //Act
+            var result = await _venueService.UpdateVenueAsync(command, CategoryIdFactory.CategoryId, CreatorId);
+
+            //Assert
+            using (new AssertionScope())
+            {
+                result.Should().BeAssignableTo<API.Domain.Entities.Venue>();
+                result.Should().NotBeNull();
+                result.FirstStoredEvent.EventType.Should().Be(EventType.VENUE_UPDATED);
+            }
+        }
+
+        #endregion
+
+        #region DeleteVenueAsync
+
+        [Test]
+        public async Task DeleteVenueAsync_WhenVenueToUpdateNotFoundInDatabase_ThrowEntityNotFoundException()
+        {
+            //Arrange
+            var command = new DeleteVenueCommand
+            {
+                VenueId = VenueId
+            };
+
+            _unitOfWork.Setup(x => x.VenueRepository.FindVenueWithDetailsAsync(VenueId))
+                .ReturnsAsync(() => null);
+
+            //Act
+            Func<Task> act = () => _venueService.DeleteVenueAsync(command);
+
+            //Assert
+            await act.Should().ThrowAsync<EntityNotFoundException>();
+        }
+
+        [Test]
+        public async Task DeleteVenueAsync_WhenVenueDeletingFromDatabaseFailed_ThrowDatabaseOperationException()
+        {
+            //Arrange
+            const double Coordinate = 100.0;
+
+            var command = new DeleteVenueCommand
+            {
+                VenueId = VenueId
+            };
+
+            var venuePersistenceModel = new VenuePersistenceModel
+            {
+                Location = new LocationPersistenceModel()
+            };
+
+            var venue = new StubVenue(VenueId, ImmutableList<Photo>.Empty);
+            venue.InitLocation(Coordinate, Coordinate);
+
+            _unitOfWork.Setup(x => x.VenueRepository.FindVenueWithDetailsAsync(VenueId))
+                .ReturnsAsync(venuePersistenceModel);
+            _mapper.Setup(x => x.Map<API.Domain.Entities.Venue>(venuePersistenceModel))
+                .Returns(venue);
+            _mapper.Setup(x => x.Map(It.IsAny<API.Domain.Entities.Venue>(), venuePersistenceModel))
+                .Returns(venuePersistenceModel);
+            _unitOfWork.Setup(x => x.CompleteAsync())
+                .ReturnsAsync(false);
+
+            //Act
+            Func<Task> act = () => _venueService.DeleteVenueAsync(command);
+
+            //Assert
+            await act.Should().ThrowAsync<DatabaseOperationException>();
+        }
+
+        [Test]
+        public async Task DeleteVenueAsync_WhenVenueDeletedFromDatabase_ReturnVenueWithProperDomainEvent()
+        {
+            //Arrange
+            const double Coordinate = 100.0;
+
+            var command = new DeleteVenueCommand
+            {
+                VenueId = VenueId
+            };
+
+            var venuePersistenceModel = new VenuePersistenceModel
+            {
+                Location = new LocationPersistenceModel()
+            };
+
+            var venue = new StubVenue(VenueId, ImmutableList<Photo>.Empty);
+            venue.InitLocation(Coordinate, Coordinate);
+            venue.AddDomainEvent(new VenueDeletedEvent());
+
+            _unitOfWork.Setup(x => x.VenueRepository.FindVenueWithDetailsAsync(VenueId))
+                .ReturnsAsync(venuePersistenceModel);
+            _mapper.Setup(x => x.Map<API.Domain.Entities.Venue>(venuePersistenceModel))
+                .Returns(venue);
+            _unitOfWork.Setup(x => x.CompleteAsync())
+                .ReturnsAsync(true);
+
+            //Act
+            var result = await _venueService.DeleteVenueAsync(command);
+
+            //Assert
+            using (new AssertionScope())
+            {
+                result.Should().BeAssignableTo<API.Domain.Entities.Venue>();
+                result.Should().NotBeNull();
+                result.FirstStoredEvent.EventType.Should().Be(EventType.VENUE_DELETED);
             }
         }
 

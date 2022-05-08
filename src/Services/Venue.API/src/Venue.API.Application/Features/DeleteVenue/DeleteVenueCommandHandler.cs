@@ -13,16 +13,19 @@ namespace Venue.API.Application.Features.DeleteVenue
     {
         private readonly IVenueService _venueService;
         private readonly ITransactionManager _transactionManager;
+        private readonly IFileStorageDataService _fileStorageDataService;
         private readonly IEventSender _eventSender;
         private readonly ILogger _logger;
 
         public DeleteVenueCommandHandler(IVenueService venueService,
             ITransactionManager transactionManager,
+            IFileStorageDataService fileStorageDataService,
             IEventSender eventSender,
             ILogger logger)
         {
             _venueService = venueService;
             _transactionManager = transactionManager;
+            _fileStorageDataService = fileStorageDataService;
             _eventSender = eventSender;
             _logger = logger;
         }
@@ -34,6 +37,9 @@ namespace Venue.API.Application.Features.DeleteVenue
                 _logger.Trace("> Database transaction began");
 
                 var deletedVenue = await _venueService.DeleteVenueAsync(request);
+
+                await _fileStorageDataService.DeletePhotosFolderAsync(deletedVenue.VenueId);
+                _logger.Info($"Deleting photos for venue #{deletedVenue.VenueId} completed");
 
                 await _eventSender.SendEventAsync(EventBusTopics.Venue, deletedVenue.FirstStoredEvent,
                     cancellationToken);

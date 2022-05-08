@@ -11,7 +11,7 @@ namespace Venue.API.Domain.ValueObjects
             if (string.IsNullOrWhiteSpace(address))
                 throw new ValidationException($"{nameof(address)} cannot be null or empty");
 
-            if (address.Length > ValidationRules.MaxVenueNameLength)
+            if (address.Length > ValidationRules.MaxAddressLength)
                 throw new ValidationException($"{nameof(address)} cannot exceed {ValidationRules.MaxAddressLength} characters");
 
             Value = address;

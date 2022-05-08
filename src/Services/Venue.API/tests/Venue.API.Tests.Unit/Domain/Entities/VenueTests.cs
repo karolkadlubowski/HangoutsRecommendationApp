@@ -33,6 +33,7 @@ namespace Venue.API.Tests.Unit.Domain.Entities
                 venue.Description.Should().BeNull();
                 venue.CreatorId.Should().BeNull();
                 venue.Status.Should().Be(VenueStatus.Created);
+                venue.Location.Should().BeNull();
             }
         }
 
