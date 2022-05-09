@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\VenueReview.API.Domain\VenueReview.API.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Abstractions" />
+      <Folder Include="Database\Repositories" />
+      <Folder Include="Features" />
+      <Folder Include="Services" />
+    </ItemGroup>
+
+</Project>
