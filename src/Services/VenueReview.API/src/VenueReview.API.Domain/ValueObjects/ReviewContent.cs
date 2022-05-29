@@ -10,6 +10,8 @@ namespace VenueReview.API.Domain.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(content))
                 throw new ValidationException($"{nameof(content)} cannot be null or empty");
+            
+            Value = content;
         }
     }
 }

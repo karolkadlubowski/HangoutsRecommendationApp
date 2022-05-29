@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using VenueReview.API.Application.Database.PersistenceModels;
@@ -20,14 +22,30 @@ namespace VenueReview.API.Infrastructure.Database.Repositories
                 .ThenByDescending(v => v.CreatedOn)
                 .ToListAsync();
 
-        public Task<VenueReviewPersistenceModel> InsertVenueReviewAsync(Domain.Entities.VenueReview venueReview)
+        public async Task<VenueReviewPersistenceModel> InsertVenueReviewAsync(Domain.Entities.VenueReview venueReview)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var venueReviewPersistenceModel = new VenueReviewPersistenceModel
+                {
+                    VenueId = venueReview.VenueId,
+                    Content = venueReview.Content,
+                    CreatorId = venueReview.CreatorId,
+                    Rating = venueReview.Rating
+                };
+
+                await _collection.InsertOneAsync(venueReviewPersistenceModel);
+
+                return venueReviewPersistenceModel;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
-        public Task<bool> DeleteVenueReviewAsync(string venueReviewId)
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task<bool> DeleteVenueReviewAsync(string venueReviewId)
+            => (await _collection.DeleteOneAsync(v => v.VenueReviewId == venueReviewId))
+                .DeletedCount > 0;
     }
 }

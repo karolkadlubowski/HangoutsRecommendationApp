@@ -3,9 +3,14 @@ using System.Threading.Tasks;
 using Library.Shared.Logging;
 using VenueReview.API.Application.Database.Repositories;
 using AutoMapper;
+using Library.EventBus;
 using Library.Shared.Exceptions;
+using Library.Shared.Models.VenueReview.Events;
+using Library.Shared.Models.VenueReview.Events.DataModels;
 using VenueReview.API.Application.Abstractions;
+using VenueReview.API.Application.Database.PersistenceModels;
 using VenueReview.API.Application.Features;
+using VenueReview.API.Application.Features.AddVenueReview;
 
 namespace VenueReview.API.Application.Services
 {
@@ -29,13 +34,39 @@ namespace VenueReview.API.Application.Services
         public async Task<IReadOnlyList<Domain.Entities.VenueReview>> GetVenueReviewsAsync(GetVenueReviewsQuery query)
         {
             var venueReviewsPersistenceModel = await _venueReviewRepository.GetVenueReviewsAsync(query.VenueId)
-                                              ?? throw new EntityNotFoundException($"VenueReviews with id:  '{query.VenueId} not found in the database");
+                                               ?? throw new EntityNotFoundException($"VenueReviews with id:  '{query.VenueId} not found in the database");
 
             var venueReviews = _mapper.Map<IReadOnlyList<Domain.Entities.VenueReview>>(venueReviewsPersistenceModel);
-            
+
             _logger.Info($"{venueReviews.Count} venueReviews read from the database");
 
             return venueReviews;
+        }
+
+        public async Task<Domain.Entities.VenueReview> AddVenueReviewAsync(AddVenueReviewCommand command)
+        {
+            var venueReview = Domain.Entities.VenueReview.Create(command.VenueId, command.Content, command.CreatorId, command.Rating);
+
+            var venueReviewPersistenceModel = await _venueReviewRepository.InsertVenueReviewAsync(venueReview)
+                                              ?? throw new DatabaseOperationException($"Inserting venue review with VenueId '{venueReview.VenueId}' to the database failed");
+
+            venueReview = _mapper.Map<VenueReviewPersistenceModel, Domain.Entities.VenueReview>(venueReviewPersistenceModel);
+
+            _logger.Info($"Venue review with rating '{venueReview.Rating}' added to the database successfully");
+
+            venueReview.AddDomainEvent(EventFactory<VenueReviewAddedEvent>.CreateEvent(venueReview.VenueReviewId,
+                new VenueReviewAddedEventDataModel
+                {
+                    VenueReviewId = venueReview.VenueReviewId,
+                    VenueId = venueReview.VenueId,
+                    Content = venueReview.Content,
+                    CreatorId = venueReview.CreatorId,
+                    Rating = venueReview.Rating,
+                    CreatedOn = venueReview.CreatedOn,
+                    ModifiedOn = venueReview.ModifiedOn
+                }));
+
+            return venueReview;
         }
     }
 }

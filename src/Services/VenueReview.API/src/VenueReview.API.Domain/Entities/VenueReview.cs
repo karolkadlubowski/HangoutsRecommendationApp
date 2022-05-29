@@ -11,10 +11,12 @@ namespace VenueReview.API.Domain.Entities
         public long CreatorId { get; protected set; }
         public double Rating { get; protected set; }
 
-        public static VenueReview Create(string content, double rating)
+        public static VenueReview Create(long venueId, string content, long creatorId, double rating)
             => new VenueReview
             {
+                VenueId = venueId,
                 Content = new ReviewContent(content),
+                CreatorId = creatorId,
                 Rating = new ReviewRating(rating)
             };
     }

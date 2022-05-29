@@ -6,6 +6,7 @@ using Library.Shared.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VenueReview.API.Application.Features;
+using VenueReview.API.Application.Features.AddVenueReview;
 
 namespace VenueReview.API.Controllers
 {
@@ -40,5 +41,27 @@ namespace VenueReview.API.Controllers
             return this.CreateResponse(response);
         }
         
+        /// <summary>
+        /// Add VenueReview to the database
+        /// </summary>
+        /// <param name="command">
+        /// VenueId - have to be long
+        /// Content - have to be string
+        /// CreatorId - have to be long
+        /// Rataing - have to be double between 0 - 5
+        /// </param>
+        [HttpPost]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int)HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int)HttpStatusCode.Conflict)]
+        public async Task<IActionResult> AddVenueReview(AddVenueReviewCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(AddVenueReviewCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
+        }
     }
 }
