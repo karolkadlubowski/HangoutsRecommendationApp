@@ -5,18 +5,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VenueReview.API.Application\VenueReview.API.Application.csproj" />
-      <ProjectReference Include="..\VenueReview.API.Domain\VenueReview.API.Domain.csproj" />
+        <ProjectReference Include="..\VenueReview.API.Application\VenueReview.API.Application.csproj" />
+        <ProjectReference Include="..\VenueReview.API.Domain\VenueReview.API.Domain.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Database\Repositories" />
-      <Folder Include="Events\Consumers" />
-      <Folder Include="Events\Producers" />
-      <Folder Include="HttpClients\Abstractions" />
-      <Folder Include="HttpClients\Models\Factories" />
-      <Folder Include="HttpClients\Models\Requests" />
-      <Folder Include="HttpClients\Models\Responses" />
+        <Folder Include="Events\Consumers" />
+        <Folder Include="Events\Producers" />
+        <Folder Include="HttpClients\Abstractions" />
+        <Folder Include="HttpClients\Models\Factories" />
+        <Folder Include="HttpClients\Models\Requests" />
+        <Folder Include="HttpClients\Models\Responses" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
     </ItemGroup>
 
 </Project>

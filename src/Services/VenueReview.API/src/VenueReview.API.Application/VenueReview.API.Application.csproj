@@ -5,14 +5,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VenueReview.API.Domain\VenueReview.API.Domain.csproj" />
+        <ProjectReference Include="..\VenueReview.API.Domain\VenueReview.API.Domain.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\Library.Shared.Models\Library.Shared.Models.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Abstractions" />
-      <Folder Include="Database\Repositories" />
-      <Folder Include="Features" />
-      <Folder Include="Services" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="MongoDB.Bson" Version="2.15.1" />
     </ItemGroup>
 
 </Project>

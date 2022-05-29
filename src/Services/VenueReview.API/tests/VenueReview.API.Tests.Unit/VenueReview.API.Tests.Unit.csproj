@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="6.6.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
         <PackageReference Include="Moq" Version="4.17.2" />
         <PackageReference Include="NUnit" Version="3.13.1" />
@@ -21,8 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application" />
-      <Folder Include="Domain" />
       <Folder Include="Utilities\Builders" />
       <Folder Include="Utilities\Factories" />
     </ItemGroup>
