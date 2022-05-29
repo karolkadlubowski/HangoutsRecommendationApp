@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VenueReview.API.Application.Features;
 using VenueReview.API.Application.Features.AddVenueReview;
+using VenueReview.API.Application.Features.DeleteVenueReview;
 
 namespace VenueReview.API.Controllers
 {
@@ -40,7 +41,7 @@ namespace VenueReview.API.Controllers
 
             return this.CreateResponse(response);
         }
-        
+
         /// <summary>
         /// Add VenueReview to the database
         /// </summary>
@@ -51,13 +52,33 @@ namespace VenueReview.API.Controllers
         /// Rataing - have to be double between 0 - 5
         /// </param>
         [HttpPost]
-        [ProducesResponseType(typeof(AddVenueReviewResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(AddVenueReviewResponse), (int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(AddVenueReviewResponse), (int)HttpStatusCode.UnprocessableEntity)]
-        [ProducesResponseType(typeof(AddVenueReviewResponse), (int)HttpStatusCode.Conflict)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.Conflict)]
         public async Task<IActionResult> AddVenueReview(AddVenueReviewCommand command)
         {
             _logger.Info($"Sending command: {nameof(AddVenueReviewCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
+        }
+
+        /// <summary>
+        /// Delete VenueReview from the database
+        /// </summary>
+        /// <param name="command">
+        /// VenueReviewId - cannot be null or empty
+        /// </param>
+        [HttpDelete]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.NotFound)]
+        public async Task<IActionResult> DeleteVenueReview([FromQuery] DeleteVenueReviewCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(DeleteVenueReviewCommand)}");
 
             var response = await _mediator.Send(command);
 

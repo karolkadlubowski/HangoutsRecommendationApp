@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Library.Shared.Logging;
 using VenueReview.API.Application.Database.Repositories;
@@ -11,6 +12,7 @@ using VenueReview.API.Application.Abstractions;
 using VenueReview.API.Application.Database.PersistenceModels;
 using VenueReview.API.Application.Features;
 using VenueReview.API.Application.Features.AddVenueReview;
+using VenueReview.API.Application.Features.DeleteVenueReview;
 
 namespace VenueReview.API.Application.Services
 {
@@ -67,6 +69,23 @@ namespace VenueReview.API.Application.Services
                 }));
 
             return venueReview;
+        }
+
+        public async Task<string> DeleteVenueReviewAsync(DeleteVenueReviewCommand command)
+        {
+            try
+            {
+                if (!await _venueReviewRepository.DeleteVenueReviewAsync(command.VenueReviewId))
+                    throw new EntityNotFoundException($"Venue review #{command.VenueReviewId} was not deleted from the database because it was not found");
+
+                _logger.Info($"Venue review #{command.VenueReviewId} deleted from the database successfully");
+
+                return command.VenueReviewId;
+            }
+            catch (Exception e) when (e is not EntityNotFoundException)
+            {
+                throw new DatabaseOperationException($"Deleting VenueReview #{command.VenueReviewId} from the database failed. Exception: {e.Message}");
+            }
         }
     }
 }

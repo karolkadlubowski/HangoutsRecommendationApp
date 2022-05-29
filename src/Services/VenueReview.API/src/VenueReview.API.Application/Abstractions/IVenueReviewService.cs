@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VenueReview.API.Application.Features.AddVenueReview;
+using VenueReview.API.Application.Features.DeleteVenueReview;
 
 namespace VenueReview.API.Application.Abstractions
 {
@@ -9,6 +10,6 @@ namespace VenueReview.API.Application.Abstractions
     {
         Task<Domain.Entities.VenueReview> AddVenueReviewAsync(AddVenueReviewCommand command);
 
-        //Task<String> DeleteVenueReviewAsync(DeleteVenueReviewCommand command);
+        Task<String> DeleteVenueReviewAsync(DeleteVenueReviewCommand command);
     }
 }
