@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Identity.API.Application\Identity.API.Application.csproj" />
+      <ProjectReference Include="..\Identity.API.Domain\Identity.API.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Database\Repositories" />
+      <Folder Include="Events\Consumers" />
+      <Folder Include="Events\Producers" />
+      <Folder Include="HttpClients\Abstractions" />
+      <Folder Include="HttpClients\Models\Factories" />
+      <Folder Include="HttpClients\Models\Requests" />
+      <Folder Include="HttpClients\Models\Responses" />
+    </ItemGroup>
+
+</Project>
