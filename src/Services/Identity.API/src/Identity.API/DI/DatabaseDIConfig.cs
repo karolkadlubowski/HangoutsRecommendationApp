@@ -1,5 +1,7 @@
-﻿using Identity.API.Domain.Configuration;
+﻿using Identity.API.Application.Database.Repositories;
+using Identity.API.Domain.Configuration;
 using Identity.API.Infrastructure.Database;
+using Identity.API.Infrastructure.Database.Repositories;
 using Library.Shared.AppConfigs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,6 @@ namespace Identity.API.DI
                 .AddSingleton(s => s.GetRequiredService<IOptions<DatabaseConfig>>().Value);
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
-            => services;
+            => services.AddScoped<IIdentityRepository, IdentityRepository>();
     }
 }

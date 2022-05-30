@@ -10,7 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Database\Repositories" />
       <Folder Include="Events\Consumers" />
       <Folder Include="Events\Producers" />
       <Folder Include="HttpClients\Abstractions" />

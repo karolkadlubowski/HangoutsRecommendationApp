@@ -31,6 +31,12 @@ namespace Identity.API
                 Configuration,
                 "Identity.API.Application");
 
+            services.AddIdentityDbContext(Configuration);
+            _logger.Trace("> Identity database context registered");
+
+            services.AddRepositories();
+            _logger.Trace("> Database repositories registered");
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
