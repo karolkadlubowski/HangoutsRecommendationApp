@@ -73,3 +73,13 @@ services:
       - 6050:27017
     volumes:
       - ./src/Services/FileStorage.API/_Scripts/Database:/docker-entrypoint-initdb.d:ro
+
+  graph.database:
+    container_name: graph.database
+    image: neo4j
+    restart: always
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./data:/data
