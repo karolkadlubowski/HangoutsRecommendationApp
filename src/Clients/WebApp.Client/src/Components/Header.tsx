@@ -32,6 +32,12 @@ export default function Navbar() {
                 >
                   Find your place
                 </Link>
+                <Link
+                  to="/create-place"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Create Place
+                </Link>
 
                 <Link
                   to="/profile"
