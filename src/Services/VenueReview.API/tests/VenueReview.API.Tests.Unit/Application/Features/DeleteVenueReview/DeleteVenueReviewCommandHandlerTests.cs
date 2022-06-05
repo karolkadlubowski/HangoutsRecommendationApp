@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Library.EventBus;
 using Library.Shared.Events.Abstractions;
 using Library.Shared.Models.VenueReview.Events;
@@ -64,10 +65,13 @@ namespace VenueReview.API.Tests.Unit.Application.Features.DeleteVenueReview
             await _deleteVenueReviewCommandHandler.Handle(command, default);
 
             //Assert
-            _venueReviewService.Verify(x => x.DeleteVenueReviewAsync(command), Times.Once);
-            _eventSender.Verify(x => x.SendEventAsync(EventBusTopics.VenueReview,
-                It.IsNotNull<VenueReviewDeletedEvent>(),
-                default), Times.Once);
+            using (new AssertionScope())
+            {
+                _venueReviewService.Verify(x => x.DeleteVenueReviewAsync(command), Times.Once);
+                _eventSender.Verify(x => x.SendEventAsync(EventBusTopics.VenueReview,
+                    It.IsNotNull<VenueReviewDeletedEvent>(),
+                    default), Times.Once);
+            }
         }
     }
 }

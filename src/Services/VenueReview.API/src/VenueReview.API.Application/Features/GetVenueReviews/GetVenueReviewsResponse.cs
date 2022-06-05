@@ -11,7 +11,6 @@ namespace VenueReview.API.Application.Features
 
         public GetVenueReviewsResponse(Error error = null) : base(error)
         {
-            
         }
     }
 }

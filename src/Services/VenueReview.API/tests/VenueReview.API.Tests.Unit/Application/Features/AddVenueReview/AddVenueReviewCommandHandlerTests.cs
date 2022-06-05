@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Library.EventBus;
 using Library.Shared.Events.Abstractions;
 using Library.Shared.Models.VenueReview.Dtos;
@@ -24,7 +25,7 @@ namespace VenueReview.API.Tests.Unit.Application.Features.AddVenueReview
         private const long VenueId = 1;
         private const string VenueReviewContent = "CONTENT";
         private const long CreatorId = 2;
-        private const double Rating = 1.11;
+        private const double Rating = 2.5;
 
         [SetUp]
         public void SetUp()
@@ -100,11 +101,14 @@ namespace VenueReview.API.Tests.Unit.Application.Features.AddVenueReview
             await _addVenueReviewCommandHandler.Handle(command, default);
 
             //Assert
-            _venueReviewService.Verify(x => x.AddVenueReviewAsync(command), Times.Once);
-            _eventSender.Verify(x => x.SendEventAsync(EventBusTopics.VenueReview,
-                venueReview.FirstStoredEvent,
-                default), Times.Once);
-            _mapper.Verify(x => x.Map<VenueReviewDto>(venueReview), Times.Once);
+            using (new AssertionScope())
+            {
+                _venueReviewService.Verify(x => x.AddVenueReviewAsync(command), Times.Once);
+                _eventSender.Verify(x => x.SendEventAsync(EventBusTopics.VenueReview,
+                    venueReview.FirstStoredEvent,
+                    default), Times.Once);
+                _mapper.Verify(x => x.Map<VenueReviewDto>(venueReview), Times.Once);
+            }
         }
     }
 }

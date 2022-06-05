@@ -20,10 +20,5 @@
       <ProjectReference Include="..\..\src\VenueReview.API.Domain\VenueReview.API.Domain.csproj" />
       <ProjectReference Include="..\..\src\VenueReview.API.Infrastructure\VenueReview.API.Infrastructure.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Utilities\Builders" />
-      <Folder Include="Utilities\Factories" />
-    </ItemGroup>
-
+    
 </Project>

@@ -22,8 +22,7 @@ namespace VenueReview.API.Application.Services
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public VenueReviewService(
-            IVenueReviewRepository venueReviewRepository,
+        public VenueReviewService(IVenueReviewRepository venueReviewRepository,
             IMapper mapper,
             ILogger logger
         )

@@ -25,7 +25,7 @@ namespace VenueReview.API.Tests.Unit.Application.Services
         private const long VenueId = 1;
         private const string VenueReviewContent = "CONTENT";
         private const long CreatorId = 2;
-        private const double Rating = 1.11;
+        private const double Rating = 2.5;
 
         private AddVenueReviewCommand _addVenueReviewCommand;
         private DeleteVenueReviewCommand _deleteVenueReviewCommand;

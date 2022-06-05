@@ -23,7 +23,7 @@ namespace VenueReview.API.Application.Handlers.DeleteReviewsFromVenue
 
             _logger.Info($"All venue reviews were successfully deleted for venue with id #{request.VenueId}");
 
-            return new DeleteVenuesFromVenueResponse() {VenueId = request.VenueId};
+            return new DeleteVenuesFromVenueResponse {VenueId = request.VenueId};
         }
     }
 }
