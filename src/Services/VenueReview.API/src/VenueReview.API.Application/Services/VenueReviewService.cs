@@ -49,6 +49,9 @@ namespace VenueReview.API.Application.Services
         {
             var venueReview = Domain.Entities.VenueReview.Create(command.VenueId, command.Content, command.CreatorId, command.Rating);
 
+            if (await _venueReviewRepository.AnyVenueReviewExistAsync(command.CreatorId, command.VenueId))
+                throw new DuplicateExistsException($"Review created by user with id '{venueReview.CreatorId}' for place with id '{venueReview.VenueId}' already exists in the database");
+
             var venueReviewPersistenceModel = await _venueReviewRepository.InsertVenueReviewAsync(venueReview)
                                               ?? throw new DatabaseOperationException($"Inserting venue review with VenueId '{venueReview.VenueId}' to the database failed");
 

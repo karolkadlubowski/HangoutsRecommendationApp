@@ -11,5 +11,9 @@ namespace VenueReview.API.Application.Database.Repositories
         Task<VenueReviewPersistenceModel> InsertVenueReviewAsync(Domain.Entities.VenueReview venueReview);
         
         Task<bool> DeleteVenueReviewAsync(string venueReviewId);
+        
+        Task<bool> DeleteVenueReviewsByVenueIdAsync(long venueId);
+        
+        Task<bool> AnyVenueReviewExistAsync(long creatorId, long venueId);
     }
 }

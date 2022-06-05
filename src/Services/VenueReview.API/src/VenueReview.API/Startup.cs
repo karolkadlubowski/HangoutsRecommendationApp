@@ -1,3 +1,4 @@
+using System.Reflection;
 using Category.API.HealthChecks;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using NLog;
 using VenueReview.API.Application.Mapper;
 using VenueReview.API.DI;
+using VenueReview.API.Infrastructure.HostedService;
 using IConfigurationProvider = VenueReview.API.Application.Providers.IConfigurationProvider;
 
 namespace VenueReview.API
@@ -35,14 +37,13 @@ namespace VenueReview.API
 
             services.AddVenueReviewDbContext(Configuration);
             _logger.Trace("> VenueReview database context registered");
-            
+
             services.AddRepositories();
             _logger.Trace("> Database repositories registered");
-            
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
-            
             services
                 .AddHealthChecks()
                 .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
@@ -50,13 +51,19 @@ namespace VenueReview.API
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
-            
-            services.AddKafkaMessageBroker(Configuration);
+
+            services
+                .AddKafkaMessageBroker(Configuration)
+                .AddEventHandlersStrategies(Assembly.Load("VenueReview.API.Application"));
             _logger.Trace("> Kafka message broker registered");
+
+            services
+                .AddHostedService<EventConsumerHostedService>();
+            _logger.Trace("> Hosted services registered");
 
             services.AddHealthChecks();
             _logger.Trace("> Health checks registered");
-            
+
             services.AddAutoMapper(typeof(MapperProfile));
             _logger.Trace("> AutoMapper profile registered");
 
