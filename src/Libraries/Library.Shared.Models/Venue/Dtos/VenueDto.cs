@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Library.Shared.Models.FileStorage.Dtos;
 using Library.Shared.Models.Venue.Enums;
 
@@ -12,6 +13,8 @@ namespace Library.Shared.Models.Venue.Dtos
         public string CategoryId { get; init; }
         public long? CreatorId { get; init; }
         public VenueStatus Status { get; init; }
+        public DateTime CreatedOn { get; init; }
+        public DateTime? ModifiedOn { get; init; }
 
         public LocationDto Location { get; init; }
 

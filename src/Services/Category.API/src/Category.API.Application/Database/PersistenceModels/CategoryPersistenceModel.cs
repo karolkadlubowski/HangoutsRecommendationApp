@@ -10,8 +10,8 @@ namespace Category.API.Application.Database.PersistenceModels
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string CategoryId { get; init; }
+        public string CategoryId { get; set; }
 
-        public string Name { get; init; }
+        public string Name { get; set; }
     }
 }
