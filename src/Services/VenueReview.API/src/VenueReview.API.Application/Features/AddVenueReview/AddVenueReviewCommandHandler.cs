@@ -16,7 +16,8 @@ namespace VenueReview.API.Application.Features.AddVenueReview
         private readonly IEventSender _eventSender;
         private readonly IMapper _mapper;
 
-        public AddVenueReviewCommandHandler(IVenueReviewService venueReviewService, IEventSender eventSender,
+        public AddVenueReviewCommandHandler(IVenueReviewService venueReviewService,
+            IEventSender eventSender,
             IMapper mapper
         )
         {

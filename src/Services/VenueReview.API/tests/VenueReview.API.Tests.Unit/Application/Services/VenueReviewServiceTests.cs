@@ -53,7 +53,7 @@ namespace VenueReview.API.Tests.Unit.Application.Services
         public async Task AddVenueReviewAsync_WhenVenueReviewCreatedByCertainUserAlreadyExistsInDatabase_ThrowDuplicateExistsException()
         {
             //Arrange
-            _venueReviewRepository.Setup(x => x.AnyVenueReviewExistAsync(CreatorId, VenueId))
+            _venueReviewRepository.Setup(x => x.AnyVenueReviewExistsAsync(CreatorId, VenueId))
                 .ReturnsAsync(true);
 
             //Act
@@ -67,7 +67,7 @@ namespace VenueReview.API.Tests.Unit.Application.Services
         public async Task AddVenueReviewAsync_WhenInsertingCategoryToDatabaseFailed_ThrowDatabaseOperationException()
         {
             //Arrange
-            _venueReviewRepository.Setup(x => x.AnyVenueReviewExistAsync(CreatorId, VenueId))
+            _venueReviewRepository.Setup(x => x.AnyVenueReviewExistsAsync(CreatorId, VenueId))
                 .ReturnsAsync(false);
             _venueReviewRepository.Setup(x => x.InsertVenueReviewAsync(It.IsAny<API.Domain.Entities.VenueReview>()))
                 .ReturnsAsync(() => null);
@@ -104,7 +104,7 @@ namespace VenueReview.API.Tests.Unit.Application.Services
                 venueReviewPersistenceModel.CreatedOn
             );
 
-            _venueReviewRepository.Setup(x => x.AnyVenueReviewExistAsync(CreatorId, VenueId))
+            _venueReviewRepository.Setup(x => x.AnyVenueReviewExistsAsync(CreatorId, VenueId))
                 .ReturnsAsync(false);
 
             _venueReviewRepository.Setup(x => x.InsertVenueReviewAsync(It.IsAny<API.Domain.Entities.VenueReview>()))

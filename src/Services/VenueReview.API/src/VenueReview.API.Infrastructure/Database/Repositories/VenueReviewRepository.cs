@@ -53,7 +53,7 @@ namespace VenueReview.API.Infrastructure.Database.Repositories
             => (await _collection.DeleteManyAsync(v => v.VenueId == venueId))
                 .DeletedCount > 0;
 
-        public async Task<bool> AnyVenueReviewExistAsync(long creatorId, long venueId)
+        public async Task<bool> AnyVenueReviewExistsAsync(long creatorId, long venueId)
             => (await _collection.AsQueryable()
                 .AnyAsync(v => v.VenueId == venueId && v.CreatorId == creatorId));
     }

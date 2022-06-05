@@ -12,7 +12,7 @@ using VenueReview.API.Application.Features.DeleteVenueReview;
 namespace VenueReview.API.Controllers
 {
     /// <summary>
-    /// Controller which provides Folder CRUD functionality
+    /// Controller which provides VenueReview CRUD functionality
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -23,11 +23,8 @@ namespace VenueReview.API.Controllers
         }
 
         /// <summary>
-        /// Return venue reviews from the database, find by the venue Id
+        /// Return venue reviews from the database, find by the venueId
         /// </summary>
-        /// <param name="query">
-        /// Id - cannot be null or empty
-        /// </param>
         [HttpGet]
         [ProducesResponseType(typeof(GetVenueReviewsQuery), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(GetVenueReviewsQuery), (int) HttpStatusCode.InternalServerError)]
@@ -46,10 +43,7 @@ namespace VenueReview.API.Controllers
         /// Add VenueReview to the database
         /// </summary>
         /// <param name="command">
-        /// VenueId - have to be long
-        /// Content - have to be string
-        /// CreatorId - have to be long
-        /// Rataing - have to be double between 0 - 5
+        /// Rating - must have value between 0 and 5
         /// </param>
         [HttpPost]
         [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.OK)]
@@ -68,9 +62,6 @@ namespace VenueReview.API.Controllers
         /// <summary>
         /// Delete VenueReview from the database
         /// </summary>
-        /// <param name="command">
-        /// VenueReviewId - cannot be null or empty
-        /// </param>
         [HttpDelete]
         [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.OK)]
         [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.InternalServerError)]

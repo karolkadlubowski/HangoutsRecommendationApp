@@ -39,7 +39,7 @@ namespace VenueReview.API.Application.Services
 
             var venueReviews = _mapper.Map<IReadOnlyList<Domain.Entities.VenueReview>>(venueReviewsPersistenceModel);
 
-            _logger.Info($"{venueReviews.Count} venueReviews read from the database");
+            _logger.Info($"{venueReviews.Count} reviews for venue #{query.VenueId} read from the database");
 
             return venueReviews;
         }
@@ -48,15 +48,15 @@ namespace VenueReview.API.Application.Services
         {
             var venueReview = Domain.Entities.VenueReview.Create(command.VenueId, command.Content, command.CreatorId, command.Rating);
 
-            if (await _venueReviewRepository.AnyVenueReviewExistAsync(command.CreatorId, command.VenueId))
-                throw new DuplicateExistsException($"Review created by user with id '{venueReview.CreatorId}' for place with id '{venueReview.VenueId}' already exists in the database");
+            if (await _venueReviewRepository.AnyVenueReviewExistsAsync(command.CreatorId, command.VenueId))
+                throw new DuplicateExistsException($"Review created by user #{venueReview.CreatorId} for venue #{venueReview.VenueId} already exists in the database");
 
             var venueReviewPersistenceModel = await _venueReviewRepository.InsertVenueReviewAsync(venueReview)
-                                              ?? throw new DatabaseOperationException($"Inserting venue review with VenueId '{venueReview.VenueId}' to the database failed");
+                                              ?? throw new DatabaseOperationException($"Inserting venue review for venue #{venueReview.VenueId} to the database failed");
 
             venueReview = _mapper.Map<VenueReviewPersistenceModel, Domain.Entities.VenueReview>(venueReviewPersistenceModel);
 
-            _logger.Info($"Venue review with rating '{venueReview.Rating}' added to the database successfully");
+            _logger.Info($"Venue review for venue #{venueReview.VenueId} added to the database successfully");
 
             venueReview.AddDomainEvent(EventFactory<VenueReviewAddedEvent>.CreateEvent(venueReview.VenueReviewId,
                 new VenueReviewAddedEventDataModel
@@ -86,8 +86,7 @@ namespace VenueReview.API.Application.Services
             }
             catch (Exception e) when (e is not EntityNotFoundException)
             {
-                throw new DatabaseOperationException($"Deleting VenueReview #{command.VenueReviewId} from the database failed. Exception: {e.Message}");
-            }
+                throw new DatabaseOperationException($"Deleting venue review #{command.VenueReviewId} from the database failed. Exception: {e.Message}");            }
         }
     }
 }

@@ -14,6 +14,6 @@ namespace VenueReview.API.Application.Database.Repositories
         
         Task<bool> DeleteVenueReviewsByVenueIdAsync(long venueId);
         
-        Task<bool> AnyVenueReviewExistAsync(long creatorId, long venueId);
+        Task<bool> AnyVenueReviewExistsAsync(long creatorId, long venueId);
     }
 }

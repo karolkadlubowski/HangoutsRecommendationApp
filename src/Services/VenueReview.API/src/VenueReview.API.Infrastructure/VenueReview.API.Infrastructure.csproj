@@ -9,16 +9,7 @@
         <ProjectReference Include="..\VenueReview.API.Domain\VenueReview.API.Domain.csproj" />
         <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Events\Consumers" />
-        <Folder Include="Events\Producers" />
-        <Folder Include="HttpClients\Abstractions" />
-        <Folder Include="HttpClients\Models\Factories" />
-        <Folder Include="HttpClients\Models\Requests" />
-        <Folder Include="HttpClients\Models\Responses" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
     </ItemGroup>

@@ -9,7 +9,7 @@ namespace VenueReview.API.Domain.ValueObjects
         public ReviewRating(double rating)
         {
             if (rating < ValidationRules.MinRating || rating > ValidationRules.MaxRating)
-                throw new ValidationException($"{nameof(rating)} have to include in {ValidationRules.MinRating} - {ValidationRules.MaxRating} range");
+                throw new ValidationException($"{nameof(rating)} must have value between {ValidationRules.MinRating} and {ValidationRules.MaxRating}");
 
             Value = rating;
         }
