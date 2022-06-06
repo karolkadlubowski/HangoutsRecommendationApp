@@ -1,3 +1,4 @@
+using Identity.API.Application.Mapper;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +49,9 @@ namespace Identity.API
 
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");
+            
+            services.AddAutoMapper(typeof(MapperProfile));
+            _logger.Trace("> AutoMapper profile registered");
 
             _logger.Info("Application registered successfully");
         }
