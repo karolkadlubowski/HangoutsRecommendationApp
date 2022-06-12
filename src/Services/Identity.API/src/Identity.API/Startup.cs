@@ -1,3 +1,4 @@
+using System.Reflection;
 using Identity.API.Application.Mapper;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
@@ -37,6 +38,9 @@ namespace Identity.API
 
             services.AddRepositories();
             _logger.Trace("> Database repositories registered");
+
+            services.AddKafkaMessageBroker(Configuration);
+            _logger.Trace("> Kafka message broker registered");
 
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
