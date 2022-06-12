@@ -22,5 +22,8 @@ namespace Identity.API.Domain.Entities
             PasswordSalt = passwordSalt;
             PasswordHash = passwordHash;
         }
+
+        public void SetEmail(string email)
+            => Email = new UserEmail(email);
     }
 }
