@@ -13,20 +13,20 @@ namespace Identity.API.Application.Features.SignupUser
 {
     public class SignupUserCommandHandler : IRequestHandler<SignupUserCommand, SignupUserResponse>
     {
-        private readonly ILogger _logger;
         private readonly IIdentityRepository _identityRepository;
         private readonly IPasswordHashService _passwordHashService;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public SignupUserCommandHandler(ILogger logger,
-            IIdentityRepository identityRepository,
+        public SignupUserCommandHandler(IIdentityRepository identityRepository,
             IPasswordHashService passwordHashService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger logger)
         {
-            _logger = logger;
             _identityRepository = identityRepository;
             _passwordHashService = passwordHashService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<SignupUserResponse> Handle(SignupUserCommand request, CancellationToken cancellationToken)
@@ -41,9 +41,12 @@ namespace Identity.API.Application.Features.SignupUser
 
             var userPersistanceModel = _mapper.Map<UserPersistenceModel>(user);
 
-            return await _identityRepository.AddUserAsync(userPersistanceModel)
-                ? new SignupUserResponse()
-                : throw new DatabaseOperationException($"Adding new user with email '{request.Email}' to database failed");
+            if (!await _identityRepository.AddUserAsync(userPersistanceModel))
+                throw new DatabaseOperationException($"Adding new user with email '{request.Email}' to database failed");
+
+            _logger.Info($"User with email '{user.Email}' created");
+
+            return new SignupUserResponse();
         }
     }
 }

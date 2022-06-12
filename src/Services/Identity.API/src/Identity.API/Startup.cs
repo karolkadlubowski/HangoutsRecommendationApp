@@ -49,7 +49,7 @@ namespace Identity.API
 
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");
-            
+
             services.AddAutoMapper(typeof(MapperProfile));
             _logger.Trace("> AutoMapper profile registered");
 
@@ -68,6 +68,7 @@ namespace Identity.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseLoggingRequestScope();
