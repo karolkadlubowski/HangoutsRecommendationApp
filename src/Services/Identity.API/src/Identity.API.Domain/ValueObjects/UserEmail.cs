@@ -11,7 +11,7 @@ namespace Identity.API.Domain.ValueObjects
     {
         public UserEmail(string email)
             => Value = email != null && new EmailAddressAttribute().IsValid(email)
-                ? email.Length > ValidationRules.MaxEmailAddress
+                ? email.Length < ValidationRules.MaxEmailAddress
                     ? email
                     : throw new ValidationException($"{nameof(email)} cannot exceed {ValidationRules.MaxEmailAddress} characters")
                 : throw new ValidationException($"{nameof(email)} is not valid");
