@@ -14,6 +14,9 @@ namespace Identity.API.Infrastructure.Database.Repositories
             _identityDbContext = identityDbContext;
         }
 
+        public async Task<UserPersistenceModel> FindUserAsync(string email)
+            => await _identityDbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+
         public async Task<bool> AddUserAsync(UserPersistenceModel user)
         {
             await _identityDbContext.Users.AddAsync(user);
