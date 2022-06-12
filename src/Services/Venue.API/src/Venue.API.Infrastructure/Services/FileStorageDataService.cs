@@ -85,19 +85,26 @@ namespace Venue.API.Infrastructure.Services
 
         public async Task DeletePhotosFolderAsync(long venueId)
         {
-            _logger.Info($">> Sending request to the FileStorage API: '{_restClientConfig.BaseApiUrl}'. Request: {nameof(DeleteFolderRequest)}");
-
-            var response = await _restClient.ExecuteAsync<DeleteFolderResponse>(RestRequestAbstractFactory.DeleteFolderRequest(new DeleteFolderRequest
+            try
             {
-                FolderKey = new PhotosFolderKey(venueId)
-            }));
+                _logger.Info($">> Sending request to the FileStorage API: '{_restClientConfig.BaseApiUrl}'. Request: {nameof(DeleteFolderRequest)}");
 
-            _logger.Trace($"Response {nameof(DeleteFolderResponse)} from the FileStorage API: {response.Content}");
+                var response = await _restClient.ExecuteAsync<DeleteFolderResponse>(RestRequestAbstractFactory.DeleteFolderRequest(new DeleteFolderRequest
+                {
+                    FolderKey = new PhotosFolderKey(venueId)
+                }));
 
-            var deleteFolderResponse = response.Content?.FromJSON<DeleteFolderResponse>(JsonOptions.JsonSerializerOptions);
+                _logger.Trace($"Response {nameof(DeleteFolderResponse)} from the FileStorage API: {response.Content}");
 
-            if (deleteFolderResponse is not null && deleteFolderResponse.IsSucceeded)
-                _logger.Info("Operation rollback completed. Photos deleted from the storage");
+                var deleteFolderResponse = response.Content?.FromJSON<DeleteFolderResponse>(JsonOptions.JsonSerializerOptions);
+
+                if (deleteFolderResponse is not null && deleteFolderResponse.IsSucceeded)
+                    _logger.Info("Operation rollback completed. Photos deleted from the storage");
+            }
+            catch (Exception e)
+            {
+                _logger.Warning($"Photos for venue #{venueId} cannot be deleted due to: {e.Message}");
+            }
         }
 
         private async Task UploadPhotoAsync(IFormFile photo, long venueId, List<FileDto> uploadedFiles)
