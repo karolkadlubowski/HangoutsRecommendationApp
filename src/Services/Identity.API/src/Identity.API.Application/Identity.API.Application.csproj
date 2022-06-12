@@ -6,7 +6,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj"/>
-        <ProjectReference Include="..\..\..\..\Libraries\Library.Shared.Models\Library.Shared.Models.csproj"/>
         <ProjectReference Include="..\Identity.API.Domain\Identity.API.Domain.csproj"/>
     </ItemGroup>
 
