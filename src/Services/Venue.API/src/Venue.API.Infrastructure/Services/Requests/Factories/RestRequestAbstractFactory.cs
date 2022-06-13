@@ -14,7 +14,7 @@ namespace Venue.API.Infrastructure.Services.Requests.Factories
                 .AddQueryParameter(nameof(request.FolderKey), request.FolderKey);
 
         public static IRestRequest PutFileRequest(PutFileRequest request)
-            => new RestRequest(Method.PUT)
+            => new RestRequest(request.Endpoint, Method.PUT)
                 .AddParameter(nameof(request.FolderKey), request.FolderKey)
                 .AddFile(nameof(request.File), writer: s =>
                 {
