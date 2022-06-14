@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import Header from '../Header';
 
 export function CreatePlace() {
-    const [files, setFiles] = useState<any>('');
+    const [files, setFiles] = useState<Blob | null>(null);
 
     const createVenue = (
         VenueName: string,
@@ -33,10 +33,10 @@ export function CreatePlace() {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
             .then(function (response) {
-                console.log('success', response, bodyFormData);
+                console.log('success', response);
             })
             .catch(function (response) {
-                console.log('error', response, bodyFormData);
+                console.log('error', response);
             });
     };
 
@@ -47,6 +47,7 @@ export function CreatePlace() {
         address: Yup.string(),
         latitude: Yup.number(),
         longitude: Yup.number(),
+        photos: Yup.mixed<Blob>(),
     });
 
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +66,7 @@ export function CreatePlace() {
                     'address': '',
                     'latitude': '',
                     'longitude': '',
+                    'photos': new Blob(),
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(data) => {
@@ -76,7 +78,7 @@ export function CreatePlace() {
                         data.address,
                         data.latitude,
                         data.longitude,
-                        files
+                        files ?? ''
                     );
                 }}
             >
@@ -91,11 +93,8 @@ export function CreatePlace() {
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="venueName"
                                     placeholder={'Venue Name'}
-                                    name="venueName"
+                                    name="venue name"
                                 />
-                                <div className="text-rose-600">
-                                    <ErrorMessage name="venueName" />
-                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
@@ -107,9 +106,6 @@ export function CreatePlace() {
                                     placeholder={'Description'}
                                     name="description"
                                 />
-                                <div className="text-rose-600">
-                                    <ErrorMessage name="description" />
-                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categoryName">
@@ -121,9 +117,6 @@ export function CreatePlace() {
                                     placeholder={'Category name'}
                                     name="categoryName"
                                 />
-                                <div className="text-rose-600">
-                                    <ErrorMessage name="categoryName" />
-                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
@@ -135,9 +128,6 @@ export function CreatePlace() {
                                     placeholder={'Address'}
                                     name="address"
                                 />
-                                <div className="text-rose-600">
-                                    <ErrorMessage name="address" />
-                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="latitude">
@@ -149,9 +139,6 @@ export function CreatePlace() {
                                     placeholder={'Latitude'}
                                     name="latitude"
                                 />
-                                <div className="text-rose-600">
-                                    <ErrorMessage name="latitude" />
-                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="longitude">
@@ -163,9 +150,6 @@ export function CreatePlace() {
                                     placeholder={'Longitude'}
                                     name="longitude"
                                 />
-                                <div className="text-rose-600">
-                                    <ErrorMessage name="longitude" />
-                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="photos">
@@ -181,7 +165,7 @@ export function CreatePlace() {
                                     onChange={onFileChange}
                                 />
                                 <div className="mt-5">
-                                    <img src={files} alt="" width="400" height="auto" />
+                                    {/* {files ? <img src={} alt="" width="400" height="auto" /> : null} */}
                                 </div>
                             </div>
                             <div className="flex items-center justify-between mt-4">
