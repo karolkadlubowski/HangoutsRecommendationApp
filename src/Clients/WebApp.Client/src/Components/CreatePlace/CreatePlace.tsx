@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import Header from '../Header';
@@ -42,12 +42,12 @@ export function CreatePlace() {
     };
 
     const validationSchema = Yup.object().shape({
-        venueName: Yup.string(),
-        description: Yup.string(),
-        categoryName: Yup.string(),
-        address: Yup.string(),
-        latitude: Yup.number(),
-        longitude: Yup.number(),
+        venueName: Yup.string().required(),
+        description: Yup.string().required(),
+        categoryName: Yup.string().required(),
+        address: Yup.string().required(),
+        latitude: Yup.number().required(),
+        longitude: Yup.number().required(),
         photos: Yup.mixed<Blob>(),
     });
 
@@ -96,8 +96,11 @@ export function CreatePlace() {
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="venueName"
                                     placeholder={'Venue Name'}
-                                    name="venue name"
+                                    name="venueName"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="venueName" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
@@ -109,6 +112,9 @@ export function CreatePlace() {
                                     placeholder={'Description'}
                                     name="description"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="description" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categoryName">
@@ -120,6 +126,9 @@ export function CreatePlace() {
                                     placeholder={'Category name'}
                                     name="categoryName"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="categoryName" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
@@ -131,6 +140,9 @@ export function CreatePlace() {
                                     placeholder={'Address'}
                                     name="address"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="address" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="latitude">
@@ -142,6 +154,9 @@ export function CreatePlace() {
                                     placeholder={'Latitude'}
                                     name="latitude"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="latitude" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="longitude">
@@ -153,6 +168,9 @@ export function CreatePlace() {
                                     placeholder={'Longitude'}
                                     name="longitude"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="longitude" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="photos">
