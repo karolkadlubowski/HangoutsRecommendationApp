@@ -23,13 +23,14 @@ export default function VenueDetails(props: VenueDetailsProps) {
                 console.log(response.data.venue.photos);
                 setVenueDetails(response.data.venue);
 
-                const imageBlob = response.data.venue.photos[0];
-                const reader = new FileReader();
-                reader.readAsDataURL(imageBlob);
-                reader.onloadend = () => {
-                    const base64data = reader.result;
-                    setImgUrl(base64data);
-                };
+                // const imageBlob = response.data.venue.photos[0];
+                // const reader = new FileReader();
+                // reader.readAsDataURL(imageBlob);
+                // reader.onloadend = () => {
+                //     const base64data = reader.result;
+                //     setImgUrl(base64data);
+                // };
+                setImgUrl(response.data.venue.photos[0].fileUrl);
             });
     }, []);
 
@@ -58,10 +59,8 @@ export default function VenueDetails(props: VenueDetailsProps) {
                                     {venueDetails ? (
                                         <>
                                             <div className="my-4 text-slate-500 text-lg leading-relaxed">
-                                                <div>
-                                                    <img src={imgUrl} alt="" />
-                                                    {venueDetails?.description}
-                                                </div>
+                                                <img src={imgUrl} alt="" className="mb-5" />
+                                                {venueDetails?.description}
                                             </div>
                                             <p className="my-4 text-slate-1200 text-lg leading-relaxed">
                                                 Location: {venueDetails.location.address}

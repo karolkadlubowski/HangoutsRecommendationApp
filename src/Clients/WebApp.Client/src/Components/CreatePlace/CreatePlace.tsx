@@ -5,8 +5,7 @@ import * as Yup from 'yup';
 import Header from '../Header';
 
 export function CreatePlace() {
-    const [files, setFiles] = useState<string>('');
-    const [imgUrl, setImgUrl] = useState<any>();
+    const [files, setFiles] = useState<any>('');
 
     const createVenue = (
         VenueName: string,
@@ -34,28 +33,25 @@ export function CreatePlace() {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
             .then(function (response) {
-                console.log('success', response);
+                console.log('success', response, bodyFormData);
             })
             .catch(function (response) {
-                console.log('error', response);
+                console.log('error', response, bodyFormData);
             });
     };
 
     const validationSchema = Yup.object().shape({
-        venueName: Yup.string().required(),
-        description: Yup.string().required(),
-        categoryName: Yup.string().required(),
-        address: Yup.string().required(),
-        latitude: Yup.number().required(),
-        longitude: Yup.number().required(),
-        photos: Yup.mixed<Blob>(),
+        venueName: Yup.string(),
+        description: Yup.string(),
+        categoryName: Yup.string(),
+        address: Yup.string(),
+        latitude: Yup.number(),
+        longitude: Yup.number(),
     });
 
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            const fileUrl = URL.createObjectURL(event.target.files[0]);
-            setFiles(fileUrl);
-        }
+        setFiles(event.target.files ? event.target.files[0] : null);
+        console.log(files instanceof Blob);
     };
 
     return (
@@ -69,7 +65,6 @@ export function CreatePlace() {
                     'address': '',
                     'latitude': '',
                     'longitude': '',
-                    'photos': new Blob(),
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(data) => {
