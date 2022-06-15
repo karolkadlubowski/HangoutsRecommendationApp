@@ -44,7 +44,7 @@ namespace Identity.API.Application.Features.SigninUser
             var user = _mapper.Map<User>(userPersistenceModel);
             var jwtToken = _tokenService.GenerateAuthenticationToken(user);
 
-            _logger.Info($"jwt token has been generated for #{user.UserId}");
+            _logger.Info($"JWT token has been generated for #{user.UserId}");
 
             return new SigninUserResponse
             {
