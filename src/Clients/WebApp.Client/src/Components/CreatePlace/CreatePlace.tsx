@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import Header from '../Header';
 
 export function CreatePlace() {
-    const [files, setFiles] = useState<any>(null);
+    const [files, setFiles] = useState<FileList | null>(null);
 
     const createVenue = (
         VenueName: string,
@@ -14,7 +14,7 @@ export function CreatePlace() {
         Address: string,
         Latitude: string,
         Longitude: string,
-        Photos: any
+        Photos: FileList | string
     ) => {
         let bodyFormData = new FormData();
 
@@ -24,8 +24,10 @@ export function CreatePlace() {
         bodyFormData.append('Address', Address);
         bodyFormData.append('Latitude', Latitude);
         bodyFormData.append('Longitude', Longitude);
-        bodyFormData.append('Photos', Photos[0]);
-        bodyFormData.append('Photos', Photos[1]);
+        const PhotosLength = Photos.length;
+        for (let i = 0; i < PhotosLength; i++) {
+            bodyFormData.append('Photos', Photos[i]);
+        }
 
         axios({
             method: 'post',
@@ -42,27 +44,16 @@ export function CreatePlace() {
     };
 
     const validationSchema = Yup.object().shape({
-        venueName: Yup.string(),
-        description: Yup.string(),
-        categoryName: Yup.string(),
-        address: Yup.string(),
-        latitude: Yup.number(),
-        longitude: Yup.number(),
-        photos: Yup.mixed<any>(),
+        venueName: Yup.string().required(),
+        description: Yup.string().required(),
+        categoryName: Yup.string().required(),
+        address: Yup.string().required(),
+        latitude: Yup.number().required(),
+        longitude: Yup.number().required(),
+        photos: Yup.mixed<FileList>(),
     });
 
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // const fileArray: File[] = [];
-        // if (event.target.files)
-        //     Array.from(event.target.files).forEach((el) => {
-        //         fileArray.push(el);
-        //     });
-        // fileArray.map((el: any) => {
-        //     console.log('element', el);
-        // });
-        // let blob = new Blob(fileArray, { type: 'image/jpeg' });
-        // console.log(fileArray);
-        // setFiles(blob ? blob : null);
         setFiles(event.target.files);
     };
 
@@ -71,19 +62,19 @@ export function CreatePlace() {
             <Header />
             <Formik
                 initialValues={{
-                    'venue name': '',
-                    'description': '',
-                    'categoryName': '',
-                    'address': '',
-                    'latitude': '',
-                    'longitude': '',
-                    'photos': new Blob(),
+                    venueName: '',
+                    description: '',
+                    categoryName: '',
+                    address: '',
+                    latitude: '',
+                    longitude: '',
+                    photos: new Blob(),
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(data) => {
                     console.log('testdata', data, files);
                     createVenue(
-                        data['venue name'],
+                        data.venueName,
                         data.description,
                         data.categoryName,
                         data.address,
@@ -104,8 +95,11 @@ export function CreatePlace() {
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="venueName"
                                     placeholder={'Venue Name'}
-                                    name="venue name"
+                                    name="venueName"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="venueName" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
@@ -117,6 +111,9 @@ export function CreatePlace() {
                                     placeholder={'Description'}
                                     name="description"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="description" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categoryName">
@@ -128,6 +125,9 @@ export function CreatePlace() {
                                     placeholder={'Category name'}
                                     name="categoryName"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="categoryName" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
@@ -139,6 +139,9 @@ export function CreatePlace() {
                                     placeholder={'Address'}
                                     name="address"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="address" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="latitude">
@@ -150,6 +153,9 @@ export function CreatePlace() {
                                     placeholder={'Latitude'}
                                     name="latitude"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="latitude" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="longitude">
@@ -161,6 +167,9 @@ export function CreatePlace() {
                                     placeholder={'Longitude'}
                                     name="longitude"
                                 />
+                                <div className="text-rose-600">
+                                    <ErrorMessage name="longitude" />
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="photos">
