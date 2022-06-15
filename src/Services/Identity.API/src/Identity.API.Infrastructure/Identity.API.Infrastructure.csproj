@@ -10,15 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Events\Consumers" />
-      <Folder Include="Events\Producers" />
-      <Folder Include="HttpClients\Abstractions" />
-      <Folder Include="HttpClients\Models\Factories" />
-      <Folder Include="HttpClients\Models\Requests" />
-      <Folder Include="HttpClients\Models\Responses" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.17" />
     </ItemGroup>
 
