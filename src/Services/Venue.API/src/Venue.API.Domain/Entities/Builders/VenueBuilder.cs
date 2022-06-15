@@ -1,11 +1,13 @@
-﻿namespace Venue.API.Domain.Entities.Builders
+﻿using Library.Shared.Models.Venue.Enums;
+
+namespace Venue.API.Domain.Entities.Builders
 {
     public class VenueBuilder
     {
         private readonly Venue _venue;
 
-        public VenueBuilder(string name, string categoryId)
-            => _venue = Venue.CreateDefault(name, categoryId);
+        public VenueBuilder(string name, string categoryId, VenueStyle style, VenueOccupancy occupancy)
+            => _venue = Venue.CreateDefault(name, categoryId, style, occupancy);
 
         public VenueBuilder WithDescription(string description)
         {

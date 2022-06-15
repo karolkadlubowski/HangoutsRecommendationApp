@@ -16,6 +16,7 @@ using Library.Shared.Logging;
 using Library.Shared.Models.Category.Dtos;
 using Library.Shared.Models.FileStorage.Dtos;
 using Library.Shared.Models.Venue.Dtos;
+using Library.Shared.Models.Venue.Enums;
 using Library.Shared.Models.Venue.Events;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -102,7 +103,7 @@ namespace Venue.API.Tests.Unit.Application.Features
                     Name = CategoryName
                 });
             _venueService.Setup(x => x.CreateVenueAsync(_command, categoryId, CreatorId))
-                .ReturnsAsync(API.Domain.Entities.Venue.CreateDefault(Name, categoryId));
+                .ReturnsAsync(API.Domain.Entities.Venue.CreateDefault(Name, categoryId, VenueStyle.Modern, VenueOccupancy.Medium));
             _httpAccessor.Setup(x => x.CurrentUserId)
                 .Returns(CreatorId);
             _mapper.Setup(x => x.Map<VenueDto>(It.IsAny<API.Domain.Entities.Venue>()))

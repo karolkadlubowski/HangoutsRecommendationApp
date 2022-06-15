@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Library.Shared.Models.Venue.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
@@ -14,6 +15,9 @@ namespace Venue.API.Application.Features.CreateVenue
 
         public double Latitude { get; init; }
         public double Longitude { get; init; }
+        
+        public VenueStyle Style { get; init; }
+        public VenueOccupancy Occupancy { get; init; }
 
         public ICollection<IFormFile> Photos { get; init; } = new List<IFormFile>();
     }

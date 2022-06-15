@@ -9,6 +9,8 @@ namespace Library.Shared.Models.Venue.Dtos
         public string Name { get; init; }
         public string Description { get; init; }
         public string CategoryId { get; init; }
+        public VenueStyle Style { get; init; }
+        public VenueOccupancy Occupancy { get; init; }
         public long? CreatorId { get; init; }
         public VenueStatus Status { get; init; }
         public DateTime CreatedOn { get; init; }

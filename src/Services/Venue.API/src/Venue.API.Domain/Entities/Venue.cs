@@ -17,27 +17,34 @@ namespace Venue.API.Domain.Entities
         public string CategoryId { get; protected set; }
         public long? CreatorId { get; protected set; }
         public VenueStatus Status { get; protected set; } = VenueStatus.Created;
+        public VenueStyle Style { get; protected set; } = VenueStyle.Casual;
+        public VenueOccupancy Occupancy { get; protected set; } = VenueOccupancy.Medium;
 
         public Location Location { get; protected set; }
 
         public ICollection<Photo> Photos { get; protected set; } = new HashSet<Photo>();
 
-        public static Venue CreateDefault(string name, string categoryId)
+        public static Venue CreateDefault(string name, string categoryId, VenueStyle style, VenueOccupancy occupancy)
             => new Venue
             {
                 Name = new VenueName(name),
-                CategoryId = new CategoryId(categoryId)
+                CategoryId = new CategoryId(categoryId),
+                Style = style,
+                Occupancy = occupancy
             };
 
         public void Update(string name, string categoryId, string description,
-            string address, double latitude, double longitude, long userId)
+            string address, double latitude, double longitude, long userId, VenueStyle style, VenueOccupancy occupancy)
         {
             if (CreatorId != userId)
-                throw new InsufficientPermissionsException($"User #{userId} has not permissions to update venue #{VenueId}");
+                throw new InsufficientPermissionsException(
+                    $"User #{userId} has not permissions to update venue #{VenueId}");
 
             Name = new VenueName(name);
             CategoryId = new CategoryId(categoryId);
             Description = new VenueDescription(description);
+            Style = style;
+            Occupancy = occupancy;
             Location.Update(address, latitude, longitude);
         }
 
