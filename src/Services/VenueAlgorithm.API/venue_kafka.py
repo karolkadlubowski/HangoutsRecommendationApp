@@ -13,21 +13,42 @@ class VenueKafka(BaseKafka):
 
             print('Event type: ', event_type)
 
-            if EventType.VENUE_CREATED == event_type:  
-                self.callback_venue_created(message)
+            if EventType.VENUE_CREATED == event_type:
+                self.__callback_venue_created(message)
             elif EventType.VENUE_UPDATED == event_type:
-                self.callback_venue_updated(message)
+                self.__callback_venue_updated(message)
             elif EventType.VENUE_DELETED == event_type:
-                self.callback_venue_deleted(message)
+                self.__callback_venue_deleted(message)
 
-    def callback_venue_created(self, message):
+    def __callback_venue_created(self, message):
         print('VENUE CREATED')
-        print(message)
 
-    def callback_venue_updated(self, message):
+        with self.driver.session() as session:
+            result = session.write_transaction(self.__create_venue, message)
+            print(result)
+
+    def __callback_venue_updated(self, message):
         print('VENUE UPDATED')
-        print(message)
 
-    def callback_venue_deleted(self, message):
+        with self.driver.session() as session:
+            result = session.write_transaction(self.__update_venue, message)
+            print(result)
+
+    def __callback_venue_deleted(self, message):
         print('VENUE DELETED')
-        print(message)
+
+        with self.driver.session() as session:
+            result = session.write_transaction(self.__delete_venue, message)
+            print(result)
+
+    @staticmethod
+    def __create_venue(tx, messsage):
+        pass
+
+    @staticmethod
+    def __update_venue(tx, messsage):
+        pass
+
+    @staticmethod
+    def __delete_venue(tx, messsage):
+        pass
