@@ -8,10 +8,8 @@ namespace Identity.API.DI
     public static class ServicesDIConfig
     {
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            return services
+            => services
                 .AddSingleton<IPasswordHashService, Argo2PasswordHashService>()
                 .AddSingleton<IAuthTokenService, JwtAuthTokenService>();
-        }
     }
 }
