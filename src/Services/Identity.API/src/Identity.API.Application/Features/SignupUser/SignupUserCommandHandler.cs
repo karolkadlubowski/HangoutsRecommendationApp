@@ -50,8 +50,7 @@ namespace Identity.API.Application.Features.SignupUser
 
             if (!await _identityRepository.AddUserAsync(userPersistanceModel))
                 throw new DatabaseOperationException($"Adding new user with email '{request.Email}' to database failed");
-            
-            
+
             user.AddDomainEvent(EventFactory<UserCreatedEvent>.CreateEvent(user.UserId,
                 _mapper.Map<UserCreatedEventDataModel>(user)));
 
