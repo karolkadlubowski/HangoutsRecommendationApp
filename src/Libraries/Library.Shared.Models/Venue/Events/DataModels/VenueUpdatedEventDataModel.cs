@@ -11,6 +11,8 @@ namespace Library.Shared.Models.Venue.Events.DataModels
         public string CategoryId { get; init; }
         public long? CreatorId { get; init; }
         public VenueStatus Status { get; init; }
+        public VenueStyle Style { get; init; }
+        public VenueOccupancy Occupancy { get; init; }
 
         public LocationDto Location { get; init; }
     }

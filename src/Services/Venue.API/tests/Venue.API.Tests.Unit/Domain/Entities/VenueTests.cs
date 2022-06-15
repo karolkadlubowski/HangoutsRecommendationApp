@@ -26,7 +26,8 @@ namespace Venue.API.Tests.Unit.Domain.Entities
             var categoryId = StringFactory.CreateStringWithLength(24, 'x');
 
             //Act
-            var venue = API.Domain.Entities.Venue.CreateDefault(Name, categoryId);
+            var venue = API.Domain.Entities.Venue.CreateDefault(Name, categoryId, VenueStyle.Modern,
+                VenueOccupancy.Medium);
 
             //Assert
             using (new AssertionScope())
@@ -36,6 +37,8 @@ namespace Venue.API.Tests.Unit.Domain.Entities
                 venue.Description.Should().BeNull();
                 venue.CreatorId.Should().BeNull();
                 venue.Status.Should().Be(VenueStatus.Created);
+                venue.Style.Should().Be(VenueStyle.Modern);
+                venue.Occupancy.Should().Be(VenueOccupancy.Medium);
                 venue.Location.Should().BeNull();
             }
         }
@@ -56,7 +59,7 @@ namespace Venue.API.Tests.Unit.Domain.Entities
             //Act
             Action act = () => venue.Update(default, default,
                 default, default, default, default,
-                CreatorId + 1);
+                CreatorId + 1, VenueStyle.Modern, VenueOccupancy.Medium);
 
             //Assert
             act.Should().Throw<InsufficientPermissionsException>();
@@ -74,7 +77,7 @@ namespace Venue.API.Tests.Unit.Domain.Entities
             //Act
             Action act = () => venue.Update(default, default,
                 default, default, default, default,
-                CreatorId);
+                CreatorId, VenueStyle.Modern, VenueOccupancy.Medium);
 
             //Assert
             act.Should().NotThrow<InsufficientPermissionsException>();
