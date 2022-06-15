@@ -8,7 +8,7 @@ namespace Identity.API.Application.Database.Repositories
         Task<UserPersistenceModel> FindUserAsync(long userId);
         Task<UserPersistenceModel> FindUserAsync(string email);
         
-        Task<bool> AnyUserWithEmailAsync(string email);
+        Task<bool> AnyUserWithEmailExistsAsync(string email);
         
         Task<bool> AddUserAsync(UserPersistenceModel user);
         Task<bool> UpdateUserAsync(UserPersistenceModel user);
