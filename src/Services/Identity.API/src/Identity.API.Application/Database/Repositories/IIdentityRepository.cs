@@ -12,6 +12,5 @@ namespace Identity.API.Application.Database.Repositories
         
         Task<bool> AddUserAsync(UserPersistenceModel user);
         Task<bool> UpdateUserAsync(UserPersistenceModel user);
-        
     }
 }
