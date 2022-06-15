@@ -50,7 +50,7 @@ namespace Identity.API.Application.Features.ChangeUserEmail
             _mapper.Map(user, userPersistenceModel);
 
             if (!await _identityRepository.UpdateUserAsync(userPersistenceModel))
-                throw new DatabaseOperationException($"Error while updating user #{user.UserId}");
+                throw new DatabaseOperationException($"Error while changing email for user #{user.UserId}");
 
             _logger.Info($"User #{user.UserId} password updated successfully");
 
