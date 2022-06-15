@@ -1,9 +1,10 @@
+from neo4j import GraphDatabase
 from event_type import EventType
 from base_kafka import BaseKafka
 
 class IdentityKafka(BaseKafka):
-    def __init__(self, topic: str):
-        super().__init__(topic)
+    def __init__(self, topic: str, driver: GraphDatabase):
+        super().__init__(topic, driver)
 
     def consume(self):
         for message in self.consumer:

@@ -1,9 +1,10 @@
+from neo4j import GraphDatabase
 from event_type import EventType
 from base_kafka import BaseKafka
 
 class VenueKafka(BaseKafka):
-    def __init__(self, topic: str):
-        super().__init__(topic)
+    def __init__(self, topic: str, driver: GraphDatabase):
+        super().__init__(topic, driver)
 
     def consume(self):
         for message in self.consumer:
@@ -12,7 +13,7 @@ class VenueKafka(BaseKafka):
 
             print('Event type: ', event_type)
 
-            if EventType.VENUE_CREATED == event_type:
+            if EventType.VENUE_CREATED == event_type:  
                 self.callback_venue_created(message)
             elif EventType.VENUE_UPDATED == event_type:
                 self.callback_venue_updated(message)
