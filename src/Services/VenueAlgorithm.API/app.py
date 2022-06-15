@@ -5,28 +5,52 @@ from neo4j import GraphDatabase
 
 app = Flask(__name__)
 
+driver = GraphDatabase.driver('bolt://localhost:7687', auth=('neo4j', 'neo4j'))
+
 @app.route('/venue/algorithm/venues', methods=['GET'])
-def get_venues():
+def route_get_venues():
     print('Get Venues')
 
-    user_id = request.args['userId']
-    
-    res = jsonify(data={'userId': user_id}, success=True)
-    print(res)
+    args = {
+        'userId': request.args['userId']
+    }
 
-    return res
+    with driver.session() as session:
+        result = session.write_transaction(get_venues, args)
+        print(result)
+    
+        res = jsonify(data=args, success=True)
+        print(res)
+
+        return res
 
 @app.route('/venue/algorithm/relation', methods=['PUT'])
-def update_relation():
-    user_id = request.args['userId']
-    venue_id = request.args['venueId']
+def route_update_relation():
+    print('Update relation')
 
-    res = jsonify(data={'userId': user_id, 'venueId': venue_id}, success=True)
+    args = {
+        'userId': request.args['userId'],
+        'venueId': request.args['venueId'],
+        'relationType': request.args['relationType']
+    }
 
-    return res
+    with driver.session() as session:
+        result = session.write_transaction(get_venues, args)
+        print(result)
+
+        res = jsonify(data=args, success=True)
+        print(res)
+
+        return res
+
+def get_venues(tx, message):
+    pass
+
+def update_relation(tx, message):
+    pass
+
 
 if __name__ == '__main__':
-    driver = GraphDatabase.driver('bolt://localhost:7687', auth=('neo4j', 'neo4j'))
     venue_kafka = VenueKafka('venue', driver)
     identity_kafka = IdentityKafka('identity', driver)
 
