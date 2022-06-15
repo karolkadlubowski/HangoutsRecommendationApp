@@ -86,7 +86,6 @@ namespace Venue.API.Controllers
         /// Description - cannot exceed 2000 characters
         /// CategoryName - cannot be null or empty
         /// Address - cannot be null or empty, cannot exceed 500 characters
-        /// Photos - cannot contain more than 6 photos
         /// </param>
         [HttpPut]
         [ProducesResponseType(typeof(UpdateVenueResponse), (int)HttpStatusCode.OK)]

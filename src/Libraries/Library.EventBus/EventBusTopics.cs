@@ -6,5 +6,6 @@
         public const string Identity = "identity";
         public const string Category = "category";
         public const string AccountDefinition = "account-definition";
+        public const string VenueReview = "venue-review";
     }
 }

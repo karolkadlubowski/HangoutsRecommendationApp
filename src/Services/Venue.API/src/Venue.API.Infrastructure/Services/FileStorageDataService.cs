@@ -140,7 +140,7 @@ namespace Venue.API.Infrastructure.Services
 
                 await DeletePhotosFolderAsync(venueId);
 
-                throw;
+                throw new ServerException($"Photos for venue #{venueId} cannot be uploaded due to: {e.Message}");
             }
         }
     }

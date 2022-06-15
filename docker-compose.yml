@@ -53,6 +53,19 @@ services:
       - 6020:27017
     volumes:
       - ./src/Services/Category.API/_Scripts/Database:/docker-entrypoint-initdb.d:ro
+      
+  venuereview.database:
+    container_name: venuereview.database
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin1234
+      - MONGO_INITDB_DATABASE=VENUEREVIEW_DB
+    restart: always
+    ports:
+      - 6006:27017
+    volumes:
+      - ./src/Services/VenueReview.API/_Scripts/Database:/docker-entrypoint-initdb.d:ro
      
   userprofile.database:
     container_name: userprofile.database
