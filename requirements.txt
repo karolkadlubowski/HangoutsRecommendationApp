@@ -1,3 +1,6 @@
 # API
 flask
 kafka-python
+
+# Database
+neo4j
