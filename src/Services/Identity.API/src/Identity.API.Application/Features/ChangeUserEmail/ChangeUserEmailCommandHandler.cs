@@ -42,7 +42,7 @@ namespace Identity.API.Application.Features.ChangeUserEmail
 
             var user = _mapper.Map<User>(userPersistenceModel);
 
-            if (await _identityRepository.AnyUserWithEmailAsync(request.Email))
+            if (await _identityRepository.AnyUserWithEmailExistsAsync(request.Email))
                 throw new DuplicateExistsException($"User with {request.Email} already exists");
 
             user.SetEmail(request.Email);

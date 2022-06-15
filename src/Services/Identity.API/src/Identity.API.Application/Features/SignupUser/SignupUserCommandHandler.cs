@@ -38,7 +38,7 @@ namespace Identity.API.Application.Features.SignupUser
 
         public async Task<SignupUserResponse> Handle(SignupUserCommand request, CancellationToken cancellationToken)
         {
-            if (await _identityRepository.AnyUserWithEmailAsync(request.Email))
+            if (await _identityRepository.AnyUserWithEmailExistsAsync(request.Email))
                 throw new DuplicateExistsException("Error while creating user");
 
             var passwordSalt = _passwordHashService.CreatePasswordSalt();
