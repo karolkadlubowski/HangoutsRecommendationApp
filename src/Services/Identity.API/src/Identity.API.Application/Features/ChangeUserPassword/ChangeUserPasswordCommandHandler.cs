@@ -48,7 +48,7 @@ namespace Identity.API.Application.Features.ChangeUserPassword
             _mapper.Map(user, userPersistenceModel);
             
             if (!await _identityRepository.UpdateUserAsync(userPersistenceModel))
-                throw new DatabaseOperationException($"Error while updating user #{user.UserId}");
+                throw new DatabaseOperationException($"Error while updating password for user #{user.UserId}");
 
             _logger.Info($"User #{user.UserId} password updated successfully");
 
