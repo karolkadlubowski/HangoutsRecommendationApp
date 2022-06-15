@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import Header from '../Header';
 
 export function CreatePlace() {
-    const [files, setFiles] = useState<Blob | null>(null);
+    const [files, setFiles] = useState<any>(null);
 
     const createVenue = (
         VenueName: string,
@@ -14,7 +14,7 @@ export function CreatePlace() {
         Address: string,
         Latitude: string,
         Longitude: string,
-        Photos: Blob | string
+        Photos: any
     ) => {
         let bodyFormData = new FormData();
 
@@ -24,7 +24,8 @@ export function CreatePlace() {
         bodyFormData.append('Address', Address);
         bodyFormData.append('Latitude', Latitude);
         bodyFormData.append('Longitude', Longitude);
-        bodyFormData.append('Photos', Photos);
+        bodyFormData.append('Photos', Photos[0]);
+        bodyFormData.append('Photos', Photos[1]);
 
         axios({
             method: 'post',
@@ -47,12 +48,22 @@ export function CreatePlace() {
         address: Yup.string(),
         latitude: Yup.number(),
         longitude: Yup.number(),
-        photos: Yup.mixed<Blob>(),
+        photos: Yup.mixed<any>(),
     });
 
     const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFiles(event.target.files ? event.target.files[0] : null);
-        console.log(files instanceof Blob);
+        // const fileArray: File[] = [];
+        // if (event.target.files)
+        //     Array.from(event.target.files).forEach((el) => {
+        //         fileArray.push(el);
+        //     });
+        // fileArray.map((el: any) => {
+        //     console.log('element', el);
+        // });
+        // let blob = new Blob(fileArray, { type: 'image/jpeg' });
+        // console.log(fileArray);
+        // setFiles(blob ? blob : null);
+        setFiles(event.target.files);
     };
 
     return (

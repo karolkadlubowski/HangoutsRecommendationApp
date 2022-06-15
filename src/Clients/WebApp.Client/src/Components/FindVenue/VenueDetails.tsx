@@ -20,7 +20,7 @@ export default function VenueDetails(props: VenueDetailsProps) {
                 },
             })
             .then((response) => {
-                console.log(response.data.venue.photos);
+                console.log(response.data.venue.photos[0].fileUrl);
                 setVenueDetails(response.data.venue);
 
                 // const imageBlob = response.data.venue.photos[0];
@@ -32,7 +32,7 @@ export default function VenueDetails(props: VenueDetailsProps) {
                 // };
                 setImgUrl(response.data.venue.photos[0].fileUrl);
             });
-    }, []);
+    }, [props.VenueId]);
 
     return (
         <>
