@@ -1,7 +1,6 @@
-import json
-
 from flask import Flask, request, jsonify
-from kafka import KafkaConsumer
+from venue_kafka import VenueKafka
+from identity_kafka import IdentityKafka
 
 app = Flask(__name__)
 
@@ -9,30 +8,18 @@ app = Flask(__name__)
 def get_venues():
     print('Get Venues')
 
-    user_id = request.args['UserId']
+    user_id = request.args['userId']
     
-    res = jsonify(data={'UserId': user_id}, success=True)
+    res = jsonify(data={'userId': user_id}, success=True)
     print(res)
 
     return res
 
-class VenueKafka:
-    def __init__(self):
-        self.venue_consumer = KafkaConsumer('venue', bootstrap_servers=['localhost:29092'],
-                                            api_version=(0,10),
-                                            auto_offset_reset='earliest',
-                                            enable_auto_commit=True,
-                                            group_id='my-group',
-                                            value_deserializer=lambda x: json.loads(x.decode('utf-8')))
-
-    def consume(self):
-        print('Start consmue')
-
-        for message in self.venue_consumer:
-            message = message.value
-            print(message)
-
 if __name__ == '__main__':
-    # app.run(debug=True)
-    venue_kafka = VenueKafka()
-    venue_kafka.consume()
+    venue_kafka = VenueKafka(topic='venue')
+    identity_kafka = IdentityKafka(topic='identity')
+
+    venue_kafka.run()
+    identity_kafka.run()
+
+    app.run(debug=True)

@@ -12,3 +12,7 @@ class EventType(Enum):
     ACCOUNT_PROVIDER_DELETED = auto()
     VENUE_REVIEW_ADDED = auto()
     VENUE_REVIEW_DELETED = auto()
+    # Change it later afer identity api update
+    IDENTITY_CREATED = auto()
+    IDENTITY_UPDATED = auto()
+    IDENTITY_DELETED = auto()
