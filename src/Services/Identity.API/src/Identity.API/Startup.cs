@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using Identity.API.DI;
+using Identity.API.HealthChecks;
 using IConfigurationProvider = Identity.API.Application.Providers.IConfigurationProvider;
 
 namespace Identity.API
@@ -48,7 +49,9 @@ namespace Identity.API
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
 
-            services.AddHealthChecks();
+            services
+                .AddHealthChecks()
+                .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck));
             _logger.Trace("> Health checks registered");
 
             services.AddSwagger();

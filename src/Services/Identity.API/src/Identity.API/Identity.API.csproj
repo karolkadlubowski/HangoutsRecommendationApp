@@ -18,8 +18,4 @@
       <ProjectReference Include="..\Identity.API.Infrastructure\Identity.API.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="HealthChecks" />
-    </ItemGroup>
-
 </Project>
