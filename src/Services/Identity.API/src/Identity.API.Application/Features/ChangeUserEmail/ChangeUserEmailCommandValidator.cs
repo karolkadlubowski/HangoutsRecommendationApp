@@ -9,7 +9,7 @@ namespace Identity.API.Application.Features.ChangeUserEmail
         {
             RuleFor(x => x.Email)
                 .EmailAddress()
-                .MaximumLength(ValidationRules.MaxEmailAddress)
+                .MaximumLength(ValidationRules.MaxEmailAddressLength)
                 .NotNull();
         }
     }

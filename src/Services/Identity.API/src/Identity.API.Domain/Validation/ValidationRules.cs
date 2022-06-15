@@ -5,6 +5,6 @@
         public const int MinPasswordLength = 4;
         public const int MaxPasswordLength = 64;
 
-        public const int MaxEmailAddress = 255;
+        public const int MaxEmailAddressLength = 255;
     }
 }
