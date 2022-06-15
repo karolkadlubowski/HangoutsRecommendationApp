@@ -9,7 +9,7 @@ namespace Identity.API.Application.Features.SignupUser
         {
             RuleFor(x => x.Email)
                 .EmailAddress()
-                .MaximumLength(ValidationRules.MaxEmailAddress)
+                .MaximumLength(ValidationRules.MaxEmailAddressLength)
                 .NotNull();
             
             RuleFor(x => x.Password)

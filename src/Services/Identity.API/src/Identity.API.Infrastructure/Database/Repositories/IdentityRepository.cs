@@ -19,10 +19,10 @@ namespace Identity.API.Infrastructure.Database.Repositories
 
 
         public async Task<UserPersistenceModel> FindUserAsync(string email)
-            => await _identityDbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            => await _identityDbContext.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == email.ToUpper());
 
         public async Task<bool> AnyUserWithEmailExistsAsync(string email)
-            => await _identityDbContext.Users.AnyAsync(u => u.Email == email);
+            => await _identityDbContext.Users.AnyAsync(u => u.Email.ToUpper() == email.ToUpper());
 
         public async Task<bool> AddUserAsync(UserPersistenceModel user)
         {
