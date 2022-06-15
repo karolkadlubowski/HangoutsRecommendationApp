@@ -4,7 +4,7 @@ namespace Identity.API.Domain.Configuration
 {
     public record ServiceConfiguration
     {
-        public DatabaseConfig DatabaseConfig { get; set; }
-        public JwtConfig JwtConfig { get; set; }
+        public DatabaseConfig DatabaseConfig { get; init; }
+        public JwtConfig JwtConfig { get; init; }
     }
 }
