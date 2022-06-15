@@ -1,6 +1,9 @@
 from neo4j import GraphDatabase
+from neo4j.exceptions import ServiceUnavailable
 from event_type import EventType
 from base_kafka import BaseKafka
+
+import json
 
 class VenueKafka(BaseKafka):
     def __init__(self, topic: str, driver: GraphDatabase):
@@ -25,7 +28,7 @@ class VenueKafka(BaseKafka):
 
         with self.driver.session() as session:
             result = session.write_transaction(self.__create_venue, message)
-            print(result)
+            print('result: ', result)
 
     def __callback_venue_updated(self, message):
         print('VENUE UPDATED')
@@ -42,13 +45,24 @@ class VenueKafka(BaseKafka):
             print(result)
 
     @staticmethod
-    def __create_venue(tx, messsage):
+    def __create_venue(tx, message):
+        data_dict = json.loads(message['Data'])
+        query = (
+            "CREATE (v:Venue {venueId: $venueId, categoryId: $categoryId, style: $style, occupancy: $occupancy})"
+            "RETURN v"
+        )
+        result = tx.run(query, venueId=data_dict['VenueId'], categoryId=data_dict['CategoryId'], style=data_dict['Style'], occupancy=data_dict['Occupancy'])
+        try:
+            return [{"v": record["v"]}
+                    for record in result]
+        except ServiceUnavailable as exception:
+            print(exception)
+            raise
+
+    @staticmethod
+    def __update_venue(tx, message):
         pass
 
     @staticmethod
-    def __update_venue(tx, messsage):
-        pass
-
-    @staticmethod
-    def __delete_venue(tx, messsage):
-        pass
+    def __delete_venue(tx, message):
+        print(message)

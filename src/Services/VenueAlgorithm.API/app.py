@@ -5,7 +5,7 @@ from neo4j import GraphDatabase
 
 app = Flask(__name__)
 
-driver = GraphDatabase.driver('bolt://localhost:7687', auth=('neo4j', 'neo4j'))
+driver = GraphDatabase.driver('bolt://localhost:7687', auth=('neo4j', 'admin'))
 
 @app.route('/venue/algorithm/venues', methods=['GET'])
 def route_get_venues():
