@@ -40,6 +40,7 @@ services:
     volumes:
       - ./src/Services/Venue.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_venue.sql:ro
       - ./src/Services/AccountDefinition.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_accountdefinition.sql:ro
+      - ./src/Services/Identity.API/_Scripts/Database/init.sql:/docker-entrypoint-initdb.d/init_identity.sql:ro
   
   category.database:
     container_name: category.database
