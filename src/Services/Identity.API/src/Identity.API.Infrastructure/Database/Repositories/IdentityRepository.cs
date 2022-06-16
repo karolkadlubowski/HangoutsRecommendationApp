@@ -35,6 +35,5 @@ namespace Identity.API.Infrastructure.Database.Repositories
             _identityDbContext.Users.Update(user);
             return await _identityDbContext.SaveChangesAsync() > 0;
         }
-
     }
 }
