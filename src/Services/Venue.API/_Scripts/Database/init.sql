@@ -1,4 +1,3 @@
-﻿
 CREATE SCHEMA IF NOT EXISTS "Venue";
 
 CREATE TABLE IF NOT EXISTS "Venue"."Venues"
