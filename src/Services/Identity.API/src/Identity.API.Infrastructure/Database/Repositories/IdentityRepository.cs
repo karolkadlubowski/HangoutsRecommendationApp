@@ -17,7 +17,6 @@ namespace Identity.API.Infrastructure.Database.Repositories
         public async Task<UserPersistenceModel> FindUserAsync(long userId)
             => await _identityDbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
-
         public async Task<UserPersistenceModel> FindUserAsync(string email)
             => await _identityDbContext.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == email.ToUpper());
 
