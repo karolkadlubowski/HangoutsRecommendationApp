@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Library.Shared.Models.Venue.Enums;
+using MediatR;
 
 namespace Venue.API.Application.Features.UpdateVenue
 {
@@ -14,5 +15,8 @@ namespace Venue.API.Application.Features.UpdateVenue
 
         public double Latitude { get; init; }
         public double Longitude { get; init; }
+
+        public VenueStyle Style { get; init; }
+        public VenueOccupancy Occupancy { get; init; }
     }
 }

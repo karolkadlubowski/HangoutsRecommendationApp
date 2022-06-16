@@ -11,6 +11,8 @@ namespace Venue.API.Application.Database.PersistenceModels
         public string CategoryId { get; set; }
         public long? CreatorId { get; set; }
         public VenueStatus Status { get; set; } = VenueStatus.Created;
+        public VenueStyle Style { get; set; } = VenueStyle.Casual;
+        public VenueOccupancy Occupancy { get; set; } = VenueOccupancy.Medium;
 
         public virtual LocationPersistenceModel Location { get; set; }
     }

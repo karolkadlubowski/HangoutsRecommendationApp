@@ -1,4 +1,4 @@
-﻿CREATE SCHEMA IF NOT EXISTS "Venue";
+CREATE SCHEMA IF NOT EXISTS "Venue";
 
 CREATE TABLE IF NOT EXISTS "Venue"."Venues"
 (
@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS "Venue"."Venues"
     "CategoryId"    varchar(24)                                                    NOT NULL,
     "CreatorId"     bigint,
     "Status"        int DEFAULT 0                                                  NOT NULL,
+    "Style"         int DEFAULT 0                                                  NOT NULL,
+    "Occupancy"     int DEFAULT 1                                                  NOT NULL,
     "IsDeleted"     boolean DEFAULT false                                          NOT NULL, 
     "CreatedOn"     timestamp without time zone DEFAULT (now() at time zone 'utc') NOT NULL,
     "ModifiedOn"    timestamp without time zone
