@@ -22,34 +22,37 @@ class IdentityKafka(BaseKafka):
                 self.__callback_identity_deleted(message)
 
     def __callback_identity_created(self, message):
-        print('VENUE CREATED')
+        print('IDENTITY CREATED')
 
         with self.driver.session() as session:
             result = session.write_transaction(self.__create_identity, message)
             print(result)
 
     def __callback_identity_updated(self, message):
-        print('VENUE UPDATED')
+        print('IDENTITY UPDATED')
 
         with self.driver.session() as session:
             result = session.write_transaction(self.__update_identity, message)
             print(result)
 
     def __callback_identity_deleted(self, message):
-        print('VENUE DELETED')
+        print('IDENTITY DELETED')
 
         with self.driver.session() as session:
             result = session.write_transaction(self.__delete_identity, message)
             print(result)
 
     @staticmethod
-    def __create_identity(tx, messsage):
+    def __create_identity(tx, message):
+        print(message)
         pass
 
     @staticmethod
-    def __update_identity(tx, messsage):
+    def __update_identity(tx, message):
+        print(message)
         pass
 
     @staticmethod
-    def __delete_identity(tx, messsage):
+    def __delete_identity(tx, message):
+        print(message)
         pass

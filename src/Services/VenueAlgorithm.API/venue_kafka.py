@@ -61,8 +61,31 @@ class VenueKafka(BaseKafka):
 
     @staticmethod
     def __update_venue(tx, message):
-        pass
+        data_dict = json.loads(message['Data'])
+        query = (
+            "MATCH (v:Venue {venueId: $venueId})"
+            "SET v.categoryId = $categoryId, v.style = $style, v.occupancy = $occupancy RETURN v"
+        )
+        result = tx.run(query, venueId=data_dict['VenueId'], categoryId=data_dict['CategoryId'],
+                        style=data_dict['Style'], occupancy=data_dict['Occupancy'])
+        try:
+            return [{"v": record["v"]}
+                    for record in result]
+        except ServiceUnavailable as exception:
+            print(exception)
+            raise
 
     @staticmethod
     def __delete_venue(tx, message):
-        print(message)
+        data_dict = json.loads(message['Data'])
+        query = (
+            "MATCH (v:Venue {venueId: $venueId})" 
+            "DELETE v"
+        )
+        result = tx.run(query, venueId=data_dict['VenueId'])
+        try:
+            return [{"v": record["v"]}
+                    for record in result]
+        except ServiceUnavailable as exception:
+            print(exception)
+            raise
