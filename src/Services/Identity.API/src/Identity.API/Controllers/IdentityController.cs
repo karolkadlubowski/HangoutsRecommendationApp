@@ -23,20 +23,20 @@ namespace Identity.API.Controllers
         {
         }
 
-        [HttpPost("signup")]
-        public async Task<IActionResult> SignupUser(SignupUserCommand command)
+        [HttpPost("signin")]
+        public async Task<IActionResult> SigninUser(SignInUserCommand command)
         {
-            _logger.Info($"Sending command: {nameof(SignupUserCommand)}");
+            _logger.Info($"Sending command: {nameof(SignInUserCommand)}");
 
             var response = await _mediator.Send(command);
 
             return this.CreateResponse(response);
         }
-
-        [HttpPost("signin")]
-        public async Task<IActionResult> SigninUser(SigninUserCommand command)
+        
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignupUser(SignupUserCommand command)
         {
-            _logger.Info($"Sending command: {nameof(SigninUserCommand)}");
+            _logger.Info($"Sending command: {nameof(SignupUserCommand)}");
 
             var response = await _mediator.Send(command);
 

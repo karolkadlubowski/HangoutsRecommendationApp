@@ -10,7 +10,7 @@ using MediatR;
 
 namespace Identity.API.Application.Features.SigninUser
 {
-    public class SigninUserCommandHandler : IRequestHandler<SigninUserCommand, SigninUserResponse>
+    public class SignInUserCommandHandler : IRequestHandler<SignInUserCommand, SignInUserResponse>
     {
         private readonly IIdentityRepository _identityRepository;
         private readonly IPasswordHashService _passwordHashService;
@@ -18,7 +18,7 @@ namespace Identity.API.Application.Features.SigninUser
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public SigninUserCommandHandler(IIdentityRepository identityRepository,
+        public SignInUserCommandHandler(IIdentityRepository identityRepository,
             IPasswordHashService passwordHashService,
             IAuthTokenService tokenService,
             IMapper mapper,
@@ -31,7 +31,7 @@ namespace Identity.API.Application.Features.SigninUser
             _logger = logger;
         }
 
-        public async Task<SigninUserResponse> Handle(SigninUserCommand request, CancellationToken cancellationToken)
+        public async Task<SignInUserResponse> Handle(SignInUserCommand request, CancellationToken cancellationToken)
         {
             var userPersistenceModel = await _identityRepository.FindUserAsync(request.Email)
                                        ?? throw new InvalidCredentialsException("Invalid email or password");
@@ -44,9 +44,9 @@ namespace Identity.API.Application.Features.SigninUser
             var user = _mapper.Map<User>(userPersistenceModel);
             var jwtToken = _tokenService.GenerateAuthenticationToken(user);
 
-            _logger.Info($"JWT token has been generated for #{user.UserId}");
+            _logger.Info($"JWT token has been generated for user #{user.UserId}");
 
-            return new SigninUserResponse
+            return new SignInUserResponse
             {
                 JwtToken = jwtToken
             };
