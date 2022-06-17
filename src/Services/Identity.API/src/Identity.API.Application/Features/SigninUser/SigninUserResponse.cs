@@ -2,11 +2,11 @@
 
 namespace Identity.API.Application.Features.SigninUser
 {
-    public record SigninUserResponse : BaseResponse
+    public record SignInUserResponse : BaseResponse
     {
         public string JwtToken { get; init; }
 
-        public SigninUserResponse(Error error = null) : base(error)
+        public SignInUserResponse(Error error = null) : base(error)
         {
         }
     }

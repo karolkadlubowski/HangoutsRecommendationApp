@@ -5,6 +5,7 @@ using Identity.API.Application.Abstractions;
 using Identity.API.Application.Database.PersistenceModels;
 using Identity.API.Application.Database.Repositories;
 using Identity.API.Domain.Entities;
+using Identity.API.Domain.ValueObjects;
 using Library.EventBus;
 using Library.Shared.Events.Abstractions;
 using Library.Shared.Exceptions;
@@ -39,10 +40,10 @@ namespace Identity.API.Application.Features.SignupUser
         public async Task<SignupUserResponse> Handle(SignupUserCommand request, CancellationToken cancellationToken)
         {
             if (await _identityRepository.AnyUserWithEmailExistsAsync(request.Email))
-                throw new DuplicateExistsException("Error while creating user");
+                throw new DuplicateExistsException($"User with email '{request.Email}' already exists");
 
             var passwordSalt = _passwordHashService.CreatePasswordSalt();
-            var passwordHash = _passwordHashService.HashPassword(request.Password, passwordSalt);
+            var passwordHash = _passwordHashService.HashPassword(new UserPassword(request.Password), passwordSalt);
 
             var user = new User(request.Email, passwordSalt, passwordHash);
 
@@ -56,9 +57,9 @@ namespace Identity.API.Application.Features.SignupUser
 
             await _eventSender.SendEventAsync(EventBusTopics.Identity, user.FirstStoredEvent,
                 cancellationToken);
-            
+
             _logger.Info($"User with email '{user.Email}' created");
-            
+
             return new SignupUserResponse();
         }
     }

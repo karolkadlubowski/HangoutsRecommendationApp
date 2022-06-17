@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Identity.API.Application.Abstractions;
-using Identity.API.Application.Database.PersistenceModels;
 using Identity.API.Application.Database.Repositories;
 using Identity.API.Domain.Entities;
+using Identity.API.Domain.ValueObjects;
 using Library.Shared.Exceptions;
 using Library.Shared.HttpAccessor;
 using Library.Shared.Logging;
@@ -39,14 +39,14 @@ namespace Identity.API.Application.Features.ChangeUserPassword
                                        ?? throw new EntityNotFoundException($"User #{_httpAccessor.CurrentUserId} not found");
 
             var passwordSalt = _passwordHashService.CreatePasswordSalt();
-            var passwordHash = _passwordHashService.HashPassword(request.Password, passwordSalt);
+            var passwordHash = _passwordHashService.HashPassword(new UserPassword(request.Password), passwordSalt);
 
             var user = _mapper.Map<User>(userPersistenceModel);
 
             user.SetPassword(passwordSalt, passwordHash);
 
             _mapper.Map(user, userPersistenceModel);
-            
+
             if (!await _identityRepository.UpdateUserAsync(userPersistenceModel))
                 throw new DatabaseOperationException($"Error while updating password for user #{user.UserId}");
 

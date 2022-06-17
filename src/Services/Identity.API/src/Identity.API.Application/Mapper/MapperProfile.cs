@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Identity.API.Application.Database.PersistenceModels;
 using Identity.API.Domain.Entities;
+using Library.Shared.Models.Identity.Events.DataModels;
 
 namespace Identity.API.Application.Mapper
 {
@@ -10,6 +11,9 @@ namespace Identity.API.Application.Mapper
         {
             CreateMap<UserPersistenceModel, User>()
                 .ReverseMap();
+
+            CreateMap<User, UserCreatedEventDataModel>();
+            CreateMap<User, UserEmailChangedEventDataModel>();
         }
     }
 }

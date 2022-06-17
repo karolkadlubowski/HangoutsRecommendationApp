@@ -1,19 +1,21 @@
 ﻿using FluentValidation;
 using Identity.API.Domain.Validation;
 
-namespace Identity.API.Application.Features.SigninUser
+namespace Identity.API.Application.Features.SignupUser
 {
-    public class SigninUserCommandValidator : AbstractValidator<SigninUserCommand>
+    public class SignupUserValidator : AbstractValidator<SignupUserCommand>
     {
-        public SigninUserCommandValidator()
+        public SignupUserValidator()
         {
             RuleFor(x => x.Email)
+                .NotNull()
+                .NotEmpty()
                 .EmailAddress()
-                .MaximumLength(ValidationRules.MaxEmailAddressLength)
-                .NotNull();
+                .MaximumLength(ValidationRules.MaxEmailAddressLength);
 
             RuleFor(x => x.Password)
                 .NotNull()
+                .NotEmpty()
                 .Length(ValidationRules.MinPasswordLength, ValidationRules.MaxPasswordLength);
         }
     }

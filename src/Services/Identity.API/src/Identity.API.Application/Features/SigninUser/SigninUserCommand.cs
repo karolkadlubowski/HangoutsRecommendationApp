@@ -2,9 +2,9 @@
 
 namespace Identity.API.Application.Features.SigninUser
 {
-    public record SigninUserCommand
+    public record SignInUserCommand
     (
         string Email,
         string Password
-    ) : IRequest<SigninUserResponse>;
+    ) : IRequest<SignInUserResponse>;
 }
