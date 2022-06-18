@@ -14,14 +14,14 @@ def route_get_venues():
     print('Get Venues')
 
     args = {
-        'userId': request.args['userId']
+        'authentication': request.args['authentication']
     }
 
     with driver.session() as session:
         result = session.write_transaction(get_venues, args)
         print(result)
     
-        res = jsonify(data=args, success=True)
+        res = jsonify(data={'venueIds': [1, 2, 3, 4]}, success=True)
         print(res)
 
         return res
@@ -31,7 +31,7 @@ def route_update_relation():
     print('Update relation')
 
     args = {
-        'userId': request.args['userId'],
+        'authentication': request.args['authentication'],
         'venueId': request.args['venueId'],
         'relationType': request.args['relationType']
     }
@@ -40,7 +40,7 @@ def route_update_relation():
         result = session.write_transaction(get_venues, args)
         print(result)
 
-        res = jsonify(data=args, success=True)
+        res = jsonify(success=True)
         print(res)
 
         return res
