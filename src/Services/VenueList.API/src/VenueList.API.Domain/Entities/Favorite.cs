@@ -2,7 +2,7 @@
 
 namespace VenueList.API.Domain.Entities
 {
-    public class Venue : RootEntity
+    public class Favorite : RootEntity
     {
         public long VenueId { get; protected set; }
         public long UserId { get; protected set; }
@@ -11,8 +11,8 @@ namespace VenueList.API.Domain.Entities
         public string CategoryId { get; protected set; }
         public long? CreatorId { get; protected set; }
 
-        public static Venue Create(long venueId, long userId, string name, string description, string categoryId, long? creatorId)
-            => new Venue
+        public static Favorite Create(long venueId, long userId, string name, string description, string categoryId, long? creatorId)
+            => new Favorite
             {
                 VenueId = venueId,
                 UserId = userId,

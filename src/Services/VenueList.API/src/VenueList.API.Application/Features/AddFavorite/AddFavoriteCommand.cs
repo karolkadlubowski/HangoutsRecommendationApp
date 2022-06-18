@@ -1,6 +1,8 @@
-﻿namespace Library.Shared.Models.VenueList.Dtos
+﻿using MediatR;
+
+namespace VenueList.API.Application.Features.AddFavorite
 {
-    public record VenueDto
+    public record AddFavoriteCommand : IRequest<AddFavoriteResponse>
     {
         public long VenueId { get; init; }
         public long UserId { get; init; }

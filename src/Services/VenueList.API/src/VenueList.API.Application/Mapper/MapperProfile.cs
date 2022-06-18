@@ -8,8 +8,8 @@ namespace VenueList.API.Application.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<Domain.Entities.Venue, VenueDto>();
-            CreateMap<VenuePersistenceModel, Domain.Entities.Venue>();
+            CreateMap<Domain.Entities.Favorite, FavoriteDto>();
+            CreateMap<FavoritePersistenceModel, Domain.Entities.Favorite>();
         }
     }
 }

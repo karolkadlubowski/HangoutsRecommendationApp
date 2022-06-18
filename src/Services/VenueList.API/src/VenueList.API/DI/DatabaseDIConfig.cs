@@ -18,6 +18,6 @@ namespace VenueList.API.DI
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
             => services
-                .AddTransient<IVenueRepository, VenueRepository>();
+                .AddTransient<IFavoriteRepository, FavoriteRepository>();
     }
 }

@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace VenueList.API.Application.Database.PersistenceModels
 {
-    public class VenuePersistenceModel : BasePersistenceModel
+    public class FavoritePersistenceModel : BasePersistenceModel
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

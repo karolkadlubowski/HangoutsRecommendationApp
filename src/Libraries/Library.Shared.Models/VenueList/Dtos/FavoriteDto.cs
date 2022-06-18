@@ -1,8 +1,6 @@
-﻿using MediatR;
-
-namespace VenueList.API.Application.Features.AddVenue
+﻿namespace Library.Shared.Models.VenueList.Dtos
 {
-    public record AddVenueCommand : IRequest<AddVenueResponse>
+    public record FavoriteDto
     {
         public long VenueId { get; init; }
         public long UserId { get; init; }

@@ -23,8 +23,8 @@ namespace VenueList.API.DI
                 .AddSingleton<ICategoriesCacheRepository, CategoriesCacheRepository>();
 
             services
-                .AddScoped<IReadOnlyVenueService, VenueService>()
-                .AddScoped<IVenueService, VenueService>();
+                .AddScoped<IReadOnlyFavoriteService, FavoriteService>()
+                .AddScoped<IFavoriteService, FavoriteService>();
 
             return services;
         }

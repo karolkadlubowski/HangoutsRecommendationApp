@@ -3,8 +3,8 @@ using VenueList.API.Application.Database.PersistenceModels;
 
 namespace VenueList.API.Application.Database.Repositories
 {
-    public interface IVenueRepository
+    public interface IFavoriteRepository
     {
-        Task<VenuePersistenceModel> InsertVenueAsync(Domain.Entities.Venue venue);
+        Task<FavoritePersistenceModel> InsertFavoriteAsync(Domain.Entities.Favorite favorite);
     }
 }
