@@ -15,7 +15,7 @@ namespace VenueList.API.Application.Features.AddFavorite
         private readonly IMapper _mapper;
 
         public AddFavoriteCommandHandler(IFavoriteService favoriteService,
-            IEventSender eventSender,
+            //IEventSender eventSender,
             IMapper mapper)
         {
             _favoriteService = favoriteService;
