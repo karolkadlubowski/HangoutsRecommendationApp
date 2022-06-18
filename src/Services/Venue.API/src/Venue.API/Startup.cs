@@ -2,6 +2,8 @@ using System.Reflection;
 using Library.Database.DI;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
+using Library.Shared.Extensions;
+using Library.Shared.Policies.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -63,7 +65,8 @@ namespace Venue.API
                 .AddHostedService<CategoryDataHostedService>();
             _logger.Trace("> Hosted services registered");
 
-            services.AddRetryPolicyRegistry();
+            services.AddRetryPolicyRegistry()
+                .RegisterAllTypes<IRetryPolicy>(new[] { Assembly.Load("Venue.API.Infrastructure") }, ServiceLifetime.Singleton);
             _logger.Trace("> Retry policy registry registered");
 
             services

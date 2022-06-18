@@ -1,5 +1,8 @@
+using System.Reflection;
 using Library.Shared.DI;
 using Library.Shared.DI.Configs;
+using Library.Shared.Extensions;
+using Library.Shared.Policies.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using VenueList.API.DI;
+using VenueList.API.Infrastructure.HostedServices;
 using IConfigurationProvider = VenueList.API.Application.Providers.IConfigurationProvider;
 
 namespace VenueList.API
@@ -30,12 +34,27 @@ namespace VenueList.API
             services.InjectDefaultConfigs(_logger,
                 Configuration,
                 "VenueList.API.Application");
+            
+            /*services.AddVenueListDbContext(Configuration);
+            _logger.Trace("> VenueReview database context registered");*/
+            
+            services.AddMemoryCache(Configuration);
+            _logger.Trace("> Memory cache registered");
 
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
             services.AddSingleton<IConfigurationProvider, Application.Providers.ConfigurationProvider>();
             _logger.Trace("> Configuration provider registered");
+            
+            services
+                .AddHostedService<CategoryDataHostedService>();
+            _logger.Trace("> Hosted services registered");
+            
+            services.AddRetryPolicyRegistry()
+                .RegisterAllTypes<IRetryPolicy>(new[] { Assembly.Load("VenueList.API.Infrastructure") }, ServiceLifetime.Singleton);
+
+            _logger.Trace("> Retry policy registry registered");
 
             services.AddHealthChecks();
             _logger.Trace("> Health checks registered");

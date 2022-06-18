@@ -5,18 +5,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VenueList.API.Application\VenueList.API.Application.csproj" />
-      <ProjectReference Include="..\VenueList.API.Domain\VenueList.API.Domain.csproj" />
+        <ProjectReference Include="..\VenueList.API.Application\VenueList.API.Application.csproj" />
+        <ProjectReference Include="..\VenueList.API.Domain\VenueList.API.Domain.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\Library.Shared.Models\Library.Shared.Models.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Polly" Version="7.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Database\Repositories" />
-      <Folder Include="Events\Consumers" />
-      <Folder Include="Events\Producers" />
-      <Folder Include="HttpClients\Abstractions" />
-      <Folder Include="HttpClients\Models\Factories" />
-      <Folder Include="HttpClients\Models\Requests" />
-      <Folder Include="HttpClients\Models\Responses" />
+        <Folder Include="Database\Repositories" />
+        <Folder Include="Events\Consumers" />
+        <Folder Include="Events\Producers" />
+        <Folder Include="HttpClients\Abstractions" />
+        <Folder Include="HttpClients\Models\Factories" />
+        <Folder Include="HttpClients\Models\Requests" />
+        <Folder Include="HttpClients\Models\Responses" />
+        <Folder Include="Services\Responses" />
     </ItemGroup>
 
 </Project>

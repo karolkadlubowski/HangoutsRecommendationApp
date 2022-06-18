@@ -5,11 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VenueList.API.Domain\VenueList.API.Domain.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\Library.Shared.Models\Library.Shared.Models.csproj" />
+        <ProjectReference Include="..\VenueList.API.Domain\VenueList.API.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Abstractions" />
       <Folder Include="Database\Repositories" />
       <Folder Include="Features" />
       <Folder Include="Services" />

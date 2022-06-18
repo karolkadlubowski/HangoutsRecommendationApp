@@ -1,8 +1,8 @@
-﻿using Category.API.Domain.Configuration;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using VenueReview.API.Application.Database.Repositories;
+using VenueReview.API.Domain.Configuration;
 using VenueReview.API.Infrastructure.Database;
 using VenueReview.API.Infrastructure.Database.Repositories;
 

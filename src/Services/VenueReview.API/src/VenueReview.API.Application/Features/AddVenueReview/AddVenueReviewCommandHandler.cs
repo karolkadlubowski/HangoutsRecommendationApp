@@ -6,7 +6,6 @@ using Library.Shared.Events.Abstractions;
 using Library.Shared.Models.VenueReview.Dtos;
 using MediatR;
 using VenueReview.API.Application.Abstractions;
-using VenueReview.API.Application.Database.Repositories;
 
 namespace VenueReview.API.Application.Features.AddVenueReview
 {
