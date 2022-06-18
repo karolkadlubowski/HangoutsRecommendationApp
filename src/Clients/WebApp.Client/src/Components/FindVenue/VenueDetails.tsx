@@ -20,7 +20,7 @@ export default function VenueDetails(props: VenueDetailsProps) {
                 },
             })
             .then((response) => {
-                console.log(response.data.venue.photos[0].fileUrl);
+                console.log(response.data);
                 setVenueDetails(response.data.venue);
                 setImgUrl(response.data.venue.photos[0].fileUrl);
             });

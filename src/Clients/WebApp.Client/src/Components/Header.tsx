@@ -8,6 +8,11 @@ import { Link } from 'react-router-dom';
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     library.add(fas, faBowlFood, faFontAwesome);
+
+    const logout = () => {
+        localStorage.removeItem('token');
+    };
+
     return (
         <div>
             <nav className="bg-gray-800">
@@ -49,15 +54,17 @@ export default function Navbar() {
                                     >
                                         Create Place
                                     </Link>
-
-                                    <Link
-                                        to="/profile"
-                                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Profile
-                                    </Link>
                                 </div>
                             </div>
+                        </div>
+                        <div>
+                            <Link
+                                to="/signup"
+                                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                onClick={logout}
+                            >
+                                Logout
+                            </Link>
                         </div>
                         <div className="-mr-2 flex md:hidden">
                             <button
@@ -147,10 +154,11 @@ export default function Navbar() {
                                 </Link>
 
                                 <Link
-                                    to="/profile"
-                                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                                    to="/signup"
+                                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 pt-6 pb-3 rounded-md text-base font-medium"
+                                    onClick={logout}
                                 >
-                                    Profile
+                                    Logout
                                 </Link>
                             </div>
                         </div>

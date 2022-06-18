@@ -1,21 +1,64 @@
-import { Route, Routes } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
+import Signin from './Components/Authorization/Signin';
+import Signup from './Components/Authorization/Signup';
 import { CreatePlace } from './Components/CreatePlace/CreatePlace';
 import FindPlace from './Components/FindPlace/FindPlace';
 import FindVenue from './Components/FindVenue/FindVenue';
 import MainPage from './Components/MainPage/MainPage';
-import Profile from './Components/Profile/Profile';
+import './Styles/Styles.scss';
 
 function App() {
+    const ProtectedRoute = ({ children }: any) => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            return <Navigate to="/signin" replace />;
+        }
+
+        return children;
+    };
+
     return (
         <div>
             <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/find" element={<FindPlace />} />
-                <Route path="/findVenue" element={<FindVenue />} />
-                <Route path="/create-place" element={<CreatePlace />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route
+                    path="/"
+                    element={
+                        <ProtectedRoute>
+                            <MainPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/find"
+                    element={
+                        <ProtectedRoute>
+                            <FindPlace />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/findVenue"
+                    element={
+                        <ProtectedRoute>
+                            <FindVenue />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/create-place"
+                    element={
+                        <ProtectedRoute>
+                            <CreatePlace />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/signin" element={<Signin />} />
             </Routes>
+            <Toaster />
         </div>
     );
 }
