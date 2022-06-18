@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VenueList.API.Application.Abstractions;
+using VenueList.API.Application.Services;
 using VenueList.API.Infrastructure.Caching;
 using VenueList.API.Infrastructure.Clients.Factories;
 using VenueList.API.Infrastructure.Services;
@@ -18,10 +19,13 @@ namespace VenueList.API.DI
             services
                 .AddSingleton<IRestClientFactory, CategoryRestClientFactory>();
 
-            
             services
                 .AddSingleton<ICategoriesCacheRepository, CategoriesCacheRepository>();
-            
+
+            services
+                .AddScoped<IReadOnlyVenueService, VenueService>()
+                .AddScoped<IVenueService, VenueService>();
+
             return services;
         }
     }

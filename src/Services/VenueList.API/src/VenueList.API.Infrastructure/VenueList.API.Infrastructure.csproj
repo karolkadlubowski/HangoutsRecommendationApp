@@ -8,14 +8,15 @@
         <ProjectReference Include="..\VenueList.API.Application\VenueList.API.Application.csproj" />
         <ProjectReference Include="..\VenueList.API.Domain\VenueList.API.Domain.csproj" />
         <ProjectReference Include="..\..\..\..\Libraries\Library.Shared.Models\Library.Shared.Models.csproj" />
+        <ProjectReference Include="..\..\..\..\Libraries\Library.Database\Library.Database.csproj" />
     </ItemGroup>
     
     <ItemGroup>
-        <PackageReference Include="Polly" Version="7.2.3"/>
+        <PackageReference Include="Polly" Version="7.2.3" />
+        <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Database\Repositories" />
         <Folder Include="Events\Consumers" />
         <Folder Include="Events\Producers" />
         <Folder Include="HttpClients\Abstractions" />

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using VenueList.API.Application.Mapper;
 using VenueList.API.DI;
 using VenueList.API.Infrastructure.HostedServices;
 using IConfigurationProvider = VenueList.API.Application.Providers.IConfigurationProvider;
@@ -35,12 +36,15 @@ namespace VenueList.API
                 Configuration,
                 "VenueList.API.Application");
             
-            /*services.AddVenueListDbContext(Configuration);
-            _logger.Trace("> VenueReview database context registered");*/
+            services.AddVenueListDbContext(Configuration);
+            _logger.Trace("> VenueReview database context registered");
             
             services.AddMemoryCache(Configuration);
             _logger.Trace("> Memory cache registered");
 
+            services.AddRepositories();
+            _logger.Trace("> Database repositories registered");
+            
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
@@ -58,6 +62,9 @@ namespace VenueList.API
 
             services.AddHealthChecks();
             _logger.Trace("> Health checks registered");
+            
+            services.AddAutoMapper(typeof(MapperProfile));
+            _logger.Trace("> AutoMapper profile registered");
 
             services.AddSwagger();
             _logger.Trace("> Swagger UI registered");
