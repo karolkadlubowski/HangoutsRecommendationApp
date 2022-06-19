@@ -8,11 +8,14 @@ namespace VenueList.API.Application.Database.Repositories
     public interface IFavoriteRepository
     {
         Task<FavoritePersistenceModel> InsertFavoriteAsync(Domain.Entities.Favorite favorite);
-        Task<bool> DeleteFavoriteAsync(string venueReviewId);
+        Task<bool> DeleteFavoriteAsync(string favoriteId);
         
         Task<bool> AnyFavoriteExistsAsync(long venueId, long userId);
         
         Task<IPagedList<FavoritePersistenceModel>> GetPaginatedFavoritesAsync(GetFavoritesQuery query);
+        
+        Task<bool> DeleteFavoriteByVenueIdAsync(long venueId);
+
 
     }
 }

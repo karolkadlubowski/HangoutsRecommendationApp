@@ -9,9 +9,9 @@ namespace VenueList.API.Application.Features.DeleteFavorite
     {
         private readonly IFavoriteService _favoriteService;
 
-        public DeleteFavoriteCommandHandler(IFavoriteService venueReviewService)
+        public DeleteFavoriteCommandHandler(IFavoriteService favoriteService)
         {
-            _favoriteService = venueReviewService;
+            _favoriteService = favoriteService;
         }
         
         public async Task<DeleteFavoriteResponse> Handle(DeleteFavoriteCommand request, CancellationToken cancellationToken)

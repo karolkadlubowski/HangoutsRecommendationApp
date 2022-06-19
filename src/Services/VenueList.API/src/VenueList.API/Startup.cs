@@ -35,16 +35,16 @@ namespace VenueList.API
             services.InjectDefaultConfigs(_logger,
                 Configuration,
                 "VenueList.API.Application");
-            
+
             services.AddVenueListDbContext(Configuration);
             _logger.Trace("> VenueList database context registered");
-            
+
             services.AddMemoryCache(Configuration);
             _logger.Trace("> Memory cache registered");
 
             services.AddRepositories();
             _logger.Trace("> Database repositories registered");
-            
+
             services.AddServices(Configuration);
             _logger.Trace("> Services registered");
 
@@ -52,17 +52,24 @@ namespace VenueList.API
             _logger.Trace("> Configuration provider registered");
             
             services
-                .AddHostedService<CategoryDataHostedService>();
+                .AddKafkaMessageBroker(Configuration)
+                .AddEventHandlersStrategies(Assembly.Load("VenueList.API.Application"));
+            _logger.Trace("> Kafka message broker registered");
+
+            services
+                .AddHostedService<CategoryDataHostedService>()
+                .AddHostedService<EventConsumerHostedService>();
+
             _logger.Trace("> Hosted services registered");
-            
+
             services.AddRetryPolicyRegistry()
-                .RegisterAllTypes<IRetryPolicy>(new[] { Assembly.Load("VenueList.API.Infrastructure") }, ServiceLifetime.Singleton);
+                .RegisterAllTypes<IRetryPolicy>(new[] {Assembly.Load("VenueList.API.Infrastructure")}, ServiceLifetime.Singleton);
 
             _logger.Trace("> Retry policy registry registered");
 
             services.AddHealthChecks();
             _logger.Trace("> Health checks registered");
-            
+
             services.AddAutoMapper(typeof(MapperProfile));
             _logger.Trace("> AutoMapper profile registered");
 

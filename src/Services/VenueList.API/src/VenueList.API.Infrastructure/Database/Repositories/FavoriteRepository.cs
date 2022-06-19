@@ -54,5 +54,9 @@ namespace VenueList.API.Infrastructure.Database.Repositories
                 .OrderByDescending(v => v.ModifiedOn)
                 .ThenByDescending(v => v.CreatedOn)
                 .ToMongoPagedListAsync(query.PageNumber, query.PageSize);
+
+        public async Task<bool> DeleteFavoriteByVenueIdAsync(long venueId)
+            => (await _collection.DeleteManyAsync(f => f.VenueId == venueId))
+                .DeletedCount > 0;
     }
 }
