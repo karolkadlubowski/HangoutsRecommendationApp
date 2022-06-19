@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Library.Shared.Extensions;
+using Library.Shared.Models.Pagination;
 using VenueList.API.Application.Database.PersistenceModels;
 using VenueList.API.Application.Database.Repositories;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using VenueList.API.Application.Features.GetFavorites;
 
 namespace VenueList.API.Infrastructure.Database.Repositories
 {
@@ -44,5 +47,12 @@ namespace VenueList.API.Infrastructure.Database.Repositories
         public async Task<bool> AnyFavoriteExistsAsync(long venueId, long userId)
             => (await _collection.AsQueryable()
                 .AnyAsync(f => f.VenueId == venueId && f.UserId == userId));
+
+        public async Task<IPagedList<FavoritePersistenceModel>> GetPaginatedFavoritesAsync(GetFavoritesQuery query)
+            => await _collection.AsQueryable()
+                .Where(f => f.UserId == query.UserId)
+                .OrderByDescending(v => v.ModifiedOn)
+                .ThenByDescending(v => v.CreatedOn)
+                .ToMongoPagedListAsync(query.PageNumber, query.PageSize);
     }
 }

@@ -1,7 +1,13 @@
-﻿namespace VenueList.API.Application.Abstractions
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Library.Shared.Models.Pagination;
+using Library.Shared.Models.Pagination.Models;
+using VenueList.API.Application.Features.GetFavorites;
+
+namespace VenueList.API.Application.Abstractions
 {
     public interface IReadOnlyFavoriteService
     {
-        //Task<IReadOnlyList<Domain.Entities.Venue>> GetVenueAsync(GetVenueQuery query);
+        Task<PaginationTuple<Domain.Entities.Favorite>> GetFavoritesAsync(GetFavoritesQuery query);
     }
 }

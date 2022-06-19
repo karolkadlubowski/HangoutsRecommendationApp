@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VenueList.API.Application.Features.AddFavorite;
 using VenueList.API.Application.Features.DeleteFavorite;
+using VenueList.API.Application.Features.GetFavorites;
 
 namespace VenueList.API.Controllers
 {
@@ -20,6 +21,22 @@ namespace VenueList.API.Controllers
         public FavoriteController(IMediator mediator, ILogger logger) : base(mediator, logger)
         {
         }
+        
+        /// <summary>
+        /// Return Favorite entities from the database using pagination
+        /// </summary>
+        [HttpGet]
+        [ProducesResponseType(typeof(GetFavoritesResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetFavoritesResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetVenues([FromQuery] GetFavoritesQuery query)
+        {
+            _logger.Info($"Sending query: {nameof(GetFavoritesQuery)}");
+
+            var response = await _mediator.Send(query);
+
+            return this.CreateResponse(response);
+        }
+        
         
         /// <summary>
         /// Add Venue to the database
