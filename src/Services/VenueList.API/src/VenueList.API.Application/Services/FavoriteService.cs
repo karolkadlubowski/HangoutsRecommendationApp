@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
@@ -6,6 +7,7 @@ using VenueList.API.Application.Abstractions;
 using VenueList.API.Application.Database.PersistenceModels;
 using VenueList.API.Application.Database.Repositories;
 using VenueList.API.Application.Features.AddFavorite;
+using VenueList.API.Application.Features.DeleteFavorite;
 using VenueList.API.Domain.Entities;
 
 namespace VenueList.API.Application.Services
@@ -28,7 +30,11 @@ namespace VenueList.API.Application.Services
 
         public async Task<Favorite> AddVenueAsync(AddFavoriteCommand command)
         {
-            var favorite = Favorite.Create(command.VenueId, command.UserId, command.Name, command.Description, command.CategoryId, command.CreatorId);
+            var favorite = Favorite.Create(command.VenueId, command.UserId, command.Name, command.Description, command.CategoryName, command.CreatorId);
+            
+            if(await _favoriteRepository.AnyFavoriteExistsAsync(command.VenueId,command.UserId))
+                throw new DuplicateExistsException($"User #{favorite.CreatorId} has already added venue #{favorite.VenueId} to the database");
+
 
             var favoritePersistenceModel = await _favoriteRepository.InsertFavoriteAsync(favorite)
                                         ?? throw new DatabaseOperationException($"Inserting venue with id #{favorite.VenueId} for a user with id #{favorite.UserId} to the database failed");
@@ -38,6 +44,24 @@ namespace VenueList.API.Application.Services
             _logger.Info($"Venue with id #{favorite.VenueId} for a user with id #{favorite.UserId} added to the database successfully");
 
             return favorite;
+        }
+
+        public async Task<string> DeleteFavoriteAsync(DeleteFavoriteCommand command)
+        {
+            try
+            {
+                if (!await _favoriteRepository.DeleteFavoriteAsync(command.FavoriteId))
+                    throw new EntityNotFoundException($"Favorite #{command.FavoriteId} was not deleted from the database because it was not found");
+
+                _logger.Info($"Favorite #{command.FavoriteId} deleted from the database successfully");
+
+                return command.FavoriteId;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

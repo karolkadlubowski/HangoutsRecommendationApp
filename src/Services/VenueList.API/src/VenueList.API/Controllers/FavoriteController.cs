@@ -6,6 +6,7 @@ using Library.Shared.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VenueList.API.Application.Features.AddFavorite;
+using VenueList.API.Application.Features.DeleteFavorite;
 
 namespace VenueList.API.Controllers
 {
@@ -33,6 +34,23 @@ namespace VenueList.API.Controllers
         public async Task<IActionResult> AddVenue(AddFavoriteCommand command)
         {
             _logger.Info($"Sending command: {nameof(AddFavoriteCommand)}");
+
+            var response = await _mediator.Send(command);
+
+            return this.CreateResponse(response);
+        }
+        
+        /// <summary>
+        /// Delete Favorite from the database
+        /// </summary>
+        [HttpDelete]
+        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.NotFound)]
+        public async Task<IActionResult> DeleteFavorite([FromQuery] DeleteFavoriteCommand command)
+        {
+            _logger.Info($"Sending command: {nameof(DeleteFavoriteCommand)}");
 
             var response = await _mediator.Send(command);
 

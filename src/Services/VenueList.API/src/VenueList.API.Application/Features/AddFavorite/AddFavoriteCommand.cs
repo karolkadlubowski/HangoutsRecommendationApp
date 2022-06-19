@@ -8,7 +8,7 @@ namespace VenueList.API.Application.Features.AddFavorite
         public long UserId { get; init; }
         public string Name { get; init; }
         public string Description { get; init; }
-        public string CategoryId { get; init; }
+        public string CategoryName { get; init; }
         public long? CreatorId { get; init; }
     }
 }

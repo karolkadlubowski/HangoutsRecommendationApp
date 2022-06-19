@@ -37,7 +37,7 @@ namespace VenueList.API
                 "VenueList.API.Application");
             
             services.AddVenueListDbContext(Configuration);
-            _logger.Trace("> VenueReview database context registered");
+            _logger.Trace("> VenueList database context registered");
             
             services.AddMemoryCache(Configuration);
             _logger.Trace("> Memory cache registered");

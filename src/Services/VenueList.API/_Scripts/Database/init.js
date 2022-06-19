@@ -13,4 +13,4 @@ db.createUser(
 
 db = new Mongo().getDB("VENUELIST_DB");
 
-db.createCollection("Venues");
+db.createCollection("Favorites");

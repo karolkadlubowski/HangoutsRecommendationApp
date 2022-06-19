@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using VenueList.API.Application.Database.PersistenceModels;
 using VenueList.API.Application.Database.Repositories;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace VenueList.API.Infrastructure.Database.Repositories
 {
@@ -21,7 +23,7 @@ namespace VenueList.API.Infrastructure.Database.Repositories
                     UserId = favorite.UserId,
                     Name = favorite.Name,
                     Description = favorite.Description,
-                    CategoryId = favorite.CategoryId,
+                    CategoryName = favorite.CategoryName,
                     CreatorId = favorite.CreatorId
                 };
 
@@ -34,5 +36,13 @@ namespace VenueList.API.Infrastructure.Database.Repositories
                 return null;
             }
         }
+
+        public async Task<bool> DeleteFavoriteAsync(string favoriteId)
+            => (await _collection.DeleteOneAsync(f => f.FavoriteId == favoriteId))
+                .DeletedCount > 0;
+
+        public async Task<bool> AnyFavoriteExistsAsync(long venueId, long userId)
+            => (await _collection.AsQueryable()
+                .AnyAsync(f => f.VenueId == venueId && f.UserId == userId));
     }
 }

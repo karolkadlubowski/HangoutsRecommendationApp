@@ -14,10 +14,10 @@ namespace VenueList.API.DI
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddSingleton<ICategoryDataService, CategoryDataService>();
-
-            services
                 .AddSingleton<IRestClientFactory, CategoryRestClientFactory>();
+            
+            services
+                .AddSingleton<ICategoryDataService, CategoryDataService>();
 
             services
                 .AddSingleton<ICategoriesCacheRepository, CategoriesCacheRepository>();
