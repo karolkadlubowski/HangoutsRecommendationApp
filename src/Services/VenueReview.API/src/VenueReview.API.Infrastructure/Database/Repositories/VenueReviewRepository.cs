@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using VenueReview.API.Application.Database.PersistenceModels;

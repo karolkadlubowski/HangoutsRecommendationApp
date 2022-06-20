@@ -1,4 +1,4 @@
-﻿namespace Category.API.Domain.Configuration
+﻿namespace VenueReview.API.Domain.Configuration
 {
     public record DatabaseConfig : Library.Shared.AppConfigs.DatabaseConfig
     {
