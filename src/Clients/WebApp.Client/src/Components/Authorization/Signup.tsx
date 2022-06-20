@@ -23,7 +23,7 @@ export default function Signup() {
             .then(function (response) {
                 console.log('success', response);
                 localStorage.setItem('token', response.data.jwtToken);
-                navigate('/', { replace: true });
+                navigate('/signin', { replace: true });
             })
             .catch(function (response) {
                 console.log('error', response);

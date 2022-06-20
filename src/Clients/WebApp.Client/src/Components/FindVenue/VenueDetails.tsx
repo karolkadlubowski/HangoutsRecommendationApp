@@ -23,6 +23,9 @@ export default function VenueDetails(props: VenueDetailsProps) {
                 console.log(response.data);
                 setVenueDetails(response.data.venue);
                 setImgUrl(response.data.venue.photos[0].fileUrl);
+            })
+            .catch(function (response) {
+                console.log(response);
             });
     }, [props.VenueId]);
 

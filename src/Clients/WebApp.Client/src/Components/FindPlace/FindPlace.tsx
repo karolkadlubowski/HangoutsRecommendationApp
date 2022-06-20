@@ -2,96 +2,137 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBowlFood, faFontAwesome, fas } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import TinderCard from 'react-tinder-card';
 import Header from '../Header';
 import './FindPlace.css';
 
-export const favi: any[] = [];
+interface VenueDetails {
+    id?: number;
+    name?: string;
+    img?: any;
+}
+
 export default function FindPlace() {
-    const [direction, setDirection] = useState<string>()
-    const [favorite, setFavorite] = useState<boolean>()
-    const [id, setId] = useState<number>()
-    const [people, setPeople] = useState([]);
-    library.add(fas, faBowlFood,  faFontAwesome)
+    const [direction, setDirection] = useState<string>();
+    const [id, setId] = useState<number>();
+    const [VenueDetails, setVenueDetails] = useState<VenueDetails[]>();
+    const [venueIds, setVenueIds] = useState<number[]>();
+    library.add(fas, faBowlFood, faFontAwesome);
+
+    const getVenueIds = () => {
+        const token = localStorage.getItem('token');
+        axios({
+            method: 'get',
+            url: 'http://localhost:5000/venue/algorithm/venues',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        })
+            .then(function (response) {
+                setVenueIds(response?.data?.data?.venueIds);
+            })
+            .catch(function (response) {
+                console.log(response);
+                toast.error('Error');
+            });
+    };
+
+    const getVenueDetails = (ids: number[]) => {
+        const requestOne = axios.get('http://localhost:8000/api/v1/Venue', {
+            params: {
+                VenueId: ids[0],
+            },
+        });
+        const requestTwo = axios.get('http://localhost:8000/api/v1/Venue', {
+            params: {
+                VenueId: ids[1],
+            },
+        });
+        axios
+            .all([requestOne, requestTwo])
+            .then(
+                axios.spread((...responses) => {
+                    const responseOne = responses[0];
+                    const firstVenueDetails = {
+                        id: responseOne.data.venue.venueId,
+                        name: responseOne.data.venue.name,
+                        img: responseOne.data.venue.photos,
+                    };
+                    const responseTwo = responses[1];
+                    const secondVenueDetails = {
+                        id: responseTwo.data.venue.venueId,
+                        name: responseTwo.data.venue.name,
+                        img: responseTwo.data.venue.photos,
+                    };
+                    setVenueDetails([secondVenueDetails, firstVenueDetails]);
+                })
+            )
+            .catch((errors) => {
+                console.error(errors);
+            });
+    };
 
     useEffect(() => {
-        axios
-          .get(
-            "https://api.themoviedb.org/3/trending/all/day?api_key=360a9b5e0dea438bac3f653b0e73af47&language=en-US"
-          )
-          .then((res) => setPeople(res.data.results.reverse()));
+        getVenueIds();
     }, []);
 
+    useEffect(() => {
+        if (venueIds) {
+            getVenueDetails(venueIds);
+        }
+    }, [venueIds]);
+
     const onSwipe = (direction: string) => {
-        setDirection('You swiped: ' + direction)
-    }
+        setDirection('You swiped: ' + direction);
+    };
 
     const props = {
         onSwipe: onSwipe,
-        preventSwipe: ['up', 'down']
-    }
+        preventSwipe: ['up', 'down'],
+    };
 
-    const addToFavorite = (id: number) => {
-        let currentFavorites: string[] = JSON.parse(localStorage.getItem("favorites") ?? '');
-        currentFavorites.push(id.toString());
-        setFavorite(true);
-        localStorage.setItem("favorites", JSON.stringify(currentFavorites));
-        console.log(currentFavorites);
-    }
+    const OnCardLeftScreen = (id?: number) => {
+        if (id) {
+            setId(id);
+            const newIds = venueIds;
+            newIds?.shift();
+            if (newIds) getVenueDetails(newIds);
+        }
+    };
 
-    const removeFromFavorites = (id: number) => {
-      let currentFavorites: string[] = JSON.parse(localStorage.getItem("favorites") ?? '');
-      const index = currentFavorites.indexOf(id.toString());
-      if (index > -1) {
-        currentFavorites.splice(index, 1);
-      }
-      setFavorite(false);
-      localStorage.setItem("favorites", JSON.stringify(currentFavorites));
-      console.log(currentFavorites);
-    }
-
-  return (
-    <div className='overflow-hidden'>
-        <Header/>
-        <div className='flex justify-center'>
-            <div className='flex flex-col content-center'>
-              <div className='mt-10'>
-                <p>{direction ?? 'Swiping direction'}</p>
-                <p>{`id: ${id} left the screen` ?? 'Swiping id'}</p>
-              </div>
-              {/* {!favorite ? 
-                <button onClick={() => {if(id){addToFavorite(id)}}}>
-                  <FontAwesomeIcon icon={faHeartCirclePlus} className="ml-5 text-2xl leading-lg text-black opacity-75"/>
-                </button> : 
-                <button onClick={() => {if(id){removeFromFavorites(id)}}}>
-                  <FontAwesomeIcon icon={faHeartCircleMinus} className="ml-5 text-2xl leading-lg text-red-600 opacity-75"/>
-                </button>
-                } */}
-            <div className='mt-10 flex justify-center'>
-                {people.map((k: any, index: number) => (
-                <TinderCard {...(props as any)} 
-                            className="swipe"
-                            onCardLeftScreen={() => setId(index)} 
-                            onSwipe={onSwipe}
-                            preventSwipe={['up', 'down']}>
-            <div
-              style={{
-                backgroundImage: `url(https://image.tmdb.org/t/p/w500${k.poster_path})`
-              }}
-              className="card"
-            >
-              <h4
-                className='text-background'
-              >
-                {k?.original_title}
-              </h4>
+    return (
+        <div className="overflow-hidden">
+            <Header />
+            <div className="flex justify-center">
+                <div className="flex flex-col content-center">
+                    <div className="mt-10">
+                        <p>{direction ?? 'Swiping direction'}</p>
+                        <p>{`id: ${id} left the screen` ?? 'Swiping id'}</p>
+                    </div>
+                    <div className="cardContainer">
+                        {VenueDetails?.map((el: VenueDetails) => (
+                            <TinderCard
+                                {...(props as any)}
+                                className="swipe"
+                                onCardLeftScreen={() => OnCardLeftScreen(el.id)}
+                                onSwipe={onSwipe}
+                                key={el.id}
+                                preventSwipe={['up', 'down']}
+                            >
+                                <div
+                                    style={{
+                                        backgroundImage: `url(${el.img[0].fileUrl})`,
+                                    }}
+                                    className="card"
+                                >
+                                    <h4 className="text-background">
+                                        {el.name} {el.id}
+                                    </h4>
+                                </div>
+                            </TinderCard>
+                        ))}
+                    </div>
+                </div>
             </div>
-                </TinderCard>
-                ))}
-                
-            </div>
-            </div>
-      </div>
-    </div>
-  )
+        </div>
+    );
 }

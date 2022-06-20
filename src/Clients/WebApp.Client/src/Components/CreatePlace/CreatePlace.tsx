@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import Header from '../Header';
 
@@ -41,9 +42,11 @@ export function CreatePlace() {
         })
             .then(function (response) {
                 console.log('success', response);
+                toast.success('Successfully added venue');
             })
             .catch(function (response) {
                 console.log('error', response);
+                toast.error('Something went wrong');
             });
     };
 

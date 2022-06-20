@@ -57,7 +57,7 @@ export default function Navbar() {
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div className="hidden md:block">
                             <Link
                                 to="/signup"
                                 className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
