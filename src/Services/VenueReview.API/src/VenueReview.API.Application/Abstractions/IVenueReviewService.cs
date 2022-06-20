@@ -8,7 +8,7 @@ namespace VenueReview.API.Application.Abstractions
 {
     public interface IVenueReviewService : IReadOnlyVenueReviewService
     {
-        Task<Domain.Entities.VenueReview> AddVenueReviewAsync(AddVenueReviewCommand command);
+        Task<Domain.Entities.VenueReview> AddVenueReviewAsync(AddVenueReviewCommand command, long userId);
 
         Task<String> DeleteVenueReviewAsync(DeleteVenueReviewCommand command);
     }
