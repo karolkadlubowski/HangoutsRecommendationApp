@@ -1,10 +1,11 @@
+import json
+import jwt
+
 from flask import Flask, request, jsonify
 from venue_kafka import VenueKafka
 from identity_kafka import IdentityKafka
 from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable
-import json
-import jwt
 
 app = Flask(__name__)
 
@@ -38,8 +39,8 @@ def route_get_venues():
 
         return res
 
-@app.route('/venue/algorithm/relation', methods=['PUT'])
-def route_update_relation():
+@app.route('/venue/algorithm/like', methods=['PUT'])
+def route_like_venue():
     print('Update relation')
 
     auth_token = request.headers.get('Authorization')
@@ -47,12 +48,12 @@ def route_update_relation():
 
     args = {
         "userId": decode_auth_token(auth_token),
-        'venueId': request.args['venueId'],
-        'relationType': request.args['relationType']
+        'venueId': request.args['venueId']
     }
 
     with driver.session() as session:
         result = session.write_transaction(get_venues, args)
+        print(result)
 
         res = jsonify(success=True)
         print(res)
