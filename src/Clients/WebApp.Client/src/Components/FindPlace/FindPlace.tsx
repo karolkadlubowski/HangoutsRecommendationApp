@@ -71,6 +71,26 @@ export default function FindPlace() {
             });
     };
 
+    const sendVenueInfo = (id: number, relationType: number) => {
+        const token = localStorage.getItem('token');
+        axios({
+            method: 'put',
+            url: 'http://localhost:5000/venue/algorithm/relation',
+            params: {
+                venueId: id,
+                relationType: relationType,
+            },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (response) {
+                console.log(response);
+                toast.error('Error');
+            });
+    };
+
     useEffect(() => {
         getVenueIds();
     }, []);
@@ -81,8 +101,16 @@ export default function FindPlace() {
         }
     }, [venueIds]);
 
+    useEffect(() => {
+        if (id && direction) {
+            console.log(id, direction);
+            let relationType = direction === 'right' ? 0 : 1;
+            sendVenueInfo(id, relationType);
+        }
+    }, [id]);
+
     const onSwipe = (direction: string) => {
-        setDirection('You swiped: ' + direction);
+        setDirection(direction);
     };
 
     const props = {
@@ -100,39 +128,37 @@ export default function FindPlace() {
     };
 
     return (
-        <div className="overflow-hidden">
+        <>
             <Header />
-            <div className="flex justify-center">
-                <div className="flex flex-col content-center">
-                    <div className="mt-10">
-                        <p>{direction ?? 'Swiping direction'}</p>
-                        <p>{`id: ${id} left the screen` ?? 'Swiping id'}</p>
-                    </div>
-                    <div className="cardContainer">
-                        {VenueDetails?.map((el: VenueDetails) => (
-                            <TinderCard
-                                {...(props as any)}
-                                className="swipe"
-                                onCardLeftScreen={() => OnCardLeftScreen(el.id)}
-                                onSwipe={onSwipe}
-                                key={el.id}
-                                preventSwipe={['up', 'down']}
-                            >
-                                <div
-                                    style={{
-                                        backgroundImage: `url(${el.img[0].fileUrl})`,
-                                    }}
-                                    className="card"
+            <div className="flex justify-center bg-gray-100 page-height">
+                <div className="bg-slate-100 w-full absolute flex justify-center">
+                    <div className="flex items-center" style={{ height: '60vh' }}>
+                        <div className="cardContainer relative z-10">
+                            {VenueDetails?.map((el: VenueDetails) => (
+                                <TinderCard
+                                    {...(props as any)}
+                                    className="swipe"
+                                    onCardLeftScreen={() => OnCardLeftScreen(el.id)}
+                                    onSwipe={onSwipe}
+                                    key={el.id}
+                                    preventSwipe={['up', 'down']}
                                 >
-                                    <h4 className="text-background">
-                                        {el.name} {el.id}
-                                    </h4>
-                                </div>
-                            </TinderCard>
-                        ))}
+                                    <div
+                                        style={{
+                                            backgroundImage: `url(${el.img[0].fileUrl})`,
+                                        }}
+                                        className="card"
+                                    >
+                                        <h4 className="text-background">
+                                            {el.name} {el.id}
+                                        </h4>
+                                    </div>
+                                </TinderCard>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
