@@ -15,7 +15,7 @@ driver = GraphDatabase.driver('bolt://localhost:7687', auth=('neo4j', 'admin'))
 def decode_auth_token(auth_token):
     payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'), algorithms=['HS512'])
 
-    return payload['sub']
+    return payload['nameid']
 
 
 @app.route('/venue/algorithm/venues', methods=['GET'])
