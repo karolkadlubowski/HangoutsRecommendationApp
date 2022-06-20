@@ -4,7 +4,6 @@ namespace VenueList.API.Domain.Entities
 {
     public class Favorite : RootEntity
     {
-        public string FavoriteId { get; protected set; }
         public long VenueId { get; protected set; }
         public long UserId { get; protected set; }
         public string Name { get; protected set; }

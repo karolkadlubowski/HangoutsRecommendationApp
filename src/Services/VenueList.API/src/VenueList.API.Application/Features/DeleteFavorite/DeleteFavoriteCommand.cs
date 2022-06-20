@@ -4,7 +4,6 @@ namespace VenueList.API.Application.Features.DeleteFavorite
 {
     public record DeleteFavoriteCommand : IRequest<DeleteFavoriteResponse>
     {
-        public string FavoriteId { get; init; }
-
+        public long VenueId { get; init; }
     }
 }

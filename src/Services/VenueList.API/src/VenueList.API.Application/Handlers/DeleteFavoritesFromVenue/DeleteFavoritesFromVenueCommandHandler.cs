@@ -21,7 +21,7 @@ namespace VenueList.API.Application.Handlers.DeleteFavoritesFromVenue
         {
             await _favoriteRepository.DeleteFavoriteByVenueIdAsync(request.VenueId);
 
-            _logger.Info($"All favorites were successfully deleted for venue with id #{request.VenueId}");
+            _logger.Info($"All favorites were successfully deleted for venue #{request.VenueId}");
 
             return new DeleteFavoritesFromVenueResponse {VenueId = request.VenueId};
         }

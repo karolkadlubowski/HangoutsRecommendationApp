@@ -26,31 +26,5 @@ namespace VenueList.API.Infrastructure.Caching
         public async Task<CategoryDto> FindCategoryByNameAsync(string name)
             => (await GetCategoriesAsync())
                 .FirstOrDefault(category => category.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-
-        public async Task StoreCategoryAsync(CategoryDto category)
-        {
-            var categories = await GetValueOrDefaultAsync(CacheKeys.Categories)
-                             ?? new List<CategoryDto>();
-
-            if (categories.Any(c => c.CategoryId == category.CategoryId
-                                    && c.Name.Equals(category.Name, StringComparison.InvariantCultureIgnoreCase)))
-                throw new DuplicateExistsException($"Category #{category.CategoryId} with name '{category.Name}' already exists in the cache");
-
-            categories.Add(category);
-
-            await SetValueAsync(CacheKeys.Categories, categories);
-        }
-
-        public async Task DeleteCategoryAsync(string categoryId)
-        {
-            var categories = await GetValueOrDefaultAsync(CacheKeys.Categories)
-                             ?? new List<CategoryDto>();
-
-            var categoryToDelete = categories.FirstOrDefault(c => c.CategoryId == categoryId);
-
-            categories.Remove(categoryToDelete);
-
-            await SetValueAsync(CacheKeys.Categories, categories);
-        }
     }
 }

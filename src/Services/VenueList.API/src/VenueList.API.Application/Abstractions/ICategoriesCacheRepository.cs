@@ -9,8 +9,5 @@ namespace VenueList.API.Application.Abstractions
     {
         Task<IReadOnlyList<CategoryDto>> GetCategoriesAsync();
         Task<CategoryDto> FindCategoryByNameAsync(string name);
-
-        Task StoreCategoryAsync(CategoryDto category);
-        Task DeleteCategoryAsync(string categoryId);
     }
 }

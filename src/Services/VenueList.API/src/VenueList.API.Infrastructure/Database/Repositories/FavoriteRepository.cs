@@ -6,7 +6,7 @@ using VenueList.API.Application.Database.PersistenceModels;
 using VenueList.API.Application.Database.Repositories;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using VenueList.API.Application.Features.GetFavorites;
+using VenueList.API.Application.Features.GetUserFavorites;
 
 namespace VenueList.API.Infrastructure.Database.Repositories
 {
@@ -40,23 +40,23 @@ namespace VenueList.API.Infrastructure.Database.Repositories
             }
         }
 
-        public async Task<bool> DeleteFavoriteAsync(string favoriteId)
-            => (await _collection.DeleteOneAsync(f => f.FavoriteId == favoriteId))
-                .DeletedCount > 0;
-
         public async Task<bool> AnyFavoriteExistsAsync(long venueId, long userId)
             => (await _collection.AsQueryable()
                 .AnyAsync(f => f.VenueId == venueId && f.UserId == userId));
 
-        public async Task<IPagedList<FavoritePersistenceModel>> GetPaginatedFavoritesAsync(GetFavoritesQuery query)
+        public async Task<IPagedList<FavoritePersistenceModel>> GetPaginatedFavoritesAsync(GetUserFavoritesQuery query, long userId)
             => await _collection.AsQueryable()
-                .Where(f => f.UserId == query.UserId)
+                .Where(f => f.UserId == userId)
                 .OrderByDescending(v => v.ModifiedOn)
                 .ThenByDescending(v => v.CreatedOn)
-                .ToMongoPagedListAsync(query.PageNumber, query.PageSize);
+                .ToPagedListAsync(query.PageNumber, query.PageSize);
 
         public async Task<bool> DeleteFavoriteByVenueIdAsync(long venueId)
             => (await _collection.DeleteManyAsync(f => f.VenueId == venueId))
+                .DeletedCount > 0;
+
+        public async Task<bool> DeleteFavoriteByVenueIdAndUserIdAsync(long venueId, long userId)
+            => (await _collection.DeleteManyAsync(f => f.VenueId == venueId && f.UserId == userId))
                 .DeletedCount > 0;
     }
 }

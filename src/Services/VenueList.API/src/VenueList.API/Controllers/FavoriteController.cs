@@ -5,9 +5,9 @@ using Library.Shared.Extensions;
 using Library.Shared.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using VenueList.API.Application.Features.AddFavorite;
+using VenueList.API.Application.Features.AddVenueToFavorites;
 using VenueList.API.Application.Features.DeleteFavorite;
-using VenueList.API.Application.Features.GetFavorites;
+using VenueList.API.Application.Features.GetUserFavorites;
 
 namespace VenueList.API.Controllers
 {
@@ -23,14 +23,14 @@ namespace VenueList.API.Controllers
         }
         
         /// <summary>
-        /// Return Favorite entities from the database using pagination
+        /// Return favorite user's venues from the database using pagination
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(GetFavoritesResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(GetFavoritesResponse), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> GetVenues([FromQuery] GetFavoritesQuery query)
+        [ProducesResponseType(typeof(GetUserFavoritesResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetUserFavoritesResponse), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetVenues([FromQuery] GetUserFavoritesQuery query)
         {
-            _logger.Info($"Sending query: {nameof(GetFavoritesQuery)}");
+            _logger.Info($"Sending query: {nameof(GetUserFavoritesQuery)}");
 
             var response = await _mediator.Send(query);
 
@@ -39,18 +39,18 @@ namespace VenueList.API.Controllers
         
         
         /// <summary>
-        /// Add Venue to the database
+        /// Add venue to user's favorites
         /// </summary>
         /// <param name="command">
         /// </param>
         [HttpPost]
-        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.UnprocessableEntity)]
-        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.Conflict)]
-        public async Task<IActionResult> AddVenue(AddFavoriteCommand command)
+        [ProducesResponseType(typeof(AddVenueToFavoritesResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AddVenueToFavoritesResponse), (int) HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(AddVenueToFavoritesResponse), (int) HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(AddVenueToFavoritesResponse), (int) HttpStatusCode.Conflict)]
+        public async Task<IActionResult> AddVenue(AddVenueToFavoritesCommand command)
         {
-            _logger.Info($"Sending command: {nameof(AddFavoriteCommand)}");
+            _logger.Info($"Sending command: {nameof(AddVenueToFavoritesCommand)}");
 
             var response = await _mediator.Send(command);
 
@@ -58,13 +58,13 @@ namespace VenueList.API.Controllers
         }
         
         /// <summary>
-        /// Delete Favorite from the database
+        /// Delete favorite venue from user's list
         /// </summary>
         [HttpDelete]
-        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.UnprocessableEntity)]
-        [ProducesResponseType(typeof(AddFavoriteResponse), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(AddVenueToFavoritesResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AddVenueToFavoritesResponse), (int) HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(AddVenueToFavoritesResponse), (int) HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(AddVenueToFavoritesResponse), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteFavorite([FromQuery] DeleteFavoriteCommand command)
         {
             _logger.Info($"Sending command: {nameof(DeleteFavoriteCommand)}");

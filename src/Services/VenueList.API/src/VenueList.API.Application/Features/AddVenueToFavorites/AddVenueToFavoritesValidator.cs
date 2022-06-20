@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using VenueList.API.Domain.Validation;
 
-namespace VenueList.API.Application.Features.AddFavorite
+namespace VenueList.API.Application.Features.AddVenueToFavorites
 {
-    public class AddFavoriteValidator : AbstractValidator<AddFavoriteCommand>
+    public class AddVenueToFavoritesValidator : AbstractValidator<AddVenueToFavoritesCommand>
     {
-        public AddFavoriteValidator()
+        public AddVenueToFavoritesValidator()
         {
             RuleFor(x => x.Name)
                 .NotNull()

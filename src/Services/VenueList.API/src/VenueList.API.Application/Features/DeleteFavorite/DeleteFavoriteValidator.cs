@@ -6,8 +6,8 @@ namespace VenueList.API.Application.Features.DeleteFavorite
     {
         public DeleteFavoriteValidator()
         {
-            RuleFor(x => x.FavoriteId)
-                .Length(24);
+            RuleFor(x => x.VenueId)
+                .GreaterThan(0);
         }
     }
 }

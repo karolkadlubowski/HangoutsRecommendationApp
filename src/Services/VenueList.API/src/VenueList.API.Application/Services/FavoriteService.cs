@@ -10,9 +10,9 @@ using VenueList.API.Application.Abstractions;
 using VenueList.API.Application.Database;
 using VenueList.API.Application.Database.PersistenceModels;
 using VenueList.API.Application.Database.Repositories;
-using VenueList.API.Application.Features.AddFavorite;
+using VenueList.API.Application.Features.AddVenueToFavorites;
 using VenueList.API.Application.Features.DeleteFavorite;
-using VenueList.API.Application.Features.GetFavorites;
+using VenueList.API.Application.Features.GetUserFavorites;
 using VenueList.API.Domain.Entities;
 
 namespace VenueList.API.Application.Services
@@ -33,7 +33,7 @@ namespace VenueList.API.Application.Services
             _logger = logger;
         }
 
-        public async Task<Favorite> AddVenueAsync(AddFavoriteCommand command)
+        public async Task<Favorite> AddVenueToFavoritesAsync(AddVenueToFavoritesCommand command)
         {
             var favorite = Favorite.Create(command.VenueId, command.UserId, command.Name, command.Description, command.CategoryName, command.CreatorId);
 
@@ -42,25 +42,25 @@ namespace VenueList.API.Application.Services
 
 
             var favoritePersistenceModel = await _favoriteRepository.InsertFavoriteAsync(favorite)
-                                           ?? throw new DatabaseOperationException($"Inserting venue with id #{favorite.VenueId} for a user with id #{favorite.UserId} to the database failed");
+                                           ?? throw new DatabaseOperationException($"Inserting venue #{favorite.VenueId} for a user with id #{favorite.UserId} to the database failed");
 
             favorite = _mapper.Map<FavoritePersistenceModel, Domain.Entities.Favorite>(favoritePersistenceModel);
 
-            _logger.Info($"Venue with id #{favorite.VenueId} for a user with id #{favorite.UserId} added to the database successfully");
+            _logger.Info($"Venue #{favorite.VenueId} for a user with id #{favorite.UserId} added to the database successfully");
 
             return favorite;
         }
 
-        public async Task<string> DeleteFavoriteAsync(DeleteFavoriteCommand command)
+        public async Task<long> DeleteFavoriteAsync(DeleteFavoriteCommand command, long userId)
         {
             try
             {
-                if (!await _favoriteRepository.DeleteFavoriteAsync(command.FavoriteId))
-                    throw new EntityNotFoundException($"Favorite #{command.FavoriteId} was not deleted from the database because it was not found");
+                if (!await _favoriteRepository.DeleteFavoriteByVenueIdAndUserIdAsync(command.VenueId,userId))
+                    throw new EntityNotFoundException($"Venue #{command.VenueId} was not deleted from the database because it was not found");
 
-                _logger.Info($"Favorite #{command.FavoriteId} deleted from the database successfully");
+                _logger.Info($"Venue #{command.VenueId} deleted from the database successfully");
 
-                return command.FavoriteId;
+                return command.VenueId;
             }
             catch (Exception e)
             {
@@ -69,9 +69,9 @@ namespace VenueList.API.Application.Services
             }
         }
 
-        public async Task<PaginationTuple<Favorite>> GetFavoritesAsync(GetFavoritesQuery query)
+        public async Task<PaginationTuple<Favorite>> GetUserFavoritesAsync(GetUserFavoritesQuery query, long userId)
         {
-            var favoritesPersistenceModels = await _favoriteRepository.GetPaginatedFavoritesAsync(query);
+            var favoritesPersistenceModels = await _favoriteRepository.GetPaginatedFavoritesAsync(query, userId);
             var pagination = PaginationResponseDecorator.Create(favoritesPersistenceModels);
 
             _logger.Info($"Favorites: {favoritesPersistenceModels.CurrentPage} page with {favoritesPersistenceModels.CurrentCount} records loaded from the database");

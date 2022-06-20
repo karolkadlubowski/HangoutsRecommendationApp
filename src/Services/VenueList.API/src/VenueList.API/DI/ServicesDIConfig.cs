@@ -14,17 +14,17 @@ namespace VenueList.API.DI
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services
+                .AddScoped<IReadOnlyFavoriteService, FavoriteService>()
+                .AddScoped<IFavoriteService, FavoriteService>();
+
+            services
                 .AddSingleton<IRestClientFactory, CategoryRestClientFactory>();
-            
+
             services
                 .AddSingleton<ICategoryDataService, CategoryDataService>();
 
             services
                 .AddSingleton<ICategoriesCacheRepository, CategoriesCacheRepository>();
-
-            services
-                .AddScoped<IReadOnlyFavoriteService, FavoriteService>()
-                .AddScoped<IFavoriteService, FavoriteService>();
 
             return services;
         }

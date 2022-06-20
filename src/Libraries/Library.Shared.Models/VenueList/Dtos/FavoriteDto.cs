@@ -2,7 +2,6 @@
 {
     public record FavoriteDto
     {
-        public string FavoriteId { get; init; }
         public long VenueId { get; init; }
         public long UserId { get; init; }
         public string Name { get; init; }

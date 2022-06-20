@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace VenueList.API.Application.Features.AddFavorite
+namespace VenueList.API.Application.Features.AddVenueToFavorites
 {
-    public record AddFavoriteCommand : IRequest<AddFavoriteResponse>
+    public record AddVenueToFavoritesCommand : IRequest<AddVenueToFavoritesResponse>
     {
         public long VenueId { get; init; }
         public long UserId { get; init; }
