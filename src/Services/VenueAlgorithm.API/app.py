@@ -18,14 +18,10 @@ def decode_auth_token(auth_token):
     :param auth_token:
     :return: integer|string
     """
-    try:
-        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-        return payload['sub']
-    except jwt.ExpiredSignatureError:
-        return 'Signature expired. Please log in again.'
-    except jwt.InvalidTokenError:
-        return 'Invalid token. Please log in again.'
 
+    payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'), algorithms=['HS512'])
+
+    return payload['sub']
 
 
 @app.route('/venue/algorithm/venues', methods=['GET'])
@@ -33,6 +29,7 @@ def route_get_venues():
     print('Get Venues')
     
     auth_token = request.headers.get('Authorization')
+    auth_token = auth_token.split(' ')[-1]
 
     args = {
         "userId": decode_auth_token(auth_token)
@@ -52,6 +49,7 @@ def route_update_relation():
     print('Update relation')
 
     auth_token = request.headers.get('Authorization')
+    auth_token = auth_token.split(' ')[-1]
 
     args = {
         "userId": decode_auth_token(auth_token),
