@@ -1,0 +1,5 @@
+$header-height: 4rem;
+
+.page-height {
+    height: calc(100vh - $header-height);
+}

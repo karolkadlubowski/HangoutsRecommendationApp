@@ -1,0 +1,44 @@
+.swipe {
+  position: absolute;
+  z-index: -1;
+}
+
+.card {
+  position: relative;
+  background-color: #fff;
+  height: 30rem;
+  width: 20rem;
+  max-width: 100vh;
+  padding: 30px;
+
+  background-size: cover;
+  background-position: center;
+  border-radius: 30px;
+  box-shadow: 1px 1px 2px 5px rgba(237, 165, 23, 0.3);
+}
+
+.card > span {
+  position: absolute;
+  font-size: 25px;
+  color: rgb(192, 46, 46);
+  background-color: rgb(231, 118, 118);
+  border-radius: 99px;
+  bottom: 0px;
+  left: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.text-background {
+  color: white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-size: 10px;
+  border-radius: 99px;
+  padding: 10px;
+  margin: 5px;
+  background-color: rgba(18, 18, 18, 0.557);
+  -webkit-backdrop-filter: blur(3px);
+   backdrop-filter: blur(3px);
+}
