@@ -33,12 +33,12 @@ namespace VenueList.API.Application.Services
             _logger = logger;
         }
 
-        public async Task<Favorite> AddVenueToFavoritesAsync(AddVenueToFavoritesCommand command)
+        public async Task<Favorite> AddVenueToFavoritesAsync(AddVenueToFavoritesCommand command, long userId)
         {
-            var favorite = Favorite.Create(command.VenueId, command.UserId, command.Name, command.Description, command.CategoryName, command.CreatorId);
+            var favorite = Favorite.Create(command.VenueId, userId, command.Name, command.Description, command.CategoryName, command.CreatorId);
 
-            if (await _favoriteRepository.AnyFavoriteExistsAsync(command.VenueId, command.UserId))
-                throw new DuplicateExistsException($"User #{favorite.CreatorId} has already added venue #{favorite.VenueId} to the database");
+            if (await _favoriteRepository.AnyFavoriteExistsAsync(command.VenueId, userId))
+                throw new DuplicateExistsException($"User #{favorite.UserId} has already added venue #{favorite.VenueId} to the database");
 
 
             var favoritePersistenceModel = await _favoriteRepository.InsertFavoriteAsync(favorite)
@@ -55,7 +55,7 @@ namespace VenueList.API.Application.Services
         {
             try
             {
-                if (!await _favoriteRepository.DeleteFavoriteByVenueIdAndUserIdAsync(command.VenueId,userId))
+                if (!await _favoriteRepository.DeleteFavoriteByVenueIdAndUserIdAsync(command.VenueId, userId))
                     throw new EntityNotFoundException($"Venue #{command.VenueId} was not deleted from the database because it was not found");
 
                 _logger.Info($"Venue #{command.VenueId} deleted from the database successfully");

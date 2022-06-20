@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Library.Shared.Exceptions;
+using Library.Shared.HttpAccessor;
 using Library.Shared.Logging;
 using Library.Shared.Models.VenueList.Dtos;
 using MediatR;
@@ -15,15 +16,20 @@ namespace VenueList.API.Application.Features.AddVenueToFavorites
         private readonly ICategoriesCacheRepository _cacheRepository;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly IReadOnlyHttpAccessor _httpAccessor;
+
 
         public AddVenueToFavoritesCommandHandler(IFavoriteService favoriteService,
             ICategoriesCacheRepository cacheRepository,
-            IMapper mapper, ILogger logger)
+            IMapper mapper, ILogger logger,
+            IReadOnlyHttpAccessor httpAccessor
+        )
         {
             _favoriteService = favoriteService;
             _cacheRepository = cacheRepository;
             _mapper = mapper;
             _logger = logger;
+            _httpAccessor = httpAccessor;
         }
 
         public async Task<AddVenueToFavoritesResponse> Handle(AddVenueToFavoritesCommand request, CancellationToken cancellationToken)
@@ -32,7 +38,7 @@ namespace VenueList.API.Application.Features.AddVenueToFavorites
                            ?? throw new EntityNotFoundException($"Category with name '{request.CategoryName}' does not exist");
             _logger.Trace($"Category #{category.CategoryId} with name '{category.Name}' found in the memory cache");
 
-            var addedFavoriteVenue = await _favoriteService.AddVenueToFavoritesAsync(request);
+            var addedFavoriteVenue = await _favoriteService.AddVenueToFavoritesAsync(request, _httpAccessor.CurrentUserId);
 
             return new AddVenueToFavoritesResponse {AddedVenue = _mapper.Map<FavoriteDto>(addedFavoriteVenue)};
         }
