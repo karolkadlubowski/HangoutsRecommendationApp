@@ -53,10 +53,17 @@ export default function VenueDetails(props: VenueDetailsProps) {
                                 <div className="relative p-6 flex-auto">
                                     {venueDetails ? (
                                         <>
-                                            <div className="my-4 text-slate-500 text-lg leading-relaxed">
-                                                <img src={imgUrl} alt="" className="mb-5" />
-                                                {venueDetails?.description}
+                                            <div className="my-4 text-slate-500 text-lg leading-relaxed flex flex-col items-center">
+                                                <img
+                                                    src={imgUrl}
+                                                    alt=""
+                                                    className="mb-5"
+                                                    style={{ maxHeight: '40rem', maxWidth: '60rem' }}
+                                                />
                                             </div>
+                                            <p className="my-4 text-slate-500 text-lg leading-relaxed">
+                                                {venueDetails?.description}
+                                            </p>
                                             <p className="my-4 text-slate-1200 text-lg leading-relaxed">
                                                 Location: {venueDetails.location.address}
                                             </p>
