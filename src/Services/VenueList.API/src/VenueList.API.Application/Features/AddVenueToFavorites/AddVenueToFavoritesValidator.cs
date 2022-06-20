@@ -11,16 +11,13 @@ namespace VenueList.API.Application.Features.AddVenueToFavorites
                 .NotNull()
                 .NotEmpty()
                 .MaximumLength(ValidationRules.MaxVenueNameLength);
-            
+
             RuleFor(x => x.Description)
                 .MaximumLength(ValidationRules.MaxVenueDescriptionLength);
 
-            RuleFor(x => x.UserId)
-                .GreaterThanOrEqualTo(0);
-            
             RuleFor(x => x.VenueId)
                 .GreaterThanOrEqualTo(0);
-            
+
             RuleFor(x => x.CreatorId)
                 .GreaterThanOrEqualTo(0);
         }

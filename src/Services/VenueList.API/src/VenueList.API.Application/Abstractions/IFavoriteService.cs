@@ -7,7 +7,7 @@ namespace VenueList.API.Application.Abstractions
 {
     public interface IFavoriteService : IReadOnlyFavoriteService
     {
-        Task<Domain.Entities.Favorite> AddVenueToFavoritesAsync(AddVenueToFavoritesCommand command);
+        Task<Domain.Entities.Favorite> AddVenueToFavoritesAsync(AddVenueToFavoritesCommand command, long userId);
 
         Task<long> DeleteFavoriteAsync(DeleteFavoriteCommand command, long userId);
     }
