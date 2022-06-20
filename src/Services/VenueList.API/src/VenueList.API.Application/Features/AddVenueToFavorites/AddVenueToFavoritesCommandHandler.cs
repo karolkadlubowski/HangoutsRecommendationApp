@@ -18,12 +18,10 @@ namespace VenueList.API.Application.Features.AddVenueToFavorites
         private readonly ILogger _logger;
         private readonly IReadOnlyHttpAccessor _httpAccessor;
 
-
         public AddVenueToFavoritesCommandHandler(IFavoriteService favoriteService,
             ICategoriesCacheRepository cacheRepository,
             IMapper mapper, ILogger logger,
-            IReadOnlyHttpAccessor httpAccessor
-        )
+            IReadOnlyHttpAccessor httpAccessor)
         {
             _favoriteService = favoriteService;
             _cacheRepository = cacheRepository;
