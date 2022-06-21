@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Library.EventBus;
 using Library.Shared.Exceptions;
 using Library.Shared.Logging;
 using Library.Shared.Models.Pagination;
 using Library.Shared.Models.Pagination.Models;
+using Library.Shared.Models.VenueList.Events;
+using Library.Shared.Models.VenueList.Events.DataModels;
 using VenueList.API.Application.Abstractions;
 using VenueList.API.Application.Database;
 using VenueList.API.Application.Database.PersistenceModels;
@@ -14,6 +17,7 @@ using VenueList.API.Application.Features.AddVenueToFavorites;
 using VenueList.API.Application.Features.DeleteFavorite;
 using VenueList.API.Application.Features.GetUserFavorites;
 using VenueList.API.Domain.Entities;
+using VenueList.API.Domain.ValueObjects;
 
 namespace VenueList.API.Application.Services
 {
@@ -47,6 +51,20 @@ namespace VenueList.API.Application.Services
             favorite = _mapper.Map<FavoritePersistenceModel, Domain.Entities.Favorite>(favoritePersistenceModel);
 
             _logger.Info($"Venue #{favorite.VenueId} for a user with id #{favorite.UserId} added to the database successfully");
+
+            favorite.AddDomainEvent(EventFactory<VenueAddedToFavoritesEvent>.CreateEvent(new FavoriteId(favorite.VenueId, favorite.UserId).Value,
+                new VenueAddedToFavoritesEventDataModel
+                {
+                    VenueId = favorite.VenueId,
+                    UserId = favorite.UserId,
+                    Name = favorite.Name,
+                    Description = favorite.Description,
+                    CategoryName = favorite.CategoryName,
+                    CreatorId = favorite.CreatorId,
+                    CreatedOn = favorite.CreatedOn,
+                    ModifiedOn = favorite.ModifiedOn
+                }
+            ));
 
             return favorite;
         }
