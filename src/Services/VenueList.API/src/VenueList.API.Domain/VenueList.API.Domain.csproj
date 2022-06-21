@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\Libraries\Library.Shared\Library.Shared.csproj"/>
+        <ProjectReference Include="..\..\..\..\Libraries\Library.Shared\Library.Shared.csproj" />
     </ItemGroup>
     
 </Project>
