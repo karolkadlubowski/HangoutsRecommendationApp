@@ -95,6 +95,7 @@ namespace Venue.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseLoggingRequestScope();
