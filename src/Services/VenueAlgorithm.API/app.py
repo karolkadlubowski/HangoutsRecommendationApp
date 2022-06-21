@@ -21,7 +21,7 @@ def decode_auth_token(auth_token):
 @app.route('/venue/algorithm/venues', methods=['GET'])
 def route_get_venues():
     print('Get Venues')
-    
+
     auth_token = request.headers.get('Authorization')
     auth_token = auth_token.split(' ')[-1]
 
@@ -29,14 +29,14 @@ def route_get_venues():
         "userId": decode_auth_token(auth_token)
     }
 
-    with driver.session() as session:
-        result = session.write_transaction(get_venues, args)
-        print(result)
-    
-        res = jsonify(data={'venueIds': [1, 2, 3, 4]}, success=True)
-        print(res)
+    # with driver.session() as session:
+    #     result = session.write_transaction(get_venues, args)
+    #     print(result)
 
-        return res
+    res = jsonify(data={'venueIds': [1, 2, 3, 4]}, success=True)
+    print(res)
+
+    return res
 
 @app.route('/venue/algorithm/relation', methods=['PUT'])
 def route_update_relation():
@@ -51,13 +51,13 @@ def route_update_relation():
         'relationType': request.args['relationType']
     }
 
-    with driver.session() as session:
-        result = session.write_transaction(get_venues, args)
+    # with driver.session() as session:
+    #     result = session.write_transaction(get_venues, args)
 
-        res = jsonify(success=True)
-        print(res)
+    res = jsonify(success=True)
+    print(res)
 
-        return res
+    return res
 
 def get_venues(tx, message):
     # data_dict = json.loads(message['Data'])
