@@ -39,7 +39,6 @@ namespace VenueList.API.Controllers
             return this.CreateResponse(response);
         }
 
-
         /// <summary>
         /// Add venue to user's favorites
         /// </summary>
