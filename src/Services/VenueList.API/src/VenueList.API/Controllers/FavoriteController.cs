@@ -4,6 +4,7 @@ using Library.Shared.Controllers;
 using Library.Shared.Extensions;
 using Library.Shared.Logging;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VenueList.API.Application.Features.AddVenueToFavorites;
 using VenueList.API.Application.Features.DeleteFavorite;
@@ -16,18 +17,19 @@ namespace VenueList.API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/v1/List/Favorites")]
-    public class FavoriteController  : BaseApiController
+    [Authorize]
+    public class FavoriteController : BaseApiController
     {
         public FavoriteController(IMediator mediator, ILogger logger) : base(mediator, logger)
         {
         }
-        
+
         /// <summary>
         /// Return favorite user's venues from the database using pagination
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(GetUserFavoritesResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(GetUserFavoritesResponse), (int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(GetUserFavoritesResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetUserFavoritesResponse), (int) HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetVenues([FromQuery] GetUserFavoritesQuery query)
         {
             _logger.Info($"Sending query: {nameof(GetUserFavoritesQuery)}");
@@ -36,8 +38,7 @@ namespace VenueList.API.Controllers
 
             return this.CreateResponse(response);
         }
-        
-        
+
         /// <summary>
         /// Add venue to user's favorites
         /// </summary>
@@ -56,7 +57,7 @@ namespace VenueList.API.Controllers
 
             return this.CreateResponse(response);
         }
-        
+
         /// <summary>
         /// Delete favorite venue from user's list
         /// </summary>
