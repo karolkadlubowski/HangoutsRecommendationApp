@@ -1,20 +1,33 @@
+import json
+import jwt
+
 from flask import Flask, request, jsonify
 from venue_kafka import VenueKafka
 from identity_kafka import IdentityKafka
 from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable
-import json
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'th1s1sjust43x4mpl3'
+
 driver = GraphDatabase.driver('bolt://localhost:7687', auth=('neo4j', 'admin'))
+
+def decode_auth_token(auth_token):
+    payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'), algorithms=['HS512'])
+
+    return payload['nameid']
+
 
 @app.route('/venue/algorithm/venues', methods=['GET'])
 def route_get_venues():
     print('Get Venues')
+    
+    auth_token = request.headers.get('Authorization')
+    auth_token = auth_token.split(' ')[-1]
 
     args = {
-        'authentication': request.args['authentication']
+        "userId": decode_auth_token(auth_token)
     }
 
     with driver.session() as session:
@@ -26,14 +39,16 @@ def route_get_venues():
 
         return res
 
-@app.route('/venue/algorithm/relation', methods=['PUT'])
-def route_update_relation():
+@app.route('/venue/algorithm/like', methods=['PUT'])
+def route_like_venue():
     print('Update relation')
 
+    auth_token = request.headers.get('Authorization')
+    auth_token = auth_token.split(' ')[-1]
+
     args = {
-        'authentication': request.args['authentication'],
-        'venueId': request.args['venueId'],
-        'relationType': request.args['relationType']
+        "userId": decode_auth_token(auth_token),
+        'venueId': request.args['venueId']
     }
 
     with driver.session() as session:
