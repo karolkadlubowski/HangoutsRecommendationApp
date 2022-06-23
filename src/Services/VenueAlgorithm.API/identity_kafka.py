@@ -14,12 +14,8 @@ class IdentityKafka(BaseKafka):
             print('Event type: ', event_type)
             print(message)
 
-            if EventType.IDENTITY_CREATED == event_type:
+            if EventType.USER_CREATED == event_type:
                 self.__callback_identity_created(message)
-            elif EventType.IDENTITY_UPDATED == event_type:
-                self.__callback_identity_updated(message)
-            elif EventType.IDENTITY_DELETED == event_type:
-                self.__callback_identity_deleted(message)
 
     def __callback_identity_created(self, message):
         print('IDENTITY CREATED')
@@ -28,31 +24,7 @@ class IdentityKafka(BaseKafka):
             result = session.write_transaction(self.__create_identity, message)
             print(result)
 
-    def __callback_identity_updated(self, message):
-        print('IDENTITY UPDATED')
-
-        with self.driver.session() as session:
-            result = session.write_transaction(self.__update_identity, message)
-            print(result)
-
-    def __callback_identity_deleted(self, message):
-        print('IDENTITY DELETED')
-
-        with self.driver.session() as session:
-            result = session.write_transaction(self.__delete_identity, message)
-            print(result)
-
     @staticmethod
     def __create_identity(tx, message):
-        print(message)
-        pass
-
-    @staticmethod
-    def __update_identity(tx, message):
-        print(message)
-        pass
-
-    @staticmethod
-    def __delete_identity(tx, message):
         print(message)
         pass
