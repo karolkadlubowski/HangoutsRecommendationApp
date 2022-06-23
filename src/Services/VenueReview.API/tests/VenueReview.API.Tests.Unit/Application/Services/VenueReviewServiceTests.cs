@@ -39,7 +39,7 @@ namespace VenueReview.API.Tests.Unit.Application.Services
             _mapper = new Mock<IMapper>();
             _logger = new Mock<ILogger>();
 
-            _addVenueReviewCommand = new AddVenueReviewCommand {VenueId = VenueId, Content = VenueReviewContent, CreatorId = CreatorId, Rating = Rating};
+            _addVenueReviewCommand = new AddVenueReviewCommand {VenueId = VenueId, Content = VenueReviewContent, Rating = Rating};
             _deleteVenueReviewCommand = new DeleteVenueReviewCommand {VenueReviewId = _venueReviewId};
 
             _venueReviewService = new VenueReviewService(_venueReviewRepository.Object,
@@ -57,7 +57,7 @@ namespace VenueReview.API.Tests.Unit.Application.Services
                 .ReturnsAsync(true);
 
             //Act
-            Func<Task> act = () => _venueReviewService.AddVenueReviewAsync(_addVenueReviewCommand);
+            Func<Task> act = () => _venueReviewService.AddVenueReviewAsync(_addVenueReviewCommand, CreatorId);
 
             //Assert
             await act.Should().ThrowAsync<DuplicateExistsException>();
@@ -73,7 +73,7 @@ namespace VenueReview.API.Tests.Unit.Application.Services
                 .ReturnsAsync(() => null);
 
             //Act
-            Func<Task> act = () => _venueReviewService.AddVenueReviewAsync(_addVenueReviewCommand);
+            Func<Task> act = () => _venueReviewService.AddVenueReviewAsync(_addVenueReviewCommand, CreatorId);
 
             //Assert
             await act.Should().ThrowAsync<DatabaseOperationException>();
@@ -114,7 +114,7 @@ namespace VenueReview.API.Tests.Unit.Application.Services
                 .Returns(expectedVenueReview);
 
             //Act
-            var result = await _venueReviewService.AddVenueReviewAsync(_addVenueReviewCommand);
+            var result = await _venueReviewService.AddVenueReviewAsync(_addVenueReviewCommand, CreatorId);
 
             //Assert
             result.Should().BeEquivalentTo(expectedVenueReview);

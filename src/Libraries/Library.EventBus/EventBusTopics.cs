@@ -7,5 +7,6 @@
         public const string Category = "category";
         public const string AccountDefinition = "account-definition";
         public const string VenueReview = "venue-review";
+        public const string VenueList = "venue-list";
     }
 }

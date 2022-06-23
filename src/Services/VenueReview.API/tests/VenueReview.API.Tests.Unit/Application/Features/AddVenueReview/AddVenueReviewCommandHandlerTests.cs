@@ -5,6 +5,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Library.EventBus;
 using Library.Shared.Events.Abstractions;
+using Library.Shared.HttpAccessor;
 using Library.Shared.Models.VenueReview.Dtos;
 using Moq;
 using NUnit.Framework;
@@ -18,6 +19,7 @@ namespace VenueReview.API.Tests.Unit.Application.Features.AddVenueReview
         private Mock<IVenueReviewService> _venueReviewService;
         private Mock<IEventSender> _eventSender;
         private Mock<IMapper> _mapper;
+        private Mock<IReadOnlyHttpAccessor> _httpAccessor;
 
         private AddVenueReviewCommandHandler _addVenueReviewCommandHandler;
 
@@ -33,10 +35,12 @@ namespace VenueReview.API.Tests.Unit.Application.Features.AddVenueReview
             _venueReviewService = new Mock<IVenueReviewService>();
             _eventSender = new Mock<IEventSender>();
             _mapper = new Mock<IMapper>();
+            _httpAccessor = new Mock<IReadOnlyHttpAccessor>();
 
             _addVenueReviewCommandHandler = new AddVenueReviewCommandHandler(_venueReviewService.Object,
                 _eventSender.Object,
-                _mapper.Object);
+                _mapper.Object,
+                _httpAccessor.Object);
         }
 
         [Test]
@@ -61,11 +65,10 @@ namespace VenueReview.API.Tests.Unit.Application.Features.AddVenueReview
             {
                 VenueId = VenueId,
                 Content = VenueReviewContent,
-                CreatorId = CreatorId,
                 Rating = Rating
             };
 
-            _venueReviewService.Setup(x => x.AddVenueReviewAsync(command))
+            _venueReviewService.Setup(x => x.AddVenueReviewAsync(command, CreatorId))
                 .ReturnsAsync(venueReview);
             _mapper.Setup(x => x.Map<VenueReviewDto>(venueReview))
                 .Returns(expectedVenueReview);
@@ -90,11 +93,10 @@ namespace VenueReview.API.Tests.Unit.Application.Features.AddVenueReview
             {
                 VenueId = VenueId,
                 Content = VenueReviewContent,
-                CreatorId = CreatorId,
                 Rating = Rating
             };
 
-            _venueReviewService.Setup(x => x.AddVenueReviewAsync(It.IsNotNull<AddVenueReviewCommand>()))
+            _venueReviewService.Setup(x => x.AddVenueReviewAsync(It.IsNotNull<AddVenueReviewCommand>(), CreatorId))
                 .ReturnsAsync(venueReview);
 
             //Act
@@ -103,7 +105,7 @@ namespace VenueReview.API.Tests.Unit.Application.Features.AddVenueReview
             //Assert
             using (new AssertionScope())
             {
-                _venueReviewService.Verify(x => x.AddVenueReviewAsync(command), Times.Once);
+                _venueReviewService.Verify(x => x.AddVenueReviewAsync(command, CreatorId), Times.Once);
                 _eventSender.Verify(x => x.SendEventAsync(EventBusTopics.VenueReview,
                     venueReview.FirstStoredEvent,
                     default), Times.Once);

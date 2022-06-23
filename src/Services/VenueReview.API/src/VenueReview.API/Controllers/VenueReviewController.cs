@@ -4,6 +4,7 @@ using Library.Shared.Controllers;
 using Library.Shared.Extensions;
 using Library.Shared.Logging;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VenueReview.API.Application.Features;
 using VenueReview.API.Application.Features.AddVenueReview;
@@ -16,6 +17,7 @@ namespace VenueReview.API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class VenueReviewController : BaseApiController
     {
         public VenueReviewController(IMediator mediator, ILogger logger) : base(mediator, logger)
@@ -63,10 +65,10 @@ namespace VenueReview.API.Controllers
         /// Delete VenueReview from the database
         /// </summary>
         [HttpDelete]
-        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.UnprocessableEntity)]
-        [ProducesResponseType(typeof(AddVenueReviewResponse), (int) HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(DeleteVenueReviewResponse), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(DeleteVenueReviewResponse), (int) HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(DeleteVenueReviewResponse), (int) HttpStatusCode.UnprocessableEntity)]
+        [ProducesResponseType(typeof(DeleteVenueReviewResponse), (int) HttpStatusCode.NotFound)]
         public async Task<IActionResult> DeleteVenueReview([FromQuery] DeleteVenueReviewCommand command)
         {
             _logger.Info($"Sending command: {nameof(DeleteVenueReviewCommand)}");

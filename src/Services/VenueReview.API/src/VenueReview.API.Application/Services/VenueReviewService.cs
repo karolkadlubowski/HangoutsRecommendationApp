@@ -44,11 +44,11 @@ namespace VenueReview.API.Application.Services
             return venueReviews;
         }
 
-        public async Task<Domain.Entities.VenueReview> AddVenueReviewAsync(AddVenueReviewCommand command)
+        public async Task<Domain.Entities.VenueReview> AddVenueReviewAsync(AddVenueReviewCommand command, long userId)
         {
-            var venueReview = Domain.Entities.VenueReview.Create(command.VenueId, command.Content, command.CreatorId, command.Rating);
+            var venueReview = Domain.Entities.VenueReview.Create(command.VenueId, command.Content, userId, command.Rating);
 
-            if (await _venueReviewRepository.AnyVenueReviewExistsAsync(command.CreatorId, command.VenueId))
+            if (await _venueReviewRepository.AnyVenueReviewExistsAsync(userId, command.VenueId))
                 throw new DuplicateExistsException($"Review created by user #{venueReview.CreatorId} for venue #{venueReview.VenueId} already exists in the database");
 
             var venueReviewPersistenceModel = await _venueReviewRepository.InsertVenueReviewAsync(venueReview)
@@ -86,7 +86,8 @@ namespace VenueReview.API.Application.Services
             }
             catch (Exception e) when (e is not EntityNotFoundException)
             {
-                throw new DatabaseOperationException($"Deleting venue review #{command.VenueReviewId} from the database failed. Exception: {e.Message}");            }
+                throw new DatabaseOperationException($"Deleting venue review #{command.VenueReviewId} from the database failed. Exception: {e.Message}");
+            }
         }
     }
 }
