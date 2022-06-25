@@ -53,7 +53,9 @@ namespace Identity.API.Application.Features.ChangeUserEmail
                 throw new DatabaseOperationException($"Error while changing email for user #{user.UserId}");
 
             _logger.Info($"User #{user.UserId} password updated successfully");
-
+            
+            user = _mapper.Map<User>(userPersistenceModel);
+            
             user.AddDomainEvent(EventFactory<UserEmailChangedEvent>.CreateEvent(user.UserId,
                 _mapper.Map<UserEmailChangedEventDataModel>(user)));
 
