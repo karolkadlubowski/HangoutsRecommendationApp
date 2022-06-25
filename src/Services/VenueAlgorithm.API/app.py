@@ -32,10 +32,10 @@ def route_get_venues():
 
     with driver.session() as session:
         result = session.write_transaction(get_venues, args)
-        print(result)
+        print('RESULT: ', result)
     
-        res = jsonify(data={'venueIds': [1, 2, 3, 4]}, success=True)
-        print(res)
+        res = jsonify(data={'venueIds': result}, success=True)
+        print('RES: ', res)
 
         return res
 
@@ -52,8 +52,8 @@ def route_like_venue():
     }
 
     with driver.session() as session:
-        result = session.write_transaction(get_venues, args)
-        print(result)
+        result = session.write_transaction(update_relation, args)
+        print('RESULT: ', result)
 
         res = jsonify(success=True)
         print(res)
@@ -61,35 +61,37 @@ def route_like_venue():
         return res
 
 def get_venues(tx, message):
-    # data_dict = json.loads(message['Data'])
-    # query = (
-    #     "MATCH (u1:User {userId: $userId})-[:liked]->(u1Venue:Venue)<-[:liked|:saved]-(similarUser1:User)-[:liked|:saved]->(similarUserVenue1:Venue) where similarUser1 <> u1 and similarUserVenue1 <> u1Venue LIMIT 5"
-    #     "MATCH (u2:User {userId: $userId})-[:saved]->(u2Venue:Venue)<-[:liked|:saved]-(similarUser2:User)-[:liked|:saved]->(similarUserVenue2:Venue) where similarUser2 <> u2 and similarUserVenue2 <> u2Venue LIMIT 5"
-    #     "RETURN similarUserVenue1, similarUserVenue2"
-    # )
-    # result = tx.run(query, userId=data_dict['UserId'])
-    # try:
-    #     return [{"similarUserVenue1": record["similarUserVenue1"]["venueId"], "similarUserVenue2": record["similarUserVenue2"]["venueId"]}
-    #             for record in result]
-    # except ServiceUnavailable as exception:
-    #     print(exception)
-    #     raise
+    query = (
+            "MATCH (u1:User {userId: $userId})-[:liked|:saved]->(u1Venue:Venue)<-[:liked|:saved]-(similarUser1:User)-[:liked|:saved]->(similarUserVenue1:Venue) "
+            "WHERE similarUser1 <> u1 and similarUserVenue1 <> u1Venue "
+            "RETURN DISTINCT similarUserVenue1"
+        )
+
+    result = tx.run(query, userId=int(message['userId']))
+    try:
+        result_array = [record['similarUserVenue1']['venueId']
+                for record in result]
+        print('result_array: ', result_array)
+        return result_array
+    except ServiceUnavailable as exception:
+        print(exception)
+        raise
     pass
 
 def update_relation(tx, message):
-    # data_dict = json.loads(message['Data'])
-    # query = (
-    #     "MATCH (u1:User {userId: $userId}), (v1:Venue {venueId: $venueId})"
-    #     "CREATE (u1)-[r:liked]->(v1)"
-    #     "RETURN u1"
-    # )
-    # result = tx.run(query, userId=data_dict['UserId'], venueId=data_dict['VenueId'])
-    # try:
-    #     return [{"r": record["u1"]}
-    #             for record in result]
-    # except ServiceUnavailable as exception:
-    #     print(exception)
-    #     raise
+    query = (
+        "MATCH (u1:User), (v1:Venue) "
+        "WHERE u1.userId = $userId and v1.venueId = $venueId "
+        "CREATE (u1)-[r:liked]->(v1) "
+        "RETURN r"
+    )
+    result = tx.run(query, userId=int(message['userId']), venueId=int(message['venueId']))
+    try:
+        return [{"r": record["r"]}
+                for record in result]
+    except ServiceUnavailable as exception:
+        print(exception)
+        raise
     pass
 
 

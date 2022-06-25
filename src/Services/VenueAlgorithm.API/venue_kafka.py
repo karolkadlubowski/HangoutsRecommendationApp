@@ -110,8 +110,32 @@ class VenueKafka(BaseKafka):
 
     @staticmethod
     def __add_venue_to_favorites(tx, message):
-        pass
+        data_dict = json.loads(message['Data'])
+        query = (
+        "MATCH (u1:User), (v1:Venue) "
+        "WHERE u1.userId = $userId and v1.venueId = $venueId "
+        "CREATE (u1)-[r:saved]->(v1) "
+        "RETURN r"
+        )
+        result = tx.run(query, userId=int(data_dict['UserId']), venueId=int(data_dict['VenueId']))
+        try:
+            return [{"r": record["r"]}
+                    for record in result]
+        except ServiceUnavailable as exception:
+            print(exception)
+            raise
 
     @staticmethod
     def __delete_venue_from_favorites(tx, message):
-        pass
+        data_dict = json.loads(message['Data'])
+        query = (
+            "MATCH (u1:User {userId: $userId})-[r:saved]->(v1:Venue {venueId: $venueId}) "
+            "DELETE r"
+        )
+        result = tx.run(query, userId=int(data_dict['UserId']), venueId=int(data_dict['VenueId']))
+        try:
+            return [{"r": record["r"]}
+                    for record in result]
+        except ServiceUnavailable as exception:
+            print(exception)
+            raise

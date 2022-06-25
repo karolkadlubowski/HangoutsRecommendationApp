@@ -1,6 +1,9 @@
 from neo4j import GraphDatabase
 from event_type import EventType
 from base_kafka import BaseKafka
+from neo4j.exceptions import ServiceUnavailable
+
+import json
 
 class IdentityKafka(BaseKafka):
     def __init__(self, topic: str, driver: GraphDatabase):
@@ -26,5 +29,15 @@ class IdentityKafka(BaseKafka):
 
     @staticmethod
     def __create_identity(tx, message):
-        print(message)
-        pass
+        data_dict = json.loads(message['Data'])
+        query = (
+            "CREATE (u:User {userId: $userId})"
+            "RETURN u"
+        )
+        result = tx.run(query, userId=data_dict['UserId'])
+        try:
+            return [{"u": record["u"]}
+                    for record in result]
+        except ServiceUnavailable as exception:
+            print(exception)
+            raise
