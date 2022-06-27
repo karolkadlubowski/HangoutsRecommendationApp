@@ -31,21 +31,7 @@ export default function Navbar() {
                                         to="/"
                                         className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                                     >
-                                        Home
-                                    </Link>
-
-                                    <Link
-                                        to="/find"
-                                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                    >
                                         Find your place
-                                    </Link>
-
-                                    <Link
-                                        to="/findVenue"
-                                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                                    >
-                                        Find Venue
                                     </Link>
 
                                     <Link
@@ -53,6 +39,13 @@ export default function Navbar() {
                                         className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                                     >
                                         Create Place
+                                    </Link>
+
+                                    <Link
+                                        to="/favourites"
+                                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                                    >
+                                        Favourites
                                     </Link>
                                 </div>
                             </div>
@@ -129,21 +122,7 @@ export default function Navbar() {
                                     to="/"
                                     className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
                                 >
-                                    Home
-                                </Link>
-
-                                <Link
-                                    to="/find"
-                                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                                >
                                     Find your place
-                                </Link>
-
-                                <Link
-                                    to="/findVenue"
-                                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                                >
-                                    Find Venue
                                 </Link>
 
                                 <Link
@@ -151,6 +130,13 @@ export default function Navbar() {
                                     className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                                 >
                                     Create Place
+                                </Link>
+
+                                <Link
+                                    to="/favourites"
+                                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                                >
+                                    Favourites
                                 </Link>
 
                                 <Link

@@ -4,9 +4,9 @@ import './App.css';
 import Signin from './Components/Authorization/Signin';
 import Signup from './Components/Authorization/Signup';
 import { CreatePlace } from './Components/CreatePlace/CreatePlace';
+import Favourites from './Components/Favourites/Favourites';
 import FindPlace from './Components/FindPlace/FindPlace';
 import FindVenue from './Components/FindVenue/FindVenue';
-import MainPage from './Components/MainPage/MainPage';
 import './Styles/Styles.scss';
 
 function App() {
@@ -27,14 +27,6 @@ function App() {
                     path="/"
                     element={
                         <ProtectedRoute>
-                            <MainPage />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/find"
-                    element={
-                        <ProtectedRoute>
                             <FindPlace />
                         </ProtectedRoute>
                     }
@@ -52,6 +44,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <CreatePlace />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/favourites"
+                    element={
+                        <ProtectedRoute>
+                            <Favourites />
                         </ProtectedRoute>
                     }
                 />

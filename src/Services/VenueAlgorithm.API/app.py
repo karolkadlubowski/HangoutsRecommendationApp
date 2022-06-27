@@ -1,10 +1,11 @@
+import json
+import jwt
+
 from flask import Flask, request, jsonify
 from venue_kafka import VenueKafka
 from identity_kafka import IdentityKafka
 from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable
-import json
-import jwt
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ def decode_auth_token(auth_token):
 @app.route('/venue/algorithm/venues', methods=['GET'])
 def route_get_venues():
     print('Get Venues')
-
+    
     auth_token = request.headers.get('Authorization')
     auth_token = auth_token.split(' ')[-1]
 
@@ -32,14 +33,14 @@ def route_get_venues():
     with driver.session() as session:
         result = session.write_transaction(get_venues, args)
         print('RESULT: ', result)
-
+    
         res = jsonify(data={'venueIds': result}, success=True)
         print('RES: ', res)
 
-    return res
+        return res
 
-@app.route('/venue/algorithm/relation', methods=['PUT'])
-def route_update_relation():
+@app.route('/venue/algorithm/like', methods=['PUT'])
+def route_like_venue():
     print('Update relation')
 
     auth_token = request.headers.get('Authorization')
@@ -47,18 +48,17 @@ def route_update_relation():
 
     args = {
         "userId": decode_auth_token(auth_token),
-        'venueId': request.args['venueId'],
-        'relationType': request.args['relationType']
+        'venueId': request.args['venueId']
     }
 
     with driver.session() as session:
         result = session.write_transaction(update_relation, args)
         print('RESULT: ', result)
 
-    res = jsonify(success=True)
-    print(res)
+        res = jsonify(success=True)
+        print(res)
 
-    return res
+        return res
 
 def get_venues(tx, message):
     query = (

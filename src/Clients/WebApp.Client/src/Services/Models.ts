@@ -22,6 +22,15 @@ export interface VenueResponse {
     location: Location;
 }
 
+export interface FavouritesResponse {
+    venueId: number;
+    userId: number;
+    name: string;
+    description: string;
+    categoryName: string;
+    creatorId: number;
+}
+
 export interface LocationCoordinate {
     locationCoordinateId: number;
     locationId: number;

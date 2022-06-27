@@ -1,5 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faBowlFood, faFontAwesome, fas } from '@fortawesome/free-solid-svg-icons';
+import { faFontAwesome, faHeart, fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -19,7 +20,7 @@ export default function FindPlace() {
     const [id, setId] = useState<number>();
     const [VenueDetails, setVenueDetails] = useState<VenueDetails[]>();
     const [venueIds, setVenueIds] = useState<number[]>();
-    library.add(fas, faBowlFood, faFontAwesome);
+    library.add(fas, faHeart, faFontAwesome);
 
     const getVenueIds = () => {
         const token = localStorage.getItem('token');
@@ -35,6 +36,31 @@ export default function FindPlace() {
             .catch(function (response) {
                 console.log(response);
                 toast.error('Error');
+            });
+    };
+
+    const addToFavorites = () => {
+        const token = localStorage.getItem('token');
+        const id = VenueDetails ? VenueDetails[0].id : null;
+        axios({
+            method: 'post',
+            url: 'http://localhost:8003/api/v1/List/Favorites',
+            data: {
+                venueId: id,
+                name: 'name',
+                description: 'des',
+                categoryName: 'NATURE',
+                creatorId: 1,
+            },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        })
+            .then(function (response) {
+                console.log(response?.data?.data?.venueIds);
+                toast.success('Added to favorites');
+            })
+            .catch(function (response) {
+                console.log(response);
+                toast.error('Failed to add to favorites');
             });
     };
 
@@ -132,12 +158,27 @@ export default function FindPlace() {
         }
     };
 
+    const onAddToFavorites = () => {
+        console.log(VenueDetails && VenueDetails[0].id);
+        if (id) {
+            addToFavorites();
+        }
+    };
+
     return (
         <>
             <Header />
             <div className="flex justify-center bg-gray-100 page-height">
                 <div className="bg-slate-100 w-full absolute flex justify-center">
-                    <div className="flex items-center" style={{ height: '60vh' }}>
+                    <div className="flex flex-col items-center justify-center" style={{ height: '60vh' }}>
+                        <div className="w-full text-right mb-10 mr-10">
+                            <button onClick={() => onAddToFavorites()}>
+                                <FontAwesomeIcon
+                                    icon={faHeart}
+                                    className="text-2xl leading-lg text-red-300 opacity-75"
+                                />
+                            </button>
+                        </div>
                         <div className="cardContainer relative z-10">
                             {VenueDetails?.map((el: VenueDetails) => (
                                 <TinderCard
