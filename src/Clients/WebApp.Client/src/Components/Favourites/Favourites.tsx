@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { FavouritesResponse } from '../../Services/Models';
 import VenueDetails from '../FindVenue/VenueDetails';
 import Header from '../Header';
@@ -28,13 +29,33 @@ export default function Favourites() {
             });
     }, []);
 
+    const onDelete = (id: number) => {
+        axios
+            .delete('http://localhost:8003/api/v1/List/Favorites', {
+                params: {
+                    VenueId: id,
+                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            })
+            .then((response) => {
+                console.log(response);
+                toast.success('removed from favourites');
+                window.location.reload();
+            })
+            .catch(function (response) {
+                toast.error('error');
+                console.log(response);
+            });
+    };
+
     const writeVenues = () => {
         return venueList?.map((el) => (
-            <button
-                key={el.venueId}
-                type="button"
-                onClick={() => openModal(el.venueId)}
-                className="
+            <div className="flex">
+                <button
+                    key={el.venueId}
+                    type="button"
+                    onClick={() => openModal(el.venueId)}
+                    className="
         text-left
         px-6
         py-2
@@ -44,11 +65,18 @@ export default function Favourites() {
         focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600
         transition
         duration-500
-        cursor-pointer
+        cursor-pointer flex justify-between
       "
-            >
-                Name: {el.name}, VenueId: {el.venueId}
-            </button>
+                >
+                    <span>
+                        {' '}
+                        Name: {el.name}, VenueId: {el.venueId}
+                    </span>
+                </button>
+                <button onClick={() => onDelete(el.venueId)} className="w-20 border-b border-l text-red-300">
+                    X
+                </button>
+            </div>
         ));
     };
 
@@ -61,7 +89,9 @@ export default function Favourites() {
         <>
             <Header />
             <div className="flex justify-center mt-5">
-                <div className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">{writeVenues()}</div>
+                {venueList?.length ? (
+                    <div className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">{writeVenues()}</div>
+                ) : null}
             </div>
 
             {showModal ? (

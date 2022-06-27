@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import TinderCard from 'react-tinder-card';
+import VenueDetails from '../FindVenue/VenueDetails';
 import Header from '../Header';
 import './FindPlace.css';
 
@@ -18,8 +19,10 @@ export default function FindPlace() {
     const token = localStorage.getItem('token');
     const [direction, setDirection] = useState<string>();
     const [id, setId] = useState<number>();
-    const [VenueDetails, setVenueDetails] = useState<VenueDetails[]>();
+    const [VenueDetailsInfo, setVenueDetailsInfo] = useState<VenueDetails[]>();
     const [venueIds, setVenueIds] = useState<number[]>();
+    const [showModal, setShowModal] = useState(false);
+    const [modalId, setModalId] = useState<number>();
     library.add(fas, faHeart, faFontAwesome);
 
     const getVenueIds = () => {
@@ -41,7 +44,7 @@ export default function FindPlace() {
 
     const addToFavorites = () => {
         const token = localStorage.getItem('token');
-        const id = VenueDetails ? VenueDetails[0].id : null;
+        const id = VenueDetailsInfo ? VenueDetailsInfo[0].id : null;
         axios({
             method: 'post',
             url: 'http://localhost:8003/api/v1/List/Favorites',
@@ -93,7 +96,7 @@ export default function FindPlace() {
                         name: responseTwo.data.venue.name,
                         img: responseTwo.data.venue.photos,
                     };
-                    setVenueDetails([secondVenueDetails, firstVenueDetails]);
+                    setVenueDetailsInfo([secondVenueDetails, firstVenueDetails]);
                 })
             )
             .catch((errors) => {
@@ -159,9 +162,16 @@ export default function FindPlace() {
     };
 
     const onAddToFavorites = () => {
-        console.log(VenueDetails && VenueDetails[0].id);
+        console.log(VenueDetailsInfo && VenueDetailsInfo[0].id);
         if (id) {
             addToFavorites();
+        }
+    };
+
+    const openModal = (id: number | null) => {
+        if (id) {
+            setShowModal(true);
+            setModalId(id);
         }
     };
 
@@ -180,28 +190,39 @@ export default function FindPlace() {
                             </button>
                         </div>
                         <div className="cardContainer relative z-10">
-                            {VenueDetails?.map((el: VenueDetails) => (
-                                <TinderCard
-                                    {...(props as any)}
-                                    className="swipe"
-                                    onCardLeftScreen={() => OnCardLeftScreen(el.id)}
-                                    onSwipe={onSwipe}
-                                    key={el.id}
-                                    preventSwipe={['up', 'down']}
-                                >
-                                    <div
-                                        style={{
-                                            backgroundImage: `url(${el.img[0].fileUrl})`,
-                                        }}
-                                        className="card"
+                            {VenueDetailsInfo?.map((el: VenueDetails) => (
+                                <button onClick={() => openModal(el.id ? el.id : null)}>
+                                    <TinderCard
+                                        {...(props as any)}
+                                        className="swipe"
+                                        onCardLeftScreen={() => OnCardLeftScreen(el.id)}
+                                        onSwipe={onSwipe}
+                                        key={el.id}
+                                        preventSwipe={['up', 'down']}
                                     >
-                                        <h4 className="text-background">
-                                            {el.name} {el.id}
-                                        </h4>
-                                    </div>
-                                </TinderCard>
+                                        <div
+                                            style={{
+                                                backgroundImage: `url(${el.img[0].fileUrl})`,
+                                            }}
+                                            className="card"
+                                        >
+                                            <h4 className="text-background">
+                                                {el.name} {el.id}
+                                            </h4>
+                                        </div>
+                                    </TinderCard>
+                                </button>
                             ))}
                         </div>
+
+                        {showModal ? (
+                            <VenueDetails
+                                VenueId={modalId}
+                                closeModal={() => {
+                                    setShowModal(false);
+                                }}
+                            />
+                        ) : null}
                     </div>
                 </div>
             </div>
