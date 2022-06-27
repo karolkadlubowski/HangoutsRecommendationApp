@@ -14,6 +14,7 @@ interface VenueDetails {
 }
 
 export default function FindPlace() {
+    const token = localStorage.getItem('token');
     const [direction, setDirection] = useState<string>();
     const [id, setId] = useState<number>();
     const [VenueDetails, setVenueDetails] = useState<VenueDetails[]>();
@@ -28,6 +29,7 @@ export default function FindPlace() {
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         })
             .then(function (response) {
+                console.log(response?.data?.data?.venueIds);
                 setVenueIds(response?.data?.data?.venueIds);
             })
             .catch(function (response) {
@@ -41,11 +43,13 @@ export default function FindPlace() {
             params: {
                 VenueId: ids[0],
             },
+            headers: { Authorization: `Bearer ${token}` },
         });
         const requestTwo = axios.get('http://localhost:8000/api/v1/Venue', {
             params: {
                 VenueId: ids[1],
             },
+            headers: { Authorization: `Bearer ${token}` },
         });
         axios
             .all([requestOne, requestTwo])
@@ -71,25 +75,23 @@ export default function FindPlace() {
             });
     };
 
-    // const sendVenueInfo = (id: number, relationType: number) => {
-    //     const token = localStorage.getItem('token');
-    //     axios({
-    //         method: 'put',
-    //         url: 'http://localhost:5000/venue/algorithm/relation',
-    //         params: {
-    //             venueId: id,
-    //             relationType: relationType,
-    //         },
-    //         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    //     })
-    //         .then(function (response) {
-    //             console.log(response);
-    //         })
-    //         .catch(function (response) {
-    //             console.log(response);
-    //             toast.error('Error');
-    //         });
-    // };
+    const sendVenueInfo = (id: number) => {
+        const token = localStorage.getItem('token');
+        axios({
+            method: 'put',
+            url: 'http://localhost:5000/venue/algorithm/like',
+            params: {
+                venueId: id,
+            },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (response) {
+                console.log(response);
+            });
+    };
 
     useEffect(() => {
         getVenueIds();
@@ -104,12 +106,14 @@ export default function FindPlace() {
     useEffect(() => {
         if (id && direction) {
             console.log(id, direction);
-            let relationType = direction === 'right' ? 0 : 1;
-            // sendVenueInfo(id, relationType);
+            if (direction === 'right') {
+                sendVenueInfo(id);
+            }
         }
     }, [id]);
 
     const onSwipe = (direction: string) => {
+        console.log('swipe');
         setDirection(direction);
     };
 
@@ -119,6 +123,7 @@ export default function FindPlace() {
     };
 
     const OnCardLeftScreen = (id?: number) => {
+        console.log('left');
         if (id) {
             setId(id);
             const newIds = venueIds;

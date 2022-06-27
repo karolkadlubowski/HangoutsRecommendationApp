@@ -5,6 +5,7 @@ import Header from '../Header';
 import VenueDetails from './VenueDetails';
 
 export default function FindVenue() {
+    const token = localStorage.getItem('token');
     const [venueList, setVenueList] = useState<VenueResponse[]>();
     const [showModal, setShowModal] = useState(false);
     const [modalId, setModalId] = useState<number>();
@@ -16,6 +17,7 @@ export default function FindVenue() {
                     pageNumber: 1,
                     pageSize: 100,
                 },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             })
             .then((response) => {
                 setVenueList(response.data.venues);

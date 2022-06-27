@@ -10,6 +10,7 @@ interface VenueDetailsProps {
 }
 
 export default function VenueDetails(props: VenueDetailsProps) {
+    const token = localStorage.getItem('token');
     const [venueDetails, setVenueDetails] = useState<VenueDetailsResponse>();
     const [imgUrl, setImgUrl] = useState<any>();
 
@@ -19,6 +20,7 @@ export default function VenueDetails(props: VenueDetailsProps) {
                 params: {
                     VenueId: props.VenueId,
                 },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             })
             .then((response) => {
                 console.log(response.data);

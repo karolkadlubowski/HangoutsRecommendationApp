@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import Header from '../Header';
 
 export function CreatePlace() {
+    const token = localStorage.getItem('token');
     const [files, setFiles] = useState<FileList | null>(null);
 
     const createVenue = (
@@ -38,7 +39,7 @@ export function CreatePlace() {
             method: 'post',
             url: 'http://localhost:8000/api/v1/Venue',
             data: bodyFormData,
-            headers: { 'Content-Type': 'multipart/form-data' },
+            headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` },
         })
             .then(function (response) {
                 console.log('success', response);
