@@ -28,7 +28,7 @@ namespace Library.Shared.DI
 
             services.AddLoggingProvider();
             logger.Trace("> Logging provider registered");
-
+            
             services.AddAuthentication(configuration);
             logger.Trace("> Authentication with JWT Bearer registered");
 

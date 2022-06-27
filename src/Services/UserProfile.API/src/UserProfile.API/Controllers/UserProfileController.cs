@@ -4,6 +4,7 @@ using Library.Shared.Controllers;
 using Library.Shared.Extensions;
 using Library.Shared.Logging;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserProfile.API.Application.Features.GetUserProfileQuery;
 
@@ -14,6 +15,7 @@ namespace UserProfile.API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class UserProfileController : BaseApiController
     {
         public UserProfileController(IMediator mediator, ILogger logger) : base(mediator, logger)

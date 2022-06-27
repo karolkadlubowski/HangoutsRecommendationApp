@@ -1,8 +1,8 @@
-﻿using Category.API.Domain.Configuration;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using VenueReview.API.Application.Database.Repositories;
+using VenueReview.API.Domain.Configuration;
 using VenueReview.API.Infrastructure.Database;
 using VenueReview.API.Infrastructure.Database.Repositories;
 
@@ -16,8 +16,8 @@ namespace VenueReview.API.DI
                 .Configure<DatabaseConfig>(configuration.GetSection(nameof(DatabaseConfig)))
                 .AddSingleton<DatabaseConfig>(s => s.GetRequiredService<IOptions<DatabaseConfig>>().Value);
 
-        public static IServiceCollection AddRepositories(this IServiceCollection serices)
-            => serices
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
+            => services
                 .AddTransient<IVenueReviewRepository, VenueReviewRepository>();
     }
 }

@@ -6,7 +6,6 @@ namespace VenueReview.API.Application.Features.AddVenueReview
     {
         public long VenueId { get; init; }
         public string Content { get; init; }
-        public long CreatorId { get; init; }
         public double Rating { get; init; }
     }
 }

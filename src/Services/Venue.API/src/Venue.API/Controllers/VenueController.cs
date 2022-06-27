@@ -4,6 +4,7 @@ using Library.Shared.Controllers;
 using Library.Shared.Extensions;
 using Library.Shared.Logging;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Venue.API.Application.Features.CreateVenue;
 using Venue.API.Application.Features.DeleteVenue;
@@ -18,6 +19,7 @@ namespace Venue.API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class VenueController : BaseApiController
     {
         public VenueController(IMediator mediator, ILogger logger) : base(mediator, logger)

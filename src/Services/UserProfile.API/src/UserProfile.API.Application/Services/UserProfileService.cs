@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Library.Shared.Logging;
 using UserProfile.API.Application.Abstractions;
@@ -28,6 +27,10 @@ namespace UserProfile.API.Application.Services
             var userProfilePersistenceModel = await _userProfileRepository.GetUserProfileAsync(request.UserId);
             //TODO Implement downloading from IdentityApi if response is null
             var userProfile = _mapper.Map<Domain.Entities.UserProfile>(userProfilePersistenceModel);
+            if (userProfile == null)
+            {
+                userProfile = Domain.Entities.UserProfile.Create(0, "user@mail.com");
+            }
 
             _logger.Info($"User profile #{userProfile.UserId} fetched from the database");
 

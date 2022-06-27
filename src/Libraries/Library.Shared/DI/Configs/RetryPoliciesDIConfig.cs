@@ -10,7 +10,6 @@ namespace Library.Shared.DI.Configs
     {
         public static IServiceCollection AddRetryPolicyRegistry(this IServiceCollection services)
             => services
-                .AddSingleton<IRetryPolicyRegistry, RetryPolicyRegistry>()
-                .RegisterAllTypes<IRetryPolicy>(new[] { Assembly.Load("Venue.API.Infrastructure") }, ServiceLifetime.Singleton);
+                .AddSingleton<IRetryPolicyRegistry, RetryPolicyRegistry>();
     }
 }
