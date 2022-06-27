@@ -46,7 +46,7 @@ export default function Signup() {
                 {(formikProps) => (
                     <div className="bg-slate-100 h-screen">
                         <div className="flex justify-center items-center" style={{ height: '80vh' }}>
-                            <div className="w-full max-w-md">
+                            <div className="w-full p-2 max-w-md">
                                 <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                                     <h1 className="block text-gray-700 text-2xl mb-6">Sign in</h1>
                                     <div className="mb-4">

@@ -71,25 +71,25 @@ export default function FindPlace() {
             });
     };
 
-    const sendVenueInfo = (id: number, relationType: number) => {
-        const token = localStorage.getItem('token');
-        axios({
-            method: 'put',
-            url: 'http://localhost:5000/venue/algorithm/relation',
-            params: {
-                venueId: id,
-                relationType: relationType,
-            },
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (response) {
-                console.log(response);
-                toast.error('Error');
-            });
-    };
+    // const sendVenueInfo = (id: number, relationType: number) => {
+    //     const token = localStorage.getItem('token');
+    //     axios({
+    //         method: 'put',
+    //         url: 'http://localhost:5000/venue/algorithm/relation',
+    //         params: {
+    //             venueId: id,
+    //             relationType: relationType,
+    //         },
+    //         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    //     })
+    //         .then(function (response) {
+    //             console.log(response);
+    //         })
+    //         .catch(function (response) {
+    //             console.log(response);
+    //             toast.error('Error');
+    //         });
+    // };
 
     useEffect(() => {
         getVenueIds();
@@ -105,7 +105,7 @@ export default function FindPlace() {
         if (id && direction) {
             console.log(id, direction);
             let relationType = direction === 'right' ? 0 : 1;
-            sendVenueInfo(id, relationType);
+            // sendVenueInfo(id, relationType);
         }
     }, [id]);
 

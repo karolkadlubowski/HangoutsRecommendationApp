@@ -1,5 +1,12 @@
 $header-height: 4rem;
+$header-height-mobile: -0.6rem;
 
 .page-height {
     height: calc(100vh - $header-height);
+}
+
+@media (max-width: 768px) {
+    .page-height {
+        height: calc(100vh - $header-height-mobile);
+    }
 }
