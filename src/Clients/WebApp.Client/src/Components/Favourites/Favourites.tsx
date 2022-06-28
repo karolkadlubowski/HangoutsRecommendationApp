@@ -88,7 +88,9 @@ export default function Favourites() {
             <div className="flex justify-center mt-5">
                 {venueList?.length ? (
                     <div className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">{writeVenues()}</div>
-                ) : null}
+                ) : (
+                    <div>No Venues</div>
+                )}
             </div>
 
             {showModal ? (

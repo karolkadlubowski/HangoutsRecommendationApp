@@ -45,12 +45,13 @@ export default function FindPlace() {
     const addToFavorites = () => {
         const token = localStorage.getItem('token');
         const id = VenueDetailsInfo ? VenueDetailsInfo[0].id : null;
+        const name = VenueDetailsInfo ? VenueDetailsInfo[0].name : null;
         axios({
             method: 'post',
             url: 'http://localhost:8003/api/v1/List/Favorites',
             data: {
                 venueId: id,
-                name: 'name',
+                name: name,
                 description: 'des',
                 categoryName: 'NATURE',
                 creatorId: 1,
@@ -190,8 +191,8 @@ export default function FindPlace() {
                             </button>
                         </div>
                         <div className="cardContainer relative z-10">
-                            {VenueDetailsInfo?.map((el: VenueDetails) => (
-                                <button onClick={() => openModal(el.id ? el.id : null)}>
+                            {VenueDetailsInfo?.map((el: VenueDetails, id) => (
+                                <button onClick={() => openModal(el.id ? el.id : null)} key={Math.random()}>
                                     <TinderCard
                                         {...(props as any)}
                                         className="swipe"
@@ -210,6 +211,15 @@ export default function FindPlace() {
                                                 {el.name} {el.id}
                                             </h4>
                                         </div>
+                                        {id === 0 && direction ? (
+                                            <div
+                                                className={`mt-20 ${
+                                                    direction === 'left' ? 'text-red-500' : 'text-green-500'
+                                                }`}
+                                            >
+                                                You swiped {direction}
+                                            </div>
+                                        ) : null}
                                     </TinderCard>
                                 </button>
                             ))}
