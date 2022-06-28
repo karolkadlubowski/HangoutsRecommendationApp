@@ -1,0 +1,28 @@
+.details-photo {
+    max-height: 30vh;
+    max-width: 60vw;
+}
+
+@media (min-width: 768px) {
+    .details-photo {
+        max-height: 50vh;
+        max-width: 90vw;
+    }
+}
+
+@media (min-width: 1024px) {
+    .details-photo {
+        max-height: 40rem;
+        max-width: 60rem;
+    }
+}
+
+.details-box {
+    min-width: 90vw;
+}
+
+@media (min-width: 768px) {
+    .details-box {
+        min-width: 50rem;
+    }
+}
