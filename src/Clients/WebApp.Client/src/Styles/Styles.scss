@@ -5,8 +5,15 @@ $header-height-mobile: -0.6rem;
     height: calc(100vh - $header-height);
 }
 
+.page-min-height {
+    height: calc(100vh - $header-height);
+}
+
 @media (max-width: 768px) {
     .page-height {
+        height: calc(100vh - $header-height-mobile);
+    }
+    .page-min-height {
         height: calc(100vh - $header-height-mobile);
     }
 }

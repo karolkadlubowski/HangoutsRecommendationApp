@@ -68,10 +68,7 @@ export default function Favourites() {
         cursor-pointer flex justify-between
       "
                 >
-                    <span>
-                        {' '}
-                        Name: {el.name}, VenueId: {el.venueId}
-                    </span>
+                    <span> Name: {el.name}</span>
                 </button>
                 <button onClick={() => onDelete(el.venueId)} className="w-20 border-b border-l text-red-300">
                     X
@@ -86,7 +83,7 @@ export default function Favourites() {
     };
 
     return (
-        <>
+        <div className="bg-gray-100" style={{ height: '100vh' }}>
             <Header />
             <div className="flex justify-center mt-5">
                 {venueList?.length ? (
@@ -102,6 +99,6 @@ export default function Favourites() {
                     }}
                 />
             ) : null}
-        </>
+        </div>
     );
 }

@@ -99,9 +99,9 @@ export function CreatePlace() {
                 }}
             >
                 {(formikProps) => (
-                    <div className="flex justify-center items-center bg-gray-100 page-height">
+                    <div className="flex justify-center items-center bg-gray-100" style={{ minHeight: '94vh' }}>
                         <div className="w-full flex justify-center mt-14">
-                            <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                            <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 overflow-auto">
                                 <div>
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="venueName">
                                         Venue Name
